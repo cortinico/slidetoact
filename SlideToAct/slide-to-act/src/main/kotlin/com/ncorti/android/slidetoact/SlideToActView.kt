@@ -279,7 +279,10 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
                 innerRect.top.toInt() + arrowMargin,
                 innerRect.right.toInt() - arrowMargin,
                 innerRect.bottom.toInt() - arrowMargin)
-        mDrawableArrow.draw(canvas)
+        if (mDrawableArrow.bounds.left <= mDrawableArrow.bounds.right &&
+                mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
+            mDrawableArrow.draw(canvas)
+        }
         canvas.rotate(-1 * arrowAngle, innerRect.centerX(), innerRect.centerY())
 
         // Tick animation drawing
@@ -293,7 +296,10 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
                         areaHeight - tickMargin)
 
                 mDrawableTickFrame?.colorFilter = innerColorFilter
-                mDrawableTickFrame?.draw(canvas)
+                if ((actualAreaWidth + tickMargin) <= (areaWidth - tickMargin - actualAreaWidth) &&
+                        (tickMargin <= areaHeight - tickMargin)) { // Left <= Right && Top <= Bottom
+                    mDrawableTickFrame?.draw(canvas)
+                }
             }
         }
     }
@@ -382,6 +388,14 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             invalidate()
         })
 
+        // Animator that bounce away the cursors
+        var marginAnimator = ValueAnimator.ofInt(actualAreaMargin, (innerRect.width() / 2).toInt() + actualAreaMargin)
+        marginAnimator.addUpdateListener({
+            actualAreaMargin = it.animatedValue as Int
+            invalidate()
+        })
+        marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
+
         // Animator that reduces the outer area (to right)
         var areaAnimator = ValueAnimator.ofInt(0, (areaWidth - areaHeight) / 2)
         areaAnimator.addUpdateListener({
@@ -395,21 +409,6 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             invalidate()
         })
 
-        // Animator that makes the arrow disappear
-        var arrowAnimator = ValueAnimator.ofInt(arrowMargin, (innerRect.width() / 2).toInt())
-        arrowAnimator.addUpdateListener({
-            arrowMargin = it.animatedValue as Int
-            invalidate()
-        })
-
-        // Animator that bounce away the cursors
-        var marginAnimator = ValueAnimator.ofInt(actualAreaMargin, (innerRect.width() / 2).toInt() + actualAreaMargin)
-        marginAnimator.addUpdateListener({
-            actualAreaMargin = it.animatedValue as Int
-            invalidate()
-        })
-        marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
-
         tickMargin = DEFAULT_ICON_MARGIN
         // Animator that draw the Tick
         var tickAnimator = ValueAnimator.ofInt(0, 41)
@@ -421,9 +420,9 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
         tickAnimator.duration = 700
 
         if (position >= areaWidth - areaHeight) {
-            animSet.playSequentially(marginAnimator, arrowAnimator, areaAnimator, tickAnimator)
+            animSet.playSequentially(marginAnimator, areaAnimator, tickAnimator)
         } else {
-            animSet.playSequentially(finalPositionAnimator, marginAnimator, arrowAnimator, areaAnimator, tickAnimator)
+            animSet.playSequentially(finalPositionAnimator, marginAnimator, areaAnimator, tickAnimator)
         }
 
         animSet.duration = 300
