@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SlideToActView">
+        <attr name="text" format="string" />
+        <attr name="text_size" format="dimension" />
+        <attr name="area_margin" format="dimension" />
+        <attr name="inner_color" format="color" />
+        <attr name="outer_color" format="color" />
+        <attr name="border_radius" format="dimension" />
+        <attr name="slider_height" format="dimension" />
+    </declare-styleable>
+</resources>
