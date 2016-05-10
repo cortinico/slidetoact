@@ -143,8 +143,11 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
     /** Flag to understand if user is moving the slider cursor */
     private var flagMoving: Boolean = false
 
-    /** Public flag to check if the slide gesture have been completed */
-    var isCompleted = false;
+    /** Private flag to check if the slide gesture have been completed */
+    private var isCompleted = false;
+
+    /** Public flag to lock slider operativity */
+    var isLocked = false;
 
     private var outlineProviders: List<Any> = ArrayList()
 
@@ -313,7 +316,7 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
                 }
                 MotionEvent.ACTION_UP -> {
                     flagMoving = false
-                    if (position > 0 && positionPerc < graceValue) {
+                    if ((position > 0 && isLocked) || (position > 0 && positionPerc < graceValue)) {
                         // Check for grace value
 
                         var positionAnimator = ValueAnimator.ofInt(position, 0)
@@ -451,6 +454,14 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
      */
     fun resetSlider() {
         startAnimationReset()
+    }
+
+    /**
+     * Method that returns the 'isCompleted' flag
+     * @return True if slider is in the Complete state
+     */
+    fun isCompleted(): Boolean {
+        return this.isCompleted
     }
 
     /**
