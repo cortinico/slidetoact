@@ -180,6 +180,8 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             innerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, DEFAULT_INNER_COLOR)
             textMessage = layoutAttrs.getString(R.styleable.SlideToActView_text)
 
+            isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false);
+
             var textSizePx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE, resources.displayMetrics).toInt()
             textSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, textSizePx)
             actualAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, DEFAULT_AREA_MARGIN)
