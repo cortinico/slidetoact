@@ -7,7 +7,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
-import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
@@ -31,13 +31,13 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
 
     /* -------------------- DEFAULTS -------------------- */
 
-    final private val DEFAULT_BORDER_RADIUS = -1
-    final private val DEFAULT_AREA_MARGIN = 20
-    final private val DEFAULT_TEXT_SIZE = 20F
-    final private val DEFAULT_OUTER_COLOR = Color.CYAN
-    final private val DEFAULT_INNER_COLOR = Color.WHITE
-    final private val DEFAULT_ICON_MARGIN = 24
-    final private val DEFAULT_GRACE_VALUE = 0.8f
+    private val DEFAULT_BORDER_RADIUS = -1
+    private val DEFAULT_AREA_MARGIN = 20
+    private val DEFAULT_TEXT_SIZE = 20F
+    private val DEFAULT_OUTER_COLOR = Color.CYAN
+    private val DEFAULT_INNER_COLOR = Color.WHITE
+    private val DEFAULT_ICON_MARGIN = 24
+    private val DEFAULT_GRACE_VALUE = 0.8f
 
     /* -------------------- LAYOUT BOUNDS -------------------- */
 
@@ -54,7 +54,7 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
     private var areaWidth: Int = 0
     /** Actual Width of the drawing area, used for animations */
     private var actualAreaWidth: Int = 0
-    /** Border Radius, default to areaHeight/2, -1 when not initialized*/
+    /** Border Radius, default to areaHeight/2, -1 when not initialized */
     private var borderRadius: Int = DEFAULT_BORDER_RADIUS
     /** Margin of the cursor from the outer area */
     private var actualAreaMargin: Int = DEFAULT_AREA_MARGIN
@@ -80,8 +80,8 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             field = value
             if (areaWidth - areaHeight == 0) {
                 // Avoid 0 division
-                positionPerc = 0f;
-                positionPercInv = 1f;
+                positionPerc = 0f
+                positionPercInv = 1f
                 return
             }
             positionPerc = value.toFloat() / (areaWidth - areaHeight).toFloat();
@@ -106,19 +106,11 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
     private var outerColorFilter = LightingColorFilter(DEFAULT_OUTER_COLOR, 1)
     private var innerColorFilter = LightingColorFilter(DEFAULT_INNER_COLOR, 1)
 
-
-    /** Flag used to draw check if tick must be drawn */
-    private var drawTick: Boolean = false
-
-    /** Frame of the tick that must be drawn */
-    private var tickFrame = 0
-
     /** Arrow drawable */
     private val mDrawableArrow: Drawable
 
-    /** Tick drawable (frame list) */
-    private val mDrawableTick: Drawable
-    private var mDrawableTickFrame: Drawable? = null
+    /** Tick drawable */
+    private var mDrawableTick: AnimatedVectorDrawable
 
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
@@ -196,17 +188,14 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
 
         outerRect = RectF(actualAreaWidth.toFloat(), 0f, areaWidth.toFloat() - actualAreaWidth.toFloat(), areaHeight.toFloat())
 
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
-            mDrawableArrow = context.resources.getDrawable(R.drawable.ic_arrow_right_white_48dp, context.theme)
-            mDrawableTick = context.resources.getDrawable(R.drawable.animated_tick, context.theme)
-        } else {
-            mDrawableArrow = context.resources.getDrawable(R.drawable.ic_arrow_right_white_48dp)
-            mDrawableTick = context.resources.getDrawable(R.drawable.animated_tick)
-        }
+        // TODO Remove me
+        mDrawableArrow = context.resources.getDrawable(R.drawable.ic_arrow, context.theme)
+        mDrawableTick = context.resources.getDrawable(R.drawable.animated_ic_check, context.theme) as AnimatedVectorDrawable
 
         outerPaint.color = outerColor
         innerPaint.color = innerColor
 
+        // TODO Take typeface from theme
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.textSize = textSize.toFloat()
         textPaint.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
@@ -232,7 +221,6 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
         setMeasuredDimension(width, desiredSliderHeight);
     }
 
-    @SuppressLint("NewApi")
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         areaWidth = w
         areaHeight = h
@@ -287,22 +275,17 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
         }
         canvas.rotate(-1 * arrowAngle, innerRect.centerX(), innerRect.centerY())
 
-        // Tick animation drawing
-        if (drawTick) {
-            if (mDrawableTick is AnimationDrawable) {
-                mDrawableTickFrame = mDrawableTick.getFrame(tickFrame);
-                mDrawableTickFrame?.setBounds(
-                        actualAreaWidth + tickMargin,
-                        tickMargin,
-                        areaWidth - tickMargin - actualAreaWidth,
-                        areaHeight - tickMargin)
+        // Tick drawing
+        mDrawableTick.setBounds(
+                actualAreaWidth + tickMargin,
+                tickMargin,
+                areaWidth - tickMargin - actualAreaWidth,
+                areaHeight - tickMargin)
 
-                mDrawableTickFrame?.colorFilter = innerColorFilter
-                if ((actualAreaWidth + tickMargin) <= (areaWidth - tickMargin - actualAreaWidth) &&
-                        (tickMargin <= areaHeight - tickMargin)) { // Left <= Right && Top <= Bottom
-                    mDrawableTickFrame?.draw(canvas)
-                }
-            }
+        mDrawableTick.colorFilter = innerColorFilter
+        if ((actualAreaWidth + tickMargin) <= (areaWidth - tickMargin - actualAreaWidth) &&
+                (tickMargin <= areaHeight - tickMargin)) { // Left <= Right && Top <= Bottom
+            mDrawableTick.draw(canvas)
         }
     }
 
@@ -413,10 +396,8 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
 
         tickMargin = DEFAULT_ICON_MARGIN
         // Animator that draw the Tick
-        var tickAnimator = ValueAnimator.ofInt(0, 41)
+        var tickAnimator = ValueAnimator.ofInt(0, 1)
         tickAnimator.addUpdateListener({
-            drawTick = true
-            tickFrame = it.animatedValue as Int
             invalidate()
         })
         tickAnimator.duration = 700
@@ -438,7 +419,9 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                isCompleted = true;
+                invalidate()
+                mDrawableTick.start()
+                isCompleted = true
                 onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
                 onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
             }
@@ -468,7 +451,6 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
     /**
      * Private method that is performed when you want to reset the cursor
      */
-    @SuppressLint("NewApi")
     private fun startAnimationReset() {
         var animSet = AnimatorSet()
 
@@ -526,9 +508,9 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
             }
 
             override fun onAnimationEnd(p0: Animator?) {
-                isCompleted = false;
-                drawTick = false;
-                isEnabled = true;
+                isCompleted = false
+                isEnabled = true
+                mDrawableTick.reset()
                 onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(this@SlideToActView)
                 onSlideResetListener?.onSlideReset(this@SlideToActView)
             }
@@ -542,7 +524,6 @@ class SlideToActView(context: Context, attrs: AttributeSet) : View(context, attr
     /**
      * Private method for generating outline providers (the shadow)
      */
-    @SuppressLint("NewApi")
     private fun generateOutlineProviders(end: Int): List<SlideToActOutlineProvider> {
         var outlines = ArrayList<SlideToActOutlineProvider>()
         for (j in 0..end) {
