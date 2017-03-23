@@ -19,17 +19,22 @@ public class MainSlideActivity extends AppCompatActivity {
         Toolbar t = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(t);
 
-        final SlideToActView stav = (SlideToActView)findViewById(R.id.slide);
+        final SlideToActView stav1 = (SlideToActView)findViewById(R.id.slide1);
+        final SlideToActView stav2 = (SlideToActView)findViewById(R.id.slide2);
+        final SlideToActView stav3 = (SlideToActView)findViewById(R.id.slide3);
+        final SlideToActView stav4 = (SlideToActView)findViewById(R.id.slide4);
 
         Button b = (Button) findViewById(R.id.button);
-        if (b != null && stav != null) {
-            b.setOnClickListener(new View.OnClickListener() {
+        b.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    stav.resetSlider();
+                    if (stav1.isCompleted()) stav1.resetSlider();
+                    if (stav2.isCompleted()) stav2.resetSlider();
+                    if (stav3.isCompleted()) stav3.resetSlider();
+                    if (stav4.isCompleted()) stav4.resetSlider();
                 }
             });
-        }
+
     }
 
 }

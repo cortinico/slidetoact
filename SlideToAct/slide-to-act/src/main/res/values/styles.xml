@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SlideToActView">
+    <style name="SlideToActView">
+        <item name="text">SlideToActView</item>
+        <item name="text_size">@dimen/default_text_size</item>
+        <item name="area_margin">@dimen/default_area_margin</item>
+        <item name="inner_color">@color/white</item>
+        <item name="outer_color">@color/defaultAccent</item>
+        <item name="slider_locked">false</item>
+    </style>
+
+    <!--    <declare-styleable name="SlideToActView">
         <attr name="text" format="string" />
         <attr name="text_size" format="dimension" />
         <attr name="area_margin" format="dimension" />
@@ -9,8 +18,5 @@
         <attr name="border_radius" format="dimension" />
         <attr name="slider_height" format="dimension" />
         <attr name="slider_locked" format="boolean" />
-    </declare-styleable>
-    <declare-styleable name="SlideToActViewTheme">
-        <attr name="slideToActViewStyle" format="reference"/>
-    </declare-styleable>
+    </declare-styleable>-->
 </resources>
