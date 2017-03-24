@@ -2,21 +2,11 @@
 <resources>
     <style name="SlideToActView">
         <item name="text">SlideToActView</item>
+        <item name="android:elevation">6dp</item>
         <item name="text_size">@dimen/default_text_size</item>
         <item name="area_margin">@dimen/default_area_margin</item>
-        <item name="inner_color">@color/white</item>
-        <item name="outer_color">@color/defaultAccent</item>
+        <item name="inner_color">?android:colorBackground</item>
+        <item name="outer_color">?android:colorAccent</item>
         <item name="slider_locked">false</item>
     </style>
-
-    <!--    <declare-styleable name="SlideToActView">
-        <attr name="text" format="string" />
-        <attr name="text_size" format="dimension" />
-        <attr name="area_margin" format="dimension" />
-        <attr name="inner_color" format="color" />
-        <attr name="outer_color" format="color" />
-        <attr name="border_radius" format="dimension" />
-        <attr name="slider_height" format="dimension" />
-        <attr name="slider_locked" format="boolean" />
-    </declare-styleable>-->
 </resources>

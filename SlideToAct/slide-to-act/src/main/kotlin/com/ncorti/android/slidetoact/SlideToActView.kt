@@ -40,7 +40,6 @@ class SlideToActView(context: Context,
 
     /* -------------------- DEFAULTS -------------------- */
 
-    private val DEFAULT_BORDER_RADIUS = -1
     private val DEFAULT_ICON_MARGIN = 12 // TODO Check me
     private var DEFAULT_ICON_MARGIN_PX: Int = 0
     private val DEFAULT_GRACE_VALUE = 0.8f
@@ -61,7 +60,7 @@ class SlideToActView(context: Context,
     /** Actual Width of the drawing area, used for animations */
     private var actualAreaWidth: Int = 0
     /** Border Radius, default to areaHeight/2, -1 when not initialized */
-    private var borderRadius: Int = DEFAULT_BORDER_RADIUS
+    private var borderRadius: Int = -1
     /** Margin of the cursor from the outer area */
     private var actualAreaMargin: Int
     private var originAreaMargin: Int
@@ -160,21 +159,11 @@ class SlideToActView(context: Context,
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
                 R.styleable.SlideToActView, defStyle, R.style.SlideToActView)
         try {
-            // Load accent color from the theme
-            // TODO This should come from the Styleable
-//            val tValue = TypedValue()
-//            val desiredColor: Int
-//            if (context.theme.resolveAttribute(R.attr.colorAccent, tValue, true)) {
-//                desiredColor = tValue.data
-//            } else {
-//                desiredColor = DEFAULT_OUTER_COLOR
-//            }
-
             desiredSliderHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, desiredSliderHeightDp, resources.displayMetrics).toInt()
             desiredSliderWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, desiredSliderWidthDp, resources.displayMetrics).toInt()
             desiredSliderHeight = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_slider_height, desiredSliderHeight)
 
-            borderRadius = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_border_radius, DEFAULT_BORDER_RADIUS)
+            borderRadius = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_border_radius, -1)
             outerColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, R.color.defaultAccent)
             innerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, R.color.white)
             textMessage = layoutAttrs.getString(R.styleable.SlideToActView_text)
