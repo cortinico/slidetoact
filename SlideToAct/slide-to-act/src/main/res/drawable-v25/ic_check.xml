@@ -9,5 +9,5 @@
         android:pathData="m7.21,25.35l10.3,10.37l23.29,-23.43"
         android:strokeColor="#FFFFFF"
         android:strokeWidth="3.5"
-        android:trimPathStart="0.01" />
+        android:trimPathEnd="0"/>
 </vector>

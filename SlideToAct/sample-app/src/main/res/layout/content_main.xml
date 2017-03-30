@@ -20,7 +20,8 @@
         android:id="@+id/slide1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:text="DEFAULT" />
+        android:elevation="6dp"
+        />
 
     <com.ncorti.android.slidetoact.SlideToActView
         android:id="@+id/slide2"
@@ -28,21 +29,24 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:elevation="6dp"
-        app:text="ELEVATION" />
+        app:area_margin="12dp"
+        app:text="AREA MARGIN" />
 
     <com.ncorti.android.slidetoact.SlideToActView
         android:id="@+id/slide3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        app:area_margin="10dp"
-        app:text="AREA MARGIN" />
+        android:elevation="6dp"
+        app:border_radius="10dp"
+        app:text="BORDER RADIUS" />
 
     <com.ncorti.android.slidetoact.SlideToActView
         android:id="@+id/slide4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        app:border_radius="10dp"
-        app:text="BORDER RADIUS" />
+        android:elevation="6dp"
+        app:border_radius="0dp"
+        app:text="BORDER RADIUS 2" />
 </LinearLayout>
