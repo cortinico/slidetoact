@@ -8,10 +8,7 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.AnimatedVectorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.graphics.drawable.Animatable2Compat
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
@@ -45,7 +42,7 @@ class SlideToActView(context: Context,
 
     /* -------------------- LAYOUT BOUNDS -------------------- */
 
-    private var desiredSliderHeightDp: Float = 80F
+    private var desiredSliderHeightDp: Float = 72F
     private var desiredSliderWidthDp: Float = 280F
     private var desiredSliderHeight: Int = 0
     private var desiredSliderWidth: Int = 0
@@ -77,7 +74,7 @@ class SlideToActView(context: Context,
     /** Inner color used by the slider (secondary, icon and border) */
     private val innerColor: Int
 
-    /** Slider cursor position (between 0 and (areaWidth - areaHeight)) */
+    /** Slider cursor position (between 0 and (`reaWidth - areaHeight)) */
     private var position: Int = 0
         get() = field
         set(value) {
@@ -413,8 +410,8 @@ class SlideToActView(context: Context,
             invalidateArea()
         }
 
-        var tickAnimator : ValueAnimator
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N){
+        var tickAnimator: ValueAnimator
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             // Fallback not using AVD.
             tickAnimator = ValueAnimator.ofInt(0, 255)
             tickAnimator.addUpdateListener {

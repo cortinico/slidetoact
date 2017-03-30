@@ -49,4 +49,8 @@
         android:elevation="6dp"
         app:border_radius="0dp"
         app:text="BORDER RADIUS 2" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
 </LinearLayout>
