@@ -181,17 +181,12 @@ class SlideToActView(context: Context,
 
         outerRect = RectF(actualAreaWidth.toFloat(), 0f, areaWidth.toFloat() - actualAreaWidth.toFloat(), areaHeight.toFloat())
 
-        // TODO Remove !!
-//        mDrawableArrow = VectorDrawableCompat.create(context.resources, R.drawable.ic_arrow, context.theme)!!
         mDrawableArrow = parseVectorDrawableCompat(context.resources, R.drawable.ic_arrow, context.theme)
-//        mDrawableTick = AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
         mDrawableTick = context.resources.getDrawable(R.drawable.animated_ic_check, context.theme) as AnimatedVectorDrawable
-//        mDrawableTick = parseAnimatedVectorDrawableCompat(context, R.drawable.animated_ic_check)
 
         outerPaint.color = outerColor
         innerPaint.color = innerColor
 
-        // TODO Take typeface from theme
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.textSize = textSize.toFloat()
         textPaint.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
@@ -410,7 +405,7 @@ class SlideToActView(context: Context,
             invalidateArea()
         }
 
-        var tickAnimator: ValueAnimator
+        val tickAnimator: ValueAnimator
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
             // Fallback not using AVD.
             tickAnimator = ValueAnimator.ofInt(0, 255)
@@ -557,11 +552,7 @@ class SlideToActView(context: Context,
      * Private method for generating outline providers (the shadow)
      */
     private fun generateOutlineProviders(end: Int): List<SlideToActOutlineProvider> {
-        val outlines = ArrayList<SlideToActOutlineProvider>()
-        for (j in 0..end) {
-            outlines.add(SlideToActOutlineProvider(borderRadius, j, areaWidth - j, areaHeight))
-        }
-        return outlines
+        return (0..end).map { SlideToActOutlineProvider(borderRadius, it, areaWidth - it, areaHeight) }
     }
 
 
