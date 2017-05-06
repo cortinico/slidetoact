@@ -104,10 +104,6 @@ class SlideToActView(context: Context,
     /** Margin for Tick Icon */
     private var tickMargin: Int
 
-    /** Color filter used for filling arrow and tick icons */
-    private var outerColorFilter: LightingColorFilter
-    private var innerColorFilter: LightingColorFilter
-
     /** Arrow drawable */
     private val mDrawableArrow: VectorDrawableCompat
 
@@ -192,9 +188,7 @@ class SlideToActView(context: Context,
         textPaint.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
         textPaint.color = innerColor
 
-        outerColorFilter = LightingColorFilter(outerColor, 1)
-        innerColorFilter = LightingColorFilter(innerColor, 1)
-        mDrawableArrow.colorFilter = outerColorFilter
+        mDrawableArrow.setTint(outerColor)
 
         iconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         arrowMargin = iconMargin
@@ -290,7 +284,7 @@ class SlideToActView(context: Context,
                 areaWidth - tickMargin - actualAreaWidth,
                 areaHeight - tickMargin)
 
-        mDrawableTick.colorFilter = innerColorFilter
+        mDrawableTick.setTint(innerColor)
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
