@@ -1,0 +1,13 @@
+language: android
+sudo: false
+android:
+    components:
+        - tools
+        - build-tools-25.0.2
+        - platform-tools
+        - extra-android-m2repository
+        - extra-google-android-support
+        - sys-img-armeabi-v7a-android-25
+jdk: oraclejdk8
+os:
+    - linux
