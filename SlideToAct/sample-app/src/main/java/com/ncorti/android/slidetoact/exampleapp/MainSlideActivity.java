@@ -24,6 +24,8 @@ public class MainSlideActivity extends AppCompatActivity {
         final SlideToActView stav3 = (SlideToActView)findViewById(R.id.slide3);
         final SlideToActView stav4 = (SlideToActView)findViewById(R.id.slide4);
 
+        stav1.setLocked(true);
+
         Button b = (Button) findViewById(R.id.button);
         b.setOnClickListener(new View.OnClickListener() {
                 @Override
