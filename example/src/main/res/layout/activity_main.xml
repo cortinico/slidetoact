@@ -1,33 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:clipToPadding="false"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/welcome"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-    </android.support.design.widget.AppBarLayout>
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/welcome_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:elevation="6dp"
+            app:text="Sample SlideToActView" />
 
-    <include layout="@layout/content_main" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:text="@string/welcome_body"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
-        android:visibility="gone" />
+        <Button
+            android:id="@+id/button_area_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/area_margin" />
 
-</android.support.design.widget.CoordinatorLayout>
+        <Button
+            android:id="@+id/button_colors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/colors" />
+
+        <Button
+            android:id="@+id/button_border_radius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/border_radius" />
+
+        <Button
+            android:id="@+id/button_elevation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/elevation" />
+
+        <Button
+            android:id="@+id/button_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_size" />
+
+        <Button
+            android:id="@+id/button_slider_dimension"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/slider_dimension" />
+
+        <Button
+            android:id="@+id/button_event_callbacks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/event_callback" />
+
+        <Button
+            android:id="@+id/button_locked_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/locked_slider" />
+
+    </LinearLayout>
+</ScrollView>

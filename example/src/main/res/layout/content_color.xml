@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/slide_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_red_A200"
+            app:text="Accent Red" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_purple_A200"
+            app:text="Accent Purple" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_indigo_A200"
+            app:text="Accent Indigo" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_deep_orange_A200"
+            app:text="Accent Deep Orange" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_amber_A200"
+            app:inner_color="@color/md_grey_800"
+            app:text="Accent Amber - Grey 800" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_teal_A200"
+            app:inner_color="@color/md_grey_800"
+            app:text="Accent Teal - Grey 800" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_green_A200"
+            app:inner_color="@color/md_grey_800"
+            app:text="Accent Green - Grey 800" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_grey_900"
+            app:inner_color="@color/md_white_1000"
+            app:text="Grey 900 - White" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:outer_color="@color/md_white_1000"
+            app:inner_color="@color/md_grey_900"
+            app:text="Grey 900 - White" />
+
+    </LinearLayout>
+</ScrollView>

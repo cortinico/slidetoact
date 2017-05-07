@@ -34,7 +34,7 @@ import java.util.*
  */
 class SlideToActView(context: Context,
                      attrs: AttributeSet?,
-                     defStyle: Int): View(context, attrs, defStyle) {
+                     defStyle: Int) : View(context, attrs, defStyle) {
 
     constructor(context: Context) : this(context, null, R.styleable.SlideToActViewTheme_slideToActViewStyle)
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, R.styleable.SlideToActViewTheme_slideToActViewStyle)
@@ -302,10 +302,12 @@ class SlideToActView(context: Context,
                     if (checkInsideButton(event.x, event.y)) {
                         mFlagMoving = true
                         mLastX = event.x
+                        parent.requestDisallowInterceptTouchEvent(true)
                     }
                 }
                 MotionEvent.ACTION_UP -> {
                     mFlagMoving = false
+                    parent.requestDisallowInterceptTouchEvent(false)
                     if ((mPosition > 0 && isLocked) || (mPosition > 0 && mPositionPerc < mGraceValue)) {
                         // Check for grace value
 
@@ -453,7 +455,9 @@ class SlideToActView(context: Context,
      * Method that reset the slider
      */
     fun resetSlider() {
-        startAnimationReset()
+        if (mIsCompleted) {
+            startAnimationReset()
+        }
     }
 
     /**

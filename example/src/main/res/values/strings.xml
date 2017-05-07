@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">SlideToAct</string>
+    <string name="app_name">SlideToAct Example</string>
     <string name="reset">Reset</string>
+    <string name="area_margin">area margin</string>
+    <string name="colors">Colors</string>
+    <string name="border_radius">Border Radius</string>
+    <string name="elevation">Elevation</string>
+    <string name="text_size">Text Size</string>
+    <string name="slider_dimension">Slider Dimension</string>
+    <string name="event_callback">Event Callback</string>
+    <string name="locked_slider">Locked Slider</string>
+    <string name="event_log">Event Log</string>
+    <string name="welcome">Welcome! 😀</string>
+    <string name="welcome_body">Press the following buttons to checkout different SlideToActView and understand each parameter. You can reset the sliders pressing the Reset button in the Toolbar. Enjoy :)</string>
 </resources>
