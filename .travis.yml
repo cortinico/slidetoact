@@ -6,6 +6,7 @@ os:
 env:
   global:
     - ANDROID_API_LEVEL=25
+    - EMULATOR_API_LEVEL=21
     - ANDROID_BUILD_TOOLS_VERSION=25.0.2
     - ANDROID_ABI=armeabi-v7a
     - ANDROID_TAG=google_apis
@@ -13,26 +14,19 @@ env:
 
 android:
   components:
-    - tools # to get the new `repository-11.xml`
+    - tools
     - platform-tools
-    - tools # to install Android SDK tools 25.1.x
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
-    # For Google APIs
-    - addon-google_apis-google-$ANDROID_API_LEVEL
-    # Support library
     - extra-android-support
-    # Latest artifacts in local repository
-    - extra-google-m2repository
     - extra-android-m2repository
-    # Specify at least one system image
-    - sys-img-armeabi-v7a-google_apis-$ANDROID_API_LEVEL
+    - extra-google-m2repository
 
 before_script:
-  # Create and start emulator
-  - echo no | android create avd --force -n test -t "android-"$ANDROID_API_LEVEL --abi $ANDROID_ABI --tag $ANDROID_TAG
-  - emulator -avd test -no-skin -no-audio -no-window &
+  - echo no | android create avd --force -n test -t "android-"$EMULATOR_API_LEVEL --abi armeabi-v7a --skin 480x800
+  - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
+  - adb shell input keyevent 82
 
 script:
    - ./gradlew clean build lint test connectedCheck
