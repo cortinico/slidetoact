@@ -12,4 +12,4 @@ jdk: oraclejdk8
 os:
     - linux
 script:
-   - ./gradlew tasks
+   - ./gradlew clean assemble
