@@ -1,1 +1,1 @@
-include ':sample-app', ':slide-to-act'
+include ':example', ':slidetoact'
