@@ -22,12 +22,25 @@ public class MainSlideActivityTest {
     public ActivityTestRule<MainSlideActivity> mActivityRule = new ActivityTestRule<>(MainSlideActivity.class);
 
     @Test
-    public void testSlideToActViews_checkAreCompleted() throws InterruptedException {
+    public void testSlideToActViews_checkAreNotCompleted() {
+        Assert.assertFalse(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide1)).isCompleted());
+        Assert.assertFalse(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide2)).isCompleted());
+        Assert.assertFalse(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide3)).isCompleted());
+        Assert.assertFalse(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide4)).isCompleted());
         onView(withId(R.id.slide1)).perform(ViewActions.swipeRight());
         onView(withId(R.id.slide2)).perform(ViewActions.swipeRight());
         onView(withId(R.id.slide3)).perform(ViewActions.swipeRight());
         onView(withId(R.id.slide4)).perform(ViewActions.swipeRight());
-        Thread.sleep(1000);
+    }
+
+
+    @Test
+    public void testSlideToActViews_checkCompleted() throws InterruptedException {
+        onView(withId(R.id.slide1)).perform(ViewActions.swipeRight());
+        onView(withId(R.id.slide2)).perform(ViewActions.swipeRight());
+        onView(withId(R.id.slide3)).perform(ViewActions.swipeRight());
+        onView(withId(R.id.slide4)).perform(ViewActions.swipeRight());
+        Thread.sleep(2000);
         Assert.assertFalse(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide1)).isCompleted());
         Assert.assertTrue(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide2)).isCompleted());
         Assert.assertTrue(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide3)).isCompleted());
