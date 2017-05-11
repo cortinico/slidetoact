@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_locked"
             style="@style/SlideToActView.Example"
             app:slider_locked="true"
             app:text="Locked Slider" />

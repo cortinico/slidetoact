@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_1"
             style="@style/SlideToActView.Example"
             app:area_margin="0dp"
             app:text="Area Margin 0dp" />
