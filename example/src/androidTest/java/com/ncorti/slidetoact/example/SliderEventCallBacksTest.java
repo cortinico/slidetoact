@@ -25,7 +25,7 @@ import static junit.framework.Assert.assertTrue;
 public class SliderEventCallBacksTest {
 
     @Rule
-    public ActivityTestRule<SampleActivity> mActivityRule =
+    public final ActivityTestRule<SampleActivity> mActivityRule =
             new ActivityTestRule<SampleActivity>(SampleActivity.class) {
                 @Override
                 protected Intent getActivityIntent() {
