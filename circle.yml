@@ -16,9 +16,7 @@ dependencies:
 
 test:
   pre:
-    - echo no | android create avd --force -n test -t android-24 --abi default/armeabi-v7a --skin 480x800:
-        parallel: true
-    - emulator -avd test -no-audio -no-window:
+    - emulator -avd circleci-android22 -no-audio -no-window:
         background: true
 
   override:
@@ -29,7 +27,7 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
+    - sleep 30
     - adb shell input keyevent 82:
-      background: true
-    - (./gradlew clean build lint test connectedCheck):
+    - ./gradlew clean build lint test connectedCheck -PdisablePreDex:
           timeout: 32000
