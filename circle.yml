@@ -30,4 +30,7 @@ test:
     - sleep 30
     - adb shell input keyevent 82:
     - ./gradlew clean build lint test connectedCheck -PdisablePreDex:
-          timeout: 32000
+        timeout: 32000
+    - cp -r slidetoact/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r example/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r example/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
