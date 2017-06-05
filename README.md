@@ -1,6 +1,6 @@
 # Slide To Act
 
-[![CircleCI](https://circleci.com/gh/cortinico/slidetoact/tree/master.svg?style=shield)](https://circleci.com/gh/cortinico/slidetoact/tree/master) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/Twitter-@cortinico-blue.svg?style=flat)](http://twitter.com/cortinico)
+[![CircleCI](https://circleci.com/gh/cortinico/slidetoact/tree/master.svg?style=shield)](https://circleci.com/gh/cortinico/slidetoact/tree/master)  [ ![Download](https://api.bintray.com/packages/cortinico/maven/slidetoact/images/download.svg) ](https://bintray.com/cortinico/maven/slidetoact/_latestVersion) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/Twitter-@cortinico-blue.svg?style=flat)](http://twitter.com/cortinico)
 
 A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Kotlin**](https://github.com/JetBrains/kotlin) 🇰.
 
@@ -31,15 +31,29 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 
 ## Getting Started 👣
 
-**Slide To Act** is distributed through JCenter (TODO). You just need to add the following **Gradle dependency** to your **android app gradle file** (NOT the root file).
+**Slide To Act** is distributed through [Bintray](https://bintray.com/cortinico/maven/slidetoact). To use it you need to add an extra **Maven Repo** to your **android app gradle file** (NOT the root file).
 
 ```groovy
-dependencies {
-   compile 'TODO'
+repositories {
+    jcenter()
+    // Add the following lines.
+    maven {
+        url  "http://dl.bintray.com/cortinico/maven" 
+    }
 }
 ```
 
-Or you can download the .AAR artifact directly from **JCenter** here TODO.
+Then you can add the following **Gradle dependency** to the same gradle file.
+
+```groovy
+dependencies {
+   compile 'com.ncorti:slidetoact:0.1.0'
+}
+```
+
+Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.1.0%2Fslidetoact-0.1.0.aar).
+
+**JCenter** support is coming soon!
 
 ## Example 🚸
 
