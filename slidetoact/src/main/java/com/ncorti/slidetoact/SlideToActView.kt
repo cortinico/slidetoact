@@ -288,10 +288,6 @@ class SlideToActView(context: Context,
         }
     }
 
-    override fun isInEditMode(): Boolean {
-        return true
-    }
-
     /**
      * On Touch event handler
      */
