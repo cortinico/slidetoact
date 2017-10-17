@@ -170,7 +170,7 @@ Otherwise, you can just [download the **APK** from a CircleCI build](https://45-
 
 ### CircleCI [![CircleCI](https://circleci.com/gh/cortinico/slidetoact/tree/master.svg?style=shield)](https://circleci.com/gh/cortinico/slidetoact/tree/master)
 
-This projects is built with [**Circle CI**](https://circleci.com/gh/cortinico/slidetoact/). The CI enviroment takes care of building the library .AAR, the example app and to run the **Espresso** tests. **Artifacts** are exposed at the end of every build (both the .AAR and the .APK of the example app).
+This projects is built with [**Circle CI**](https://circleci.com/gh/cortinico/slidetoact/). The CI environment takes care of building the library .AAR, the example app and to run the **Espresso** tests. **Artifacts** are exposed at the end of every build (both the .AAR and the .APK of the example app).
 
 ### TravisCI [![Build Status](https://travis-ci.org/cortinico/slidetoact.svg?branch=master)](https://travis-ci.org/cortinico/slidetoact)
 
