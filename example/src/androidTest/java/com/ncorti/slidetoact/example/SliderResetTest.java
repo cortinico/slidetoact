@@ -54,7 +54,7 @@ public class SliderResetTest {
     @Test
     public void testSlideToActView_withSwipeRight_isCompleted() throws InterruptedException {
         onView(withId(R.id.slide_1)).perform(swipeRight());
-        Thread.sleep(1200);
+        Thread.sleep(1500);
         assertTrue(((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).isCompleted());
     }
 
