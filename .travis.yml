@@ -1,5 +1,6 @@
 language: android
-sudo: false
+sudo: required
+dist: precise
 jdk: oraclejdk8
 os:
     - linux
