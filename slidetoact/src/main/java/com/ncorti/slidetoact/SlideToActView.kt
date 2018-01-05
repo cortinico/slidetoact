@@ -447,6 +447,16 @@ class SlideToActView(context: Context,
         animSet.start()
     }
 
+
+    /**
+     * Method that completes the slider
+     */
+    fun completeSlider() {
+        if (!mIsCompleted) {
+            startAnimationComplete()
+        }
+    }
+
     /**
      * Method that reset the slider
      */
@@ -632,6 +642,9 @@ class SlideToActView(context: Context,
             outline.setRoundRect(left, top, right, bottom, radius.toFloat())
         }
     }
+
+
+
 }
 
 
