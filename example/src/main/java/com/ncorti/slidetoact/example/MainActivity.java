@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.ncorti.slidetoact.SlideToActView;
 
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override

@@ -2,6 +2,7 @@ package com.ncorti.slidetoact.example;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -9,7 +10,6 @@ import android.view.WindowManager;
 
 import com.ncorti.slidetoact.SlideToActView;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,7 +56,7 @@ public class SliderEventCallBacksTest {
         final boolean[] flag = {false};
         ((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
-            public void onSlideComplete(@NotNull SlideToActView view) {
+            public void onSlideComplete(@NonNull SlideToActView view) {
                 flag[0] = true;
             }
         });
@@ -70,7 +70,7 @@ public class SliderEventCallBacksTest {
         final boolean[] flag = {false};
         ((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).setOnSlideResetListener(new SlideToActView.OnSlideResetListener() {
             @Override
-            public void onSlideReset(@NotNull SlideToActView view) {
+            public void onSlideReset(@NonNull SlideToActView view) {
                 flag[0] = true;
             }
         });
@@ -86,22 +86,22 @@ public class SliderEventCallBacksTest {
         final boolean[] flag = {false, false, false, false};
         ((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).setOnSlideToActAnimationEventListener(new SlideToActView.OnSlideToActAnimationEventListener() {
             @Override
-            public void onSlideCompleteAnimationEnded(@NotNull SlideToActView view) {
+            public void onSlideCompleteAnimationEnded(@NonNull SlideToActView view) {
                 flag[0] = true;
             }
 
             @Override
-            public void onSlideCompleteAnimationStarted(@NotNull SlideToActView view, float threshold) {
+            public void onSlideCompleteAnimationStarted(@NonNull SlideToActView view, float threshold) {
                 flag[1] = true;
             }
 
             @Override
-            public void onSlideResetAnimationEnded(@NotNull SlideToActView view) {
+            public void onSlideResetAnimationEnded(@NonNull SlideToActView view) {
                 flag[2] = true;
             }
 
             @Override
-            public void onSlideResetAnimationStarted(@NotNull SlideToActView view) {
+            public void onSlideResetAnimationStarted(@NonNull SlideToActView view) {
                 flag[3] = true;
             }
         });

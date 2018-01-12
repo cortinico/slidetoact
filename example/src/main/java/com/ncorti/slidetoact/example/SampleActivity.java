@@ -1,6 +1,7 @@
 package com.ncorti.slidetoact.example;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,8 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ncorti.slidetoact.SlideToActView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public class SampleActivity extends AppCompatActivity {
 
     private List<SlideToActView> getSlideList() {
         final List<SlideToActView> slideList = new ArrayList<>();
-        final LinearLayout container = (LinearLayout) findViewById(R.id.slide_container);
+        final LinearLayout container = findViewById(R.id.slide_container);
         for (int i = 0; i < container.getChildCount(); i++) {
             final View child = container.getChildAt(i);
             if (child instanceof SlideToActView) {
@@ -101,38 +100,38 @@ public class SampleActivity extends AppCompatActivity {
 
 
     private void setupEventCallbacks() {
-        final SlideToActView slide = (SlideToActView) findViewById(R.id.event_slider);
-        final TextView log = (TextView) findViewById(R.id.event_log);
+        final SlideToActView slide = findViewById(R.id.event_slider);
+        final TextView log = findViewById(R.id.event_log);
         slide.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
-            public void onSlideComplete(@NotNull SlideToActView view) {
+            public void onSlideComplete(@NonNull SlideToActView view) {
                 log.append("\n" + getTime() + " onSlideComplete");
             }
         });
         slide.setOnSlideResetListener(new SlideToActView.OnSlideResetListener() {
             @Override
-            public void onSlideReset(@NotNull SlideToActView view) {
+            public void onSlideReset(@NonNull SlideToActView view) {
                 log.append("\n" + getTime() + " onSlideReset");
             }
         });
         slide.setOnSlideToActAnimationEventListener(new SlideToActView.OnSlideToActAnimationEventListener() {
             @Override
-            public void onSlideCompleteAnimationStarted(@NotNull SlideToActView view, float threshold) {
+            public void onSlideCompleteAnimationStarted(@NonNull SlideToActView view, float threshold) {
                 log.append("\n" + getTime() + " onSlideCompleteAnimationStarted - " + threshold + "");
             }
 
             @Override
-            public void onSlideCompleteAnimationEnded(@NotNull SlideToActView view) {
+            public void onSlideCompleteAnimationEnded(@NonNull SlideToActView view) {
                 log.append("\n" + getTime() + " onSlideCompleteAnimationEnded");
             }
 
             @Override
-            public void onSlideResetAnimationStarted(@NotNull SlideToActView view) {
+            public void onSlideResetAnimationStarted(@NonNull SlideToActView view) {
                 log.append("\n" + getTime() + " onSlideResetAnimationStarted");
             }
 
             @Override
-            public void onSlideResetAnimationEnded(@NotNull SlideToActView view) {
+            public void onSlideResetAnimationEnded(@NonNull SlideToActView view) {
                 log.append("\n" + getTime() + " onSlideResetAnimationEnded");
             }
         });
