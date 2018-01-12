@@ -10,7 +10,7 @@ import android.graphics.*
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.support.graphics.drawable.VectorDrawableCompat
-import android.support.v4.view.MotionEventCompat
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.util.Xml
@@ -75,7 +75,6 @@ class SlideToActView(context: Context,
 
     /** Slider cursor position (between 0 and (`reaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
-        get() = field
         set(value) {
             field = value
             if (mAreaWidth - mAreaHeight == 0) {
@@ -156,14 +155,17 @@ class SlideToActView(context: Context,
             mDesiredSliderHeight = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_slider_height, mDesiredSliderHeight)
 
             mBorderRadius = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_border_radius, -1)
-            mOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, R.color.defaultAccent)
-            mInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, R.color.white)
+
+            val defaultOuter = ContextCompat.getColor(this.context, R.color.defaultAccent)
+            val defaultInner = ContextCompat.getColor(this.context, R.color.white)
+            mOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
+            mInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultInner)
             mTextMessage = layoutAttrs.getString(R.styleable.SlideToActView_text)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
 
-            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, R.dimen.default_text_size)
-            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, R.dimen.default_area_margin)
+            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
+            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
         } finally {
             layoutAttrs.recycle()
@@ -211,12 +213,11 @@ class SlideToActView(context: Context,
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val width: Int
 
-        if (widthMode == MeasureSpec.EXACTLY) {
-            width = widthSize
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(mDesiredSliderWidth, widthSize)
-        } else {
-            width = mDesiredSliderWidth
+        width = when (widthMode) {
+            MeasureSpec.EXACTLY -> widthSize
+            MeasureSpec.AT_MOST -> Math.min(mDesiredSliderWidth, widthSize)
+            MeasureSpec.UNSPECIFIED -> mDesiredSliderWidth
+            else -> mDesiredSliderWidth
         }
         setMeasuredDimension(width, mDesiredSliderHeight)
     }
@@ -288,12 +289,9 @@ class SlideToActView(context: Context,
         }
     }
 
-    /**
-     * On Touch event handler
-     */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null && isEnabled) {
-            when (MotionEventCompat.getActionMasked(event)) {
+            when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (checkInsideButton(event.x, event.y)) {
                         mFlagMoving = true
@@ -333,7 +331,7 @@ class SlideToActView(context: Context,
         return super.onTouchEvent(event)
     }
 
-    fun invalidateArea() {
+    private fun invalidateArea() {
         invalidate(mOuterRect.left.toInt(), mOuterRect.top.toInt(), mOuterRect.right.toInt(), mOuterRect.bottom.toInt())
     }
 
