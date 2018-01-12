@@ -447,7 +447,6 @@ class SlideToActView(context: Context,
         animSet.start()
     }
 
-
     /**
      * Method that completes the slider
      */
@@ -642,9 +641,6 @@ class SlideToActView(context: Context,
             outline.setRoundRect(left, top, right, bottom, radius.toFloat())
         }
     }
-
-
-
 }
 
 
