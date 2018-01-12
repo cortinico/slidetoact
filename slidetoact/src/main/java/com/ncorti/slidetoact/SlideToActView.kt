@@ -448,6 +448,15 @@ class SlideToActView(context: Context,
     }
 
     /**
+     * Method that completes the slider
+     */
+    fun completeSlider() {
+        if (!mIsCompleted) {
+            startAnimationComplete()
+        }
+    }
+
+    /**
      * Method that reset the slider
      */
     fun resetSlider() {
