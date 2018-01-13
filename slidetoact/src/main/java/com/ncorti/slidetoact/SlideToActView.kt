@@ -8,7 +8,10 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.annotation.RequiresApi
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -34,7 +37,7 @@ import java.util.*
  */
 class SlideToActView(context: Context,
                      attrs: AttributeSet?,
-                     defStyle: Int) : View(context, attrs, defStyle) {
+                     defStyleAttr: Int) : View(context, attrs, defStyleAttr) {
 
     constructor(context: Context) : this(context, null, R.styleable.SlideToActViewTheme_slideToActViewStyle)
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, R.styleable.SlideToActViewTheme_slideToActViewStyle)
@@ -110,8 +113,8 @@ class SlideToActView(context: Context,
     /** Arrow drawable */
     private val mDrawableArrow: VectorDrawableCompat
 
-    /** Tick drawable */
-    private val mDrawableTick: AnimatedVectorDrawable
+    /** Tick drawable, is actually an AnimatedVectorDrawable */
+    private val mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
     /* -------------------- PAINT & DRAW -------------------- */
@@ -153,7 +156,7 @@ class SlideToActView(context: Context,
 
     init {
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
-                R.styleable.SlideToActView, defStyle, R.style.SlideToActView)
+                R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
         try {
             mDesiredSliderHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderHeightDp, resources.displayMetrics).toInt()
             mDesiredSliderWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderWidthDp, resources.displayMetrics).toInt()
@@ -183,7 +186,13 @@ class SlideToActView(context: Context,
         mOuterRect = RectF(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
 
         mDrawableArrow = parseVectorDrawableCompat(context.resources, R.drawable.ic_arrow, context.theme)
-        mDrawableTick = context.resources.getDrawable(R.drawable.animated_ic_check, context.theme) as AnimatedVectorDrawable
+
+        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
+        mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            context.resources.getDrawable(R.drawable.animated_ic_check, context.theme) as AnimatedVectorDrawable
+        } else {
+            AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
+        }
 
         mOuterPaint.color = mOuterColor
         mInnerPaint.color = mInnerColor
@@ -238,7 +247,7 @@ class SlideToActView(context: Context,
         mTextYPosition = (mAreaHeight.toFloat() / 2) - (mTextPaint.descent() + mTextPaint.ascent()) / 2
 
         // This outline provider force removal of shadow
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mOutlineProviders = generateOutlineProviders((mAreaWidth - mAreaHeight) / 2)
             val outline = mOutlineProviders[0]
             if (outline is ViewOutlineProvider) {
@@ -288,7 +297,13 @@ class SlideToActView(context: Context,
                 mAreaWidth - mTickMargin - mActualAreaWidth,
                 mAreaHeight - mTickMargin)
 
-        mDrawableTick.setTint(mInnerColor)
+        // Tinting the tick with the proper implementation method
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mDrawableTick.setTint(mInnerColor)
+        } else {
+            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(mInnerColor)
+        }
+
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
@@ -415,7 +430,7 @@ class SlideToActView(context: Context,
                 if (!mFlagDrawTick) {
                     mTickMargin = mIconMargin
                     mFlagDrawTick = true
-                    mDrawableTick.start()
+                    startTickAnimation()
                     invalidateArea()
                 }
             }
@@ -541,7 +556,7 @@ class SlideToActView(context: Context,
 
             override fun onAnimationEnd(p0: Animator?) {
                 isEnabled = true
-                mDrawableTick.stop()
+                stopTickAnimation()
                 onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(this@SlideToActView)
                 onSlideResetListener?.onSlideReset(this@SlideToActView)
             }
@@ -550,6 +565,28 @@ class SlideToActView(context: Context,
             }
         })
         animSet.start()
+    }
+
+    /**
+     * Private method to start the Tick AVD animation, with the proper library based on API level.
+     */
+    private fun startTickAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            (mDrawableTick as AnimatedVectorDrawable).start()
+        } else {
+            (mDrawableTick as AnimatedVectorDrawableCompat).start()
+        }
+    }
+
+    /**
+     * Private method to stop the Tick AVD animation, with the proper library based on API level.
+     */
+    private fun stopTickAnimation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            (mDrawableTick as AnimatedVectorDrawable).stop()
+        } else {
+            (mDrawableTick as AnimatedVectorDrawableCompat).stop()
+        }
     }
 
     /**
@@ -638,6 +675,7 @@ class SlideToActView(context: Context,
         val bottom = areaHeight
         val radius = borderRadius
 
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun getOutline(view: View?, outline: Outline?) {
             if (view == null || outline == null)
                 return
