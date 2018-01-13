@@ -61,7 +61,12 @@ class SlideToActView(context: Context,
     private val mOriginAreaMargin: Int
 
     /** Text message */
-    private var mTextMessage: String = ""
+    var text: CharSequence = ""
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     /** Size for the text message */
     private val mTextSize: Int
 
@@ -160,7 +165,7 @@ class SlideToActView(context: Context,
             val defaultInner = ContextCompat.getColor(this.context, R.color.white)
             mOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
             mInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultInner)
-            mTextMessage = layoutAttrs.getString(R.styleable.SlideToActView_text)
+            text = layoutAttrs.getString(R.styleable.SlideToActView_text)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
 
@@ -261,7 +266,7 @@ class SlideToActView(context: Context,
         mTextPaint.alpha = (255 * mPositionPercInv).toInt()
 
         // Vertical + Horizontal centering
-        canvas.drawText(mTextMessage, mTextXPosition, mTextYPosition, mTextPaint)
+        canvas.drawText(text.toString(), mTextXPosition, mTextYPosition, mTextPaint)
 
         // Arrow angle
         mArrowAngle = -180 * mPositionPerc
