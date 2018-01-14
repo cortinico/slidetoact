@@ -70,7 +70,7 @@ SlideToActView sta = (SlideToActView) findViewById(R.id.example);
 
 * **100% Vectorial**, no .png or other assets provided.
 * **Fancy animations!** 🦄
-* **API >= 21** compatible.
+* **API >= 14** compatible (since v0.2.0)
 * Easy to integrate (just a gradle compile line).
 * Integrated with your **app theme** 🖼.
 * Works **out of the box**, no customization needed.
