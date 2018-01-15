@@ -205,6 +205,11 @@ class SlideToActView(context: Context,
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
         mTickMargin = mIconMargin
+
+        // This outline provider force removal of shadow
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outlineProvider = SlideToActOutlineProvider()
+        }
     }
 
     private fun parseVectorDrawableCompat(res: Resources, resId: Int, theme: Resources.Theme): VectorDrawableCompat {
@@ -243,11 +248,6 @@ class SlideToActView(context: Context,
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
         mTextYPosition = (mAreaHeight.toFloat() / 2) - (mTextPaint.descent() + mTextPaint.ascent()) / 2
-
-        // This outline provider force removal of shadow
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outlineProvider = SlideToActOutlineProvider()
-        }
     }
 
     override fun onDraw(canvas: Canvas?) {
