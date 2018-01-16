@@ -265,11 +265,12 @@ class SlideToActView(context: Context,
         canvas.drawRoundRect(mOuterRect, mBorderRadius.toFloat(), mBorderRadius.toFloat(), mOuterPaint)
 
         // Inner Cursor
+        val ratio = (mAreaHeight - 2 * mActualAreaMargin).toFloat() / mAreaHeight.toFloat()
         mInnerRect.set((mActualAreaMargin + mPosition).toFloat(),
                 mActualAreaMargin.toFloat(),
                 (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
                 mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
-        canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat(), mBorderRadius.toFloat(), mInnerPaint)
+        canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat() * ratio, mBorderRadius.toFloat() * ratio, mInnerPaint)
 
         // Text alpha
         mTextPaint.alpha = (255 * mPositionPercInv).toInt()
