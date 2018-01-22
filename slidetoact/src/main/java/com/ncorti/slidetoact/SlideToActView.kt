@@ -6,7 +6,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Outline
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -24,8 +28,6 @@ import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import java.util.*
-
 
 /**
  *  Class representing the custom view, SlideToActView.
@@ -36,8 +38,8 @@ import java.util.*
  *  @author cortinico
  */
 class SlideToActView(context: Context,
-                     attrs: AttributeSet?,
-                     defStyleAttr: Int) : View(context, attrs, defStyleAttr) {
+    attrs: AttributeSet?,
+    defStyleAttr: Int) : View(context, attrs, defStyleAttr) {
 
     constructor(context: Context) : this(context, null, R.styleable.SlideToActViewTheme_slideToActViewStyle)
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, R.styleable.SlideToActViewTheme_slideToActViewStyle)
@@ -99,7 +101,6 @@ class SlideToActView(context: Context,
     /** 1/mPositionPerc */
     private var mPositionPercInv: Float = 1f
 
-
     /* -------------------- ICONS -------------------- */
 
     private val mIconMargin: Int
@@ -143,8 +144,6 @@ class SlideToActView(context: Context,
     /** Private flag to check if the slide gesture have been completed */
     private var mIsCompleted = false
 
-    private var mOutlineProviders: List<Any> = ArrayList()
-
     /** Public flag to lock the slider */
     var isLocked = false
 
@@ -153,10 +152,9 @@ class SlideToActView(context: Context,
     var onSlideCompleteListener: OnSlideCompleteListener? = null
     var onSlideResetListener: OnSlideResetListener? = null
 
-
     init {
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
-                R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
+            R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
         try {
             mDesiredSliderHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderHeightDp, resources.displayMetrics).toInt()
             mDesiredSliderWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderWidthDp, resources.displayMetrics).toInt()
@@ -180,8 +178,8 @@ class SlideToActView(context: Context,
         }
 
         mInnerRect = RectF((mActualAreaMargin + mPosition).toFloat(), mActualAreaMargin.toFloat(),
-                (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
-                mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
+            (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
+            mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
 
         mOuterRect = RectF(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
 
@@ -207,6 +205,11 @@ class SlideToActView(context: Context,
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
         mTickMargin = mIconMargin
+
+        // This outline provider force removal of shadow
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outlineProvider = SlideToActOutlineProvider()
+        }
     }
 
     private fun parseVectorDrawableCompat(res: Resources, resId: Int, theme: Resources.Theme): VectorDrawableCompat {
@@ -245,15 +248,6 @@ class SlideToActView(context: Context,
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
         mTextYPosition = (mAreaHeight.toFloat() / 2) - (mTextPaint.descent() + mTextPaint.ascent()) / 2
-
-        // This outline provider force removal of shadow
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mOutlineProviders = generateOutlineProviders((mAreaWidth - mAreaHeight) / 2)
-            val outline = mOutlineProviders[0]
-            if (outline is ViewOutlineProvider) {
-                outlineProvider = outline
-            }
-        }
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -266,9 +260,9 @@ class SlideToActView(context: Context,
 
         // Inner Cursor
         mInnerRect.set((mActualAreaMargin + mPosition).toFloat(),
-                mActualAreaMargin.toFloat(),
-                (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
-                mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
+            mActualAreaMargin.toFloat(),
+            (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
+            mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
         canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat(), mBorderRadius.toFloat(), mInnerPaint)
 
         // Text alpha
@@ -281,21 +275,21 @@ class SlideToActView(context: Context,
         mArrowAngle = -180 * mPositionPerc
         canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         mDrawableArrow.setBounds(mInnerRect.left.toInt() + mArrowMargin,
-                mInnerRect.top.toInt() + mArrowMargin,
-                mInnerRect.right.toInt() - mArrowMargin,
-                mInnerRect.bottom.toInt() - mArrowMargin)
+            mInnerRect.top.toInt() + mArrowMargin,
+            mInnerRect.right.toInt() - mArrowMargin,
+            mInnerRect.bottom.toInt() - mArrowMargin)
         if (mDrawableArrow.bounds.left <= mDrawableArrow.bounds.right &&
-                mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
+            mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
             mDrawableArrow.draw(canvas)
         }
         canvas.rotate(-1 * mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
 
         // Tick drawing
         mDrawableTick.setBounds(
-                mActualAreaWidth + mTickMargin,
-                mTickMargin,
-                mAreaWidth - mTickMargin - mActualAreaWidth,
-                mAreaHeight - mTickMargin)
+            mActualAreaWidth + mTickMargin,
+            mTickMargin,
+            mAreaWidth - mTickMargin - mActualAreaWidth,
+            mAreaHeight - mTickMargin)
 
         // Tinting the tick with the proper implementation method
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -405,10 +399,7 @@ class SlideToActView(context: Context,
         areaAnimator.addUpdateListener {
             mActualAreaWidth = it.animatedValue as Int
             if (Build.VERSION.SDK_INT >= 21) {
-                val outline = mOutlineProviders[mActualAreaWidth]
-                if (outline is ViewOutlineProvider) {
-                    outlineProvider = outline
-                }
+                invalidateOutline()
             }
             invalidateArea()
         }
@@ -460,7 +451,6 @@ class SlideToActView(context: Context,
 
             override fun onAnimationRepeat(p0: Animator?) {
             }
-
         })
         animSet.start()
     }
@@ -512,10 +502,7 @@ class SlideToActView(context: Context,
             mFlagDrawTick = false
             mActualAreaWidth = it.animatedValue as Int
             if (Build.VERSION.SDK_INT >= 21) {
-                val outline = mOutlineProviders[mActualAreaWidth]
-                if (outline is ViewOutlineProvider) {
-                    outlineProvider = outline
-                }
+                invalidateOutline()
             }
             invalidateArea()
         })
@@ -590,14 +577,6 @@ class SlideToActView(context: Context,
     }
 
     /**
-     * Private method for generating outline providers (the shadow)
-     */
-    private fun generateOutlineProviders(end: Int): List<SlideToActOutlineProvider> {
-        return (0..end).map { SlideToActOutlineProvider(mBorderRadius, it, mAreaWidth - it, mAreaHeight) }
-    }
-
-
-    /**
      * Event handler for the SlideToActView animation events.
      * This event handler can be used to react to animation events from the Slide,
      * the event will be fired whenever an animation start/end.
@@ -638,7 +617,6 @@ class SlideToActView(context: Context,
         fun onSlideResetAnimationEnded(view: SlideToActView)
     }
 
-
     /**
      * Event handler for the slide complete event.
      * Use this handler to react to slide event
@@ -668,18 +646,14 @@ class SlideToActView(context: Context,
      * This outline will suppress the shadow (till the moment when Android will support
      * updatable Outlines).
      */
-    private class SlideToActOutlineProvider(borderRadius: Int, actualAreaWidth: Int, areaWidth: Int, areaHeight: Int) : ViewOutlineProvider() {
-        val left = actualAreaWidth
-        val top = 0
-        val right = areaWidth
-        val bottom = areaHeight
-        val radius = borderRadius
+    private inner class SlideToActOutlineProvider : ViewOutlineProvider() {
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun getOutline(view: View?, outline: Outline?) {
             if (view == null || outline == null)
                 return
-            outline.setRoundRect(left, top, right, bottom, radius.toFloat())
+
+            outline.setRoundRect(mActualAreaWidth, 0, mAreaWidth - mActualAreaWidth, mAreaHeight,mBorderRadius.toFloat())
         }
     }
 }
