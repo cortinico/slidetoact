@@ -149,6 +149,18 @@ You can also toggle this attribute programmatically with the provided setter.
 SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
 sta.setLocked(true);
 ```
+#### ``slider_icon``
+
+You can set a custom icon by setting the ``slider_icon``attribute to a drawable resource.
+
+<p align="center">
+  <img src="assets/custom_icon.png" alt="locked_slider gif"/>
+</p>
+
+```xml
+app:slider_icon="@drawable/custom_icon"
+```
+
 
 #### ``android:elevation``
 
