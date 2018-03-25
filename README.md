@@ -18,6 +18,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``text`` & ``text_size``](#text--text_size)
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
+        * [``slider_icon``](#slider_icon)
         * [``android:elevation``](#androidelevation)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
@@ -149,6 +150,8 @@ You can also toggle this attribute programmatically with the provided setter.
 SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
 sta.setLocked(true);
 ```
+
+
 #### ``slider_icon``
 
 You can set a custom icon by setting the ``slider_icon``attribute to a drawable resource.
