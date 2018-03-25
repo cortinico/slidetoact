@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="6dp"
-            app:text="Sample SlideToActView" />
+            app:text="Sample SlideToActView"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -81,6 +81,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/locked_slider" />
+
+        <Button
+            android:id="@+id/button_custom_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/custom_icon" />
 
     </LinearLayout>
 </ScrollView>

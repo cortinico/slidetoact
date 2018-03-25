@@ -118,6 +118,9 @@ class SlideToActView(context: Context,
     private val mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
+    /** The icon for the drawable */
+    private var mIcon: Int = R.drawable.ic_arrow
+
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
     private val mOuterPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -132,7 +135,6 @@ class SlideToActView(context: Context,
     private var mInnerRect: RectF
     /** Outer rectangle (used for area drawing) */
     private var mOuterRect: RectF
-
     /** Grace value, when mPositionPerc > mGraceValue slider will perform the 'complete' operations */
     private val mGraceValue: Float = 0.8F
 
@@ -173,6 +175,8 @@ class SlideToActView(context: Context,
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
+
+            mIcon = layoutAttrs.getResourceId(R.styleable.SlideToActView_slider_icon, R.drawable.ic_arrow)
         } finally {
             layoutAttrs.recycle()
         }
@@ -183,7 +187,7 @@ class SlideToActView(context: Context,
 
         mOuterRect = RectF(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
 
-        mDrawableArrow = parseVectorDrawableCompat(context.resources, R.drawable.ic_arrow, context.theme)
+        mDrawableArrow = parseVectorDrawableCompat(context.resources, mIcon, context.theme)
 
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
