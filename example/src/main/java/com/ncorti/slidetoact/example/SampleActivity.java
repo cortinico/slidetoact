@@ -58,6 +58,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_locked_slider:
                 setContentView(R.layout.content_locked_slider);
                 break;
+            case R.id.button_custom_icon:
+                setContentView(R.layout.content_custom_icon);
+                break;
             default:
                 finish();
                 break;
