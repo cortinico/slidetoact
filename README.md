@@ -15,7 +15,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``area_margin``](#area_margin)
         * [``inner_color`` & ``outer_color``](#inner_color--outer_color)
         * [``border_radius``](#border_radius)
-        * [``text`` & ``text_size``](#text--text_size)
+        * [``text``, ``text_size``, ``text_style``](#text-text_size-text_style)
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
         * [``slider_icon``](#slider_icon)
@@ -37,18 +37,18 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 If you're using the Android Gradle plugin version 3:
 ```groovy
 dependencies {
-   implementation 'com.ncorti:slidetoact:0.2.0'
+   implementation 'com.ncorti:slidetoact:0.3.0'
 }
 ```
 
 If you're using an Older version of the Android Gradle plugin:
 ```groovy
 dependencies {
-   compile 'com.ncorti:slidetoact:0.2.0'
+   compile 'com.ncorti:slidetoact:0.3.0'
 }
 ```
 
-Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.1.0%2Fslidetoact-0.1.0.aar).
+Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.3.0%2Fslidetoact-0.3.0.aar).
 
 ## Example 🚸
 
@@ -122,11 +122,13 @@ Use the ``border_radius`` attribute to control the **radius** of the **inner cir
 
 <p align="center"><img src="assets/border_radius_1.png" alt="border_radius_1" width="40%"/> <img src="assets/border_radius_2.png" alt="border_radius_2" width="40%"/></p>
 
-#### ``text`` & ``text_size``
+#### ``text``, ``text_size``, ``text_style``
 
 Use the ``text`` attribute to control the **text of your slider**. If not set, this attribute defaults to **SlideToActView**. 
 
 Use the ``text_size`` attribute to control the **size** of the **text of your slider**. A ``text_size`` set to **0sp** will result in hiding the text. If not set, this attribute defaults to **16sp**.
+
+Use the ``text_style`` attribute to control the **style** of your text. Accepted values are ``normal``, ``bold`` and ``italic``.
 
 <p align="center"><img src="assets/text.png" alt="text" width="40%"/></p>
 
@@ -157,7 +159,7 @@ sta.setLocked(true);
 You can set a custom icon by setting the ``slider_icon``attribute to a drawable resource.
 
 <p align="center">
-  <img src="assets/custom_icon.png" alt="locked_slider gif"/>
+  <img src="assets/custom_icon.png" alt="custom_icon" width="40%"/>
 </p>
 
 ```xml
