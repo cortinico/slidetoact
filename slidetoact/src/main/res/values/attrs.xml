@@ -3,6 +3,11 @@
     <declare-styleable name="SlideToActView">
         <attr name="text" format="string" />
         <attr name="text_size" format="dimension" />
+        <attr name="text_style" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+        </attr>
         <attr name="area_margin" format="dimension" />
         <attr name="inner_color" format="color" />
         <attr name="outer_color" format="color" />

@@ -5,7 +5,7 @@
     <string name="colors">Colors</string>
     <string name="border_radius">Border Radius</string>
     <string name="elevation">Elevation</string>
-    <string name="text_size">Text Size</string>
+    <string name="text_size">Text Size/Styles</string>
     <string name="slider_dimension">Slider Dimension</string>
     <string name="event_callback">Event Callback</string>
     <string name="locked_slider">Locked Slider</string>

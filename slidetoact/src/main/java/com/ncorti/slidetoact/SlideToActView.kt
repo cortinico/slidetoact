@@ -72,6 +72,14 @@ class SlideToActView(context: Context,
             invalidate()
         }
 
+    /** Typeface for the text field */
+    var typeFace = Typeface.NORMAL
+        set(value) {
+            field = value
+            mTextPaint.typeface = Typeface.create("sans-serif-light" , value)
+            invalidate()
+        }
+
     /** Size for the text message */
     private val mTextSize: Int
 
@@ -79,9 +87,22 @@ class SlideToActView(context: Context,
     private var mTextXPosition = -1f
 
     /** Outer color used by the slider (primary) */
-    private val mOuterColor: Int
+    var outerColor: Int = 0
+        set(value) {
+            field = value
+            mOuterPaint.color = value
+            mDrawableArrow.setTint(value)
+            invalidate()
+        }
+
     /** Inner color used by the slider (secondary, icon and border) */
-    private val mInnerColor: Int
+    var innerColor: Int = 0
+        set(value) {
+            field = value
+            mInnerPaint.color = value
+            mTextPaint.color = value
+            invalidate()
+        }
 
     /** Slider cursor position (between 0 and (`reaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
@@ -155,6 +176,9 @@ class SlideToActView(context: Context,
     var onSlideResetListener: OnSlideResetListener? = null
 
     init {
+        val actualOuterColor : Int
+        val actualInnerColor : Int
+
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
             R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
         try {
@@ -166,9 +190,10 @@ class SlideToActView(context: Context,
 
             val defaultOuter = ContextCompat.getColor(this.context, R.color.defaultAccent)
             val defaultInner = ContextCompat.getColor(this.context, R.color.white)
-            mOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
-            mInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultInner)
+            actualOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
+            actualInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultInner)
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
+            typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
 
@@ -196,15 +221,11 @@ class SlideToActView(context: Context,
             AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
         }
 
-        mOuterPaint.color = mOuterColor
-        mInnerPaint.color = mInnerColor
-
         mTextPaint.textAlign = Paint.Align.CENTER
         mTextPaint.textSize = mTextSize.toFloat()
-        mTextPaint.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
-        mTextPaint.color = mInnerColor
 
-        mDrawableArrow.setTint(mOuterColor)
+        outerColor = actualOuterColor
+        innerColor = actualInnerColor
 
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
@@ -299,9 +320,9 @@ class SlideToActView(context: Context,
 
         // Tinting the tick with the proper implementation method
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDrawableTick.setTint(mInnerColor)
+            mDrawableTick.setTint(innerColor)
         } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(mInnerColor)
+            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(innerColor)
         }
 
         if (mFlagDrawTick) {

@@ -18,6 +18,16 @@
 
         <com.ncorti.slidetoact.SlideToActView
             style="@style/SlideToActView.Example"
+            app:text_style="bold"
+            app:text="TextStyle Bold"/>
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:text_style="italic"
+            app:text="TextStyle Italic"/>
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
             app:text_size="12sp"
             app:text="TextSize 12sp" />
 
