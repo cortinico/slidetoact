@@ -8,11 +8,11 @@ machine:
 
 dependencies:
   pre:
-    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-26" ]; then echo y | android update sdk --no-ui --all --filter "android-26"; fi
-    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/26.0.2" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-26.0.2"; fi
+    - if [ ! -d "/usr/local/android-sdk-linux/platforms/android-27" ]; then echo y | android update sdk --no-ui --all --filter "android-27"; fi
+    - if [ ! -d "/usr/local/android-sdk-linux/build-tools/27.0.3" ]; then echo y | android update sdk --no-ui --all --filter "build-tools-27.0.3"; fi
   cache_directories:
-    - /usr/local/android-sdk-linux/platforms/android-26
-    - /usr/local/android-sdk-linux/build-tools/26.0.2
+    - /usr/local/android-sdk-linux/platforms/android-27
+    - /usr/local/android-sdk-linux/build-tools/27.0.3
 
 test:
   pre:
