@@ -170,6 +170,12 @@ class SlideToActView(context: Context,
     /** Public flag to lock the slider */
     var isLocked = false
 
+    /** Public flag to lock the rotation icon */
+    var isRotateIcon = true
+
+    /** Public flag to animate complete sliding*/
+    var isAnimateComplete = true
+
     /** Public Slide event listeners */
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
     var onSlideCompleteListener: OnSlideCompleteListener? = null
@@ -196,6 +202,10 @@ class SlideToActView(context: Context,
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
+
+            isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
+
+            isAnimateComplete = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_complete, true)
 
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
@@ -300,7 +310,9 @@ class SlideToActView(context: Context,
 
         // Arrow angle
         mArrowAngle = -180 * mPositionPerc
-        canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+        if (isRotateIcon) {
+            canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+        }
         mDrawableArrow.setBounds(mInnerRect.left.toInt() + mArrowMargin,
             mInnerRect.top.toInt() + mArrowMargin,
             mInnerRect.right.toInt() - mArrowMargin,
@@ -404,82 +416,88 @@ class SlideToActView(context: Context,
      * Private method that is performed when user completes the slide
      */
     private fun startAnimationComplete() {
-        val animSet = AnimatorSet()
+        if (isAnimateComplete) {
+            val animSet = AnimatorSet()
 
-        // Animator that moves the cursor
-        val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
-        finalPositionAnimator.addUpdateListener({
-            mPosition = it.animatedValue as Int
-            invalidateArea()
-        })
+            // Animator that moves the cursor
+            val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
+            finalPositionAnimator.addUpdateListener({
+                mPosition = it.animatedValue as Int
+                invalidateArea()
+            })
 
-        // Animator that bounce away the cursors
-        val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
-        marginAnimator.addUpdateListener({
-            mActualAreaMargin = it.animatedValue as Int
-            invalidateArea()
-        })
-        marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
+            // Animator that bounce away the cursors
+            val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
+            marginAnimator.addUpdateListener({
+                mActualAreaMargin = it.animatedValue as Int
+                invalidateArea()
+            })
+            marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
-        // Animator that reduces the outer area (to right)
-        val areaAnimator = ValueAnimator.ofInt(0, (mAreaWidth - mAreaHeight) / 2)
-        areaAnimator.addUpdateListener {
-            mActualAreaWidth = it.animatedValue as Int
-            if (Build.VERSION.SDK_INT >= 21) {
-                invalidateOutline()
-            }
-            invalidateArea()
-        }
-
-        val tickAnimator: ValueAnimator
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-            // Fallback not using AVD.
-            tickAnimator = ValueAnimator.ofInt(0, 255)
-            tickAnimator.addUpdateListener {
-                mTickMargin = mIconMargin
-                mFlagDrawTick = true
-                mDrawableTick.alpha = it.animatedValue as Int
+            // Animator that reduces the outer area (to right)
+            val areaAnimator = ValueAnimator.ofInt(0, (mAreaWidth - mAreaHeight) / 2)
+            areaAnimator.addUpdateListener {
+                mActualAreaWidth = it.animatedValue as Int
+                if (Build.VERSION.SDK_INT >= 21) {
+                    invalidateOutline()
+                }
                 invalidateArea()
             }
-        } else {
-            // Used AVD Animation.
-            tickAnimator = ValueAnimator.ofInt(0)
-            tickAnimator.addUpdateListener {
-                if (!mFlagDrawTick) {
+
+            val tickAnimator: ValueAnimator
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+                // Fallback not using AVD.
+                tickAnimator = ValueAnimator.ofInt(0, 255)
+                tickAnimator.addUpdateListener {
                     mTickMargin = mIconMargin
                     mFlagDrawTick = true
-                    startTickAnimation()
+                    mDrawableTick.alpha = it.animatedValue as Int
                     invalidateArea()
                 }
+            } else {
+                // Used AVD Animation.
+                tickAnimator = ValueAnimator.ofInt(0)
+                tickAnimator.addUpdateListener {
+                    if (!mFlagDrawTick) {
+                        mTickMargin = mIconMargin
+                        mFlagDrawTick = true
+                        startTickAnimation()
+                        invalidateArea()
+                    }
+                }
             }
-        }
 
-        if (mPosition >= mAreaWidth - mAreaHeight) {
-            animSet.playSequentially(marginAnimator, areaAnimator, tickAnimator)
+            if (mPosition >= mAreaWidth - mAreaHeight) {
+                animSet.playSequentially(marginAnimator, areaAnimator, tickAnimator)
+            } else {
+                animSet.playSequentially(finalPositionAnimator, marginAnimator, areaAnimator, tickAnimator)
+            }
+
+            animSet.duration = 300
+
+            animSet.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(this@SlideToActView, mPositionPerc)
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    mIsCompleted = true
+                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
+                    onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+            })
+            animSet.start()
         } else {
-            animSet.playSequentially(finalPositionAnimator, marginAnimator, areaAnimator, tickAnimator)
+            mIsCompleted = true
+            onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
+            onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
         }
-
-        animSet.duration = 300
-
-        animSet.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-                onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(this@SlideToActView, mPositionPerc)
-            }
-
-            override fun onAnimationCancel(p0: Animator?) {
-            }
-
-            override fun onAnimationEnd(p0: Animator?) {
-                mIsCompleted = true
-                onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
-                onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
-            }
-
-            override fun onAnimationRepeat(p0: Animator?) {
-            }
-        })
-        animSet.start()
     }
 
     /**
