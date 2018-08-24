@@ -19,6 +19,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
         * [``slider_icon``](#slider_icon)
+        * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
@@ -166,6 +167,15 @@ You can set a custom icon by setting the ``slider_icon``attribute to a drawable 
 app:slider_icon="@drawable/custom_icon"
 ```
 
+You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
+ ```xml
+app:rotate_icon="false"
+```
+ #### ``animate_complete``
+ You might want to disable the slider complete animation. Do this by setting the ``app:animate_complete`` attribute to false
+ ```xml
+app:animate_complete="false"
+```
 
 #### ``android:elevation``
 
