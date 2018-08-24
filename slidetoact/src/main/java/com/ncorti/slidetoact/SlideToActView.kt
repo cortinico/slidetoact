@@ -170,6 +170,9 @@ class SlideToActView(context: Context,
     /** Public flag to lock the slider */
     var isLocked = false
 
+    /** Public flag to lock the rotation icon */
+    var isRotateIcon = true
+
     /** Public Slide event listeners */
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
     var onSlideCompleteListener: OnSlideCompleteListener? = null
@@ -196,6 +199,7 @@ class SlideToActView(context: Context,
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
+            isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
 
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
@@ -309,7 +313,10 @@ class SlideToActView(context: Context,
             mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
             mDrawableArrow.draw(canvas)
         }
-        canvas.rotate(-1 * mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+
+        if (isRotateIcon) {
+            canvas.rotate(-1 * mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+        }
 
         // Tick drawing
         mDrawableTick.setBounds(
