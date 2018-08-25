@@ -168,14 +168,6 @@ app:slider_icon="@drawable/custom_icon"
 ```
 
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
- ```xml
-app:rotate_icon="false"
-```
- #### ``animate_complete``
- You might want to disable the slider complete animation. Do this by setting the ``app:animate_complete`` attribute to false
- ```xml
-app:animate_complete="false"
-```
 
 #### ``android:elevation``
 
