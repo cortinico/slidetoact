@@ -303,8 +303,10 @@ class SlideToActView(context: Context,
         canvas.drawText(text.toString(), mTextXPosition, mTextYPosition, mTextPaint)
 
         // Arrow angle
-        mArrowAngle = -180 * mPositionPerc
-        canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+        if (isRotateIcon) {
+            mArrowAngle = -180 * mPositionPerc
+            canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
+        }
         mDrawableArrow.setBounds(mInnerRect.left.toInt() + mArrowMargin,
             mInnerRect.top.toInt() + mArrowMargin,
             mInnerRect.right.toInt() - mArrowMargin,
