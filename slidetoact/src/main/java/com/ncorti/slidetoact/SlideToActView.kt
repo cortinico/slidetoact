@@ -34,8 +34,6 @@ import org.xmlpull.v1.XmlPullParserException
  *
  *  SlideToActView is an elegant material designed slider, that enrich your app
  *  with a "Slide-to-unlock" like widget.
- *
- *  @author cortinico
  */
 class SlideToActView(context: Context,
     attrs: AttributeSet?,
