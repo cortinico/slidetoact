@@ -355,10 +355,10 @@ class SlideToActView(context: Context,
 
                         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
                         positionAnimator.duration = 300
-                        positionAnimator.addUpdateListener({
+                        positionAnimator.addUpdateListener {
                             mPosition = it.animatedValue as Int
                             invalidateArea()
-                        })
+                        }
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
