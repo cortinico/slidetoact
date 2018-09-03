@@ -33,7 +33,7 @@ dependencies {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.51'
+    ext.kotlin_version = '1.2.61'
     repositories {
         jcenter()
         google()
