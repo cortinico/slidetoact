@@ -175,6 +175,7 @@ class SlideToActView(context: Context,
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
     var onSlideCompleteListener: OnSlideCompleteListener? = null
     var onSlideResetListener: OnSlideResetListener? = null
+    var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
     init {
         val actualOuterColor : Int
@@ -337,6 +338,12 @@ class SlideToActView(context: Context,
         }
     }
 
+    // Intentionally override `performClick` to do not lose accessibility support.
+    @Suppress("RedundantOverride")
+    override fun performClick(): Boolean {
+        return super.performClick()
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event != null && isEnabled) {
             when (event.action) {
@@ -345,14 +352,16 @@ class SlideToActView(context: Context,
                         mFlagMoving = true
                         mLastX = event.x
                         parent.requestDisallowInterceptTouchEvent(true)
+                    } else {
+                        // Clicking outside the area -> User failed, notify the listener.
+                        onSlideUserFailedListener?.onSlideFailed(this, true)
                     }
+                    performClick()
                 }
                 MotionEvent.ACTION_UP -> {
-                    mFlagMoving = false
                     parent.requestDisallowInterceptTouchEvent(false)
                     if ((mPosition > 0 && isLocked) || (mPosition > 0 && mPositionPerc < mGraceValue)) {
                         // Check for grace value
-
                         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
                         positionAnimator.duration = 300
                         positionAnimator.addUpdateListener {
@@ -363,7 +372,13 @@ class SlideToActView(context: Context,
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
                         startAnimationComplete()
+                    } else if (mFlagMoving && mPosition == 0) {
+                        // mFlagMoving == true means user successfully grabbed the slider,
+                        // but mPosition == 0 means that the slider is released at the beginning
+                        // so either a Tap or the user slided back.
+                        onSlideUserFailedListener?.onSlideFailed(this, false)
                     }
+                    mFlagMoving = false
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (mFlagMoving) {
@@ -673,6 +688,25 @@ class SlideToActView(context: Context,
          * @param view The SlideToActView who created the event
          */
         fun onSlideReset(view: SlideToActView)
+    }
+
+    /**
+     * Event handler for the user failure with the Widget.
+     * You can subscribe to this event to get notified when the user is wrongly
+     * interacting with the widget to eventually educate it:
+     *
+     * - The user clicked outside of the cursor
+     * - The user slided but left when the cursor was back to zero
+     *
+     * You can use this listener to show a Toast or other messages.
+     */
+    interface OnSlideUserFailedListener {
+        /**
+         * Called when user failed to interact with the slider slide
+         * @param view The SlideToActView who created the event
+         * @param isOutside True if user pressed outside the cursor
+         */
+        fun onSlideFailed(view: SlideToActView, isOutside: Boolean)
     }
 
     /**

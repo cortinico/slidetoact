@@ -117,6 +117,12 @@ public class SampleActivity extends AppCompatActivity {
                 log.append("\n" + getTime() + " onSlideReset");
             }
         });
+        slide.setOnSlideUserFailedListener(new SlideToActView.OnSlideUserFailedListener() {
+            @Override
+            public void onSlideFailed(@NonNull SlideToActView view, boolean isOutside) {
+                log.append("\n" + getTime() + " onSlideUserFailed - Clicked outside: " + isOutside);
+            }
+        });
         slide.setOnSlideToActAnimationEventListener(new SlideToActView.OnSlideToActAnimationEventListener() {
             @Override
             public void onSlideCompleteAnimationStarted(@NonNull SlideToActView view, float threshold) {
