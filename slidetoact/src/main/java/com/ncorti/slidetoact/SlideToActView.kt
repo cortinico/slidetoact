@@ -415,17 +415,17 @@ class SlideToActView(context: Context,
 
         // Animator that moves the cursor
         val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
-        finalPositionAnimator.addUpdateListener({
+        finalPositionAnimator.addUpdateListener {
             mPosition = it.animatedValue as Int
             invalidateArea()
-        })
+        }
 
         // Animator that bounce away the cursors
         val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
-        marginAnimator.addUpdateListener({
+        marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
             invalidateArea()
-        })
+        }
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
         // Animator that reduces the outer area (to right)
@@ -524,14 +524,14 @@ class SlideToActView(context: Context,
 
         // Animator that enlarges the outer area
         val tickAnimator = ValueAnimator.ofInt(mTickMargin, mAreaWidth / 2)
-        tickAnimator.addUpdateListener({
+        tickAnimator.addUpdateListener {
             mTickMargin = it.animatedValue as Int
             invalidateArea()
-        })
+        }
 
         // Animator that enlarges the outer area
         val areaAnimator = ValueAnimator.ofInt(mActualAreaWidth, 0)
-        areaAnimator.addUpdateListener({
+        areaAnimator.addUpdateListener {
             // Now we can hide the tick till the next complete
             mFlagDrawTick = false
             mActualAreaWidth = it.animatedValue as Int
@@ -539,28 +539,28 @@ class SlideToActView(context: Context,
                 invalidateOutline()
             }
             invalidateArea()
-        })
+        }
 
         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
-        positionAnimator.addUpdateListener({
+        positionAnimator.addUpdateListener {
             mPosition = it.animatedValue as Int
             invalidateArea()
-        })
+        }
 
         // Animator that re-draw the cursors
         val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, mOriginAreaMargin)
-        marginAnimator.addUpdateListener({
+        marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
             invalidateArea()
-        })
+        }
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
         // Animator that makes the arrow appear
         val arrowAnimator = ValueAnimator.ofInt(mArrowMargin, mIconMargin)
-        arrowAnimator.addUpdateListener({
+        arrowAnimator.addUpdateListener {
             mArrowMargin = it.animatedValue as Int
             invalidateArea()
-        })
+        }
 
 
         marginAnimator.interpolator = OvershootInterpolator(2f)
@@ -680,9 +680,9 @@ class SlideToActView(context: Context,
      * This outline will suppress the shadow (till the moment when Android will support
      * updatable Outlines).
      */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private inner class SlideToActOutlineProvider : ViewOutlineProvider() {
 
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun getOutline(view: View?, outline: Outline?) {
             if (view == null || outline == null)
                 return
