@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.ncorti.slidetoact.SlideToActView;
@@ -19,6 +20,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.ncorti.slidetoact.example.testutil.SlideViewActions.clickCenter;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -79,6 +82,52 @@ public class SliderEventCallBacksTest {
         onView(withId(R.id.reset)).perform(click());
         Thread.sleep(1400);
         assertTrue(flag[0]);
+    }
+
+    @Test
+    public void testOnSlideClickListener() throws Throwable {
+        final boolean[] flag = {false};
+        mActivityRule.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mActivityRule.getActivity().findViewById(R.id.slide_1).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        flag[0] = true;
+                    }
+                });
+            }
+        });
+        onView(withId(R.id.slide_1)).perform(click());
+        assertTrue(flag[0]);
+    }
+
+    @Test
+    public void testOnSlideUserFailedListener_withUserFailure() {
+        final boolean[] flag = {false};
+        ((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).setOnSlideUserFailedListener(new SlideToActView.OnSlideUserFailedListener() {
+            @Override
+            public void onSlideFailed(@NonNull SlideToActView view, boolean isOutside) {
+                // We test if the user clicked outside of the cursor.
+                flag[0] = isOutside;
+            }
+        });
+        onView(withId(R.id.slide_1)).perform(clickCenter());
+        assertTrue(flag[0]);
+    }
+
+    @Test
+    public void testOnSlideUserFailedListener_withCorrectSwipe() {
+        final boolean[] flag = {false};
+        ((SlideToActView) mActivityRule.getActivity().findViewById(R.id.slide_1)).setOnSlideUserFailedListener(new SlideToActView.OnSlideUserFailedListener() {
+            @Override
+            public void onSlideFailed(@NonNull SlideToActView view, boolean isOutside) {
+                // We test if the user clicked outside of the cursor.
+                flag[0] = isOutside;
+            }
+        });
+        onView(withId(R.id.slide_1)).perform(swipeRight());
+        assertFalse(flag[0]);
     }
 
     @Test
