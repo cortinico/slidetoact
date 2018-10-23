@@ -97,7 +97,13 @@ class SlideToActView(context: Context,
     var innerColor: Int = 0
         set(value) {
             field = value
-            mInnerPaint.color = value
+            mTextPaint.color = value
+            invalidate()
+        }
+
+    var textColor: Int = 0
+        set(value) {
+            field = value
             mTextPaint.color = value
             invalidate()
         }
@@ -180,6 +186,7 @@ class SlideToActView(context: Context,
     init {
         val actualOuterColor : Int
         val actualInnerColor : Int
+        val actualTextColor : Int
 
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
             R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
@@ -191,9 +198,12 @@ class SlideToActView(context: Context,
             mBorderRadius = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_border_radius, -1)
 
             val defaultOuter = ContextCompat.getColor(this.context, R.color.defaultAccent)
-            val defaultInner = ContextCompat.getColor(this.context, R.color.white)
+            val defaultWhite = ContextCompat.getColor(this.context, R.color.white)
+
             actualOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
-            actualInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultInner)
+            actualInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultWhite)
+            actualTextColor = layoutAttrs.getColor(R.styleable.SlideToActView_text_color, defaultWhite)
+
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
 
@@ -229,6 +239,7 @@ class SlideToActView(context: Context,
 
         outerColor = actualOuterColor
         innerColor = actualInnerColor
+        textColor = actualTextColor
 
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
