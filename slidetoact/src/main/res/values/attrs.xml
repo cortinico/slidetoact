@@ -11,6 +11,7 @@
         <attr name="area_margin" format="dimension" />
         <attr name="inner_color" format="color" />
         <attr name="outer_color" format="color" />
+        <attr name="text_color" format="color" />
         <attr name="border_radius" format="dimension" />
         <attr name="slider_height" format="dimension" />
         <attr name="slider_locked" format="boolean" />
