@@ -35,12 +35,11 @@ import org.xmlpull.v1.XmlPullParserException
  *  SlideToActView is an elegant material designed slider, that enrich your app
  *  with a "Slide-to-unlock" like widget.
  */
-class SlideToActView(context: Context,
-    attrs: AttributeSet?,
-    defStyleAttr: Int) : View(context, attrs, defStyleAttr) {
-
-    constructor(context: Context) : this(context, null, R.styleable.SlideToActViewTheme_slideToActViewStyle)
-    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, R.styleable.SlideToActViewTheme_slideToActViewStyle)
+class SlideToActView @JvmOverloads constructor (
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = R.attr.slideToActViewStyle
+) : View(context, attrs, defStyleAttr) {
 
     /* -------------------- LAYOUT BOUNDS -------------------- */
 
