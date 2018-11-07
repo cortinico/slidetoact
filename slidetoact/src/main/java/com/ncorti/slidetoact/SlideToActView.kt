@@ -35,7 +35,7 @@ import org.xmlpull.v1.XmlPullParserException
  *  SlideToActView is an elegant material designed slider, that enrich your app
  *  with a "Slide-to-unlock" like widget.
  */
-class SlideToActView @JvmOverloads constructor (
+open class SlideToActView @JvmOverloads constructor (
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.attr.slideToActViewStyle
