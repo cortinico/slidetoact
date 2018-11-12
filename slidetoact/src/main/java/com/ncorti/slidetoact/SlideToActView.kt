@@ -6,11 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Outline
-import android.graphics.Paint
-import android.graphics.RectF
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -96,7 +92,7 @@ class SlideToActView @JvmOverloads constructor (
     var innerColor: Int = 0
         set(value) {
             field = value
-            mTextPaint.color = value
+            mInnerPaint.color = value
             invalidate()
         }
 
