@@ -38,18 +38,18 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 If you're using the Android Gradle plugin version 3:
 ```groovy
 dependencies {
-   implementation 'com.ncorti:slidetoact:0.5.0'
+   implementation 'com.ncorti:slidetoact:0.5.1'
 }
 ```
 
 If you're using an Older version of the Android Gradle plugin:
 ```groovy
 dependencies {
-   compile 'com.ncorti:slidetoact:0.5.0'
+   compile 'com.ncorti:slidetoact:0.5.1'
 }
 ```
 
-Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.5.0%2Fslidetoact-0.5.0.aar).
+Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.5.1%2Fslidetoact-0.5.1.aar).
 
 ## Example 🚸
 
