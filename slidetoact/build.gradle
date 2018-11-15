@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "0.5.0"
+version = "0.5.1"
 
 android {
     compileSdkVersion 27
@@ -12,7 +12,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 5
-        versionName "0.5.0"
+        versionName "0.5.1"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
