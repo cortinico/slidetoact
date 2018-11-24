@@ -262,6 +262,8 @@ class SlideToActView @JvmOverloads constructor (
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val width: Int
 
         width = when (widthMode) {
@@ -270,12 +272,27 @@ class SlideToActView @JvmOverloads constructor (
             MeasureSpec.UNSPECIFIED -> mDesiredSliderWidth
             else -> mDesiredSliderWidth
         }
-        setMeasuredDimension(width, mDesiredSliderHeight)
+        if (rotation == 0.0f) {
+            setMeasuredDimension(width, mDesiredSliderHeight)
+        } else {
+            // Handle rotation.
+            val height = when (heightMode) {
+                MeasureSpec.EXACTLY -> heightSize
+                MeasureSpec.AT_MOST -> Math.min(mDesiredSliderWidth, widthSize)
+                MeasureSpec.UNSPECIFIED -> mDesiredSliderWidth
+                else -> mDesiredSliderWidth
+            }
+            setMeasuredDimension(mDesiredSliderHeight, height)
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         mAreaWidth = w
         mAreaHeight = h
+        if (rotation != 0.0f){
+            mAreaWidth = h
+            mAreaHeight = w
+        }
         if (mBorderRadius == -1) // Round if not set up
             mBorderRadius = h / 2
 

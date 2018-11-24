@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
+        android:clipChildren="false"
         android:orientation="vertical">
 
         <TextView
@@ -21,9 +22,11 @@
         <com.ncorti.slidetoact.SlideToActView
             android:id="@+id/welcome_slider"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="320dp"
             android:layout_margin="8dp"
-            android:elevation="6dp"
+            android:rotation="90"
+            android:transformPivotX="36dp"
+            android:transformPivotY="36dp"
             app:text="Sample SlideToActView"/>
 
         <TextView
