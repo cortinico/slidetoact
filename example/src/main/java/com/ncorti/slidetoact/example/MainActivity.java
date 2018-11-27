@@ -17,19 +17,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_constraint);
 
         ((TextView) findViewById(R.id.welcome_text)).setText("Welcome 😁");
 
         findViewById(R.id.button_area_margin).setOnClickListener(this);
-        findViewById(R.id.button_colors).setOnClickListener(this);
-        findViewById(R.id.button_border_radius).setOnClickListener(this);
-        findViewById(R.id.button_elevation).setOnClickListener(this);
-        findViewById(R.id.button_text_size).setOnClickListener(this);
-        findViewById(R.id.button_slider_dimension).setOnClickListener(this);
-        findViewById(R.id.button_event_callbacks).setOnClickListener(this);
-        findViewById(R.id.button_locked_slider).setOnClickListener(this);
-        findViewById(R.id.button_custom_icon).setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
