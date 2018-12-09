@@ -17,7 +17,7 @@
         <attr name="slider_locked" format="boolean" />
         <attr name="slider_icon" format="reference" />
         <attr name="rotate_icon" format="boolean" />
-        <attr name="animate_complete" format="boolean" />
+        <attr name="animate_completion" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference"/>

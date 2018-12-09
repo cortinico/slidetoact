@@ -211,7 +211,7 @@ class SlideToActView @JvmOverloads constructor (
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
-            isAnimateComplete = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_complete, true)
+            isAnimateComplete = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
