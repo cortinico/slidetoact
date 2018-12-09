@@ -177,7 +177,7 @@ class SlideToActView @JvmOverloads constructor (
     var isRotateIcon = true
 
     /** Public flag to enable complete animation */
-    var isAnimateComplete = true
+    var isAnimateCompletion = true
 
     /** Public Slide event listeners */
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
@@ -211,7 +211,7 @@ class SlideToActView @JvmOverloads constructor (
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
-            isAnimateComplete = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
+            isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
@@ -440,7 +440,7 @@ class SlideToActView @JvmOverloads constructor (
      * Private method that is performed when user completes the slide
      */
     private fun startAnimationComplete() {
-        if (!isAnimateComplete) {
+        if (!isAnimateCompletion) {
             mIsCompleted = true
             onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
             onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
