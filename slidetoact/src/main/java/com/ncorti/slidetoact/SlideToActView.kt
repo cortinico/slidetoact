@@ -440,88 +440,89 @@ class SlideToActView @JvmOverloads constructor (
      * Private method that is performed when user completes the slide
      */
     private fun startAnimationComplete() {
-        if (!isAnimateCompletion) {
-            mIsCompleted = true
-            onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
-            onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+        val animSet = AnimatorSet()
+
+        // Animator that moves the cursor
+        val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
+        finalPositionAnimator.addUpdateListener {
+            mPosition = it.animatedValue as Int
+            invalidateArea()
+        }
+
+        // Animator that bounce away the cursors
+        val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
+        marginAnimator.addUpdateListener {
+            mActualAreaMargin = it.animatedValue as Int
+            invalidateArea()
+        }
+        marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
+
+        // Animator that reduces the outer area (to right)
+        val areaAnimator = ValueAnimator.ofInt(0, (mAreaWidth - mAreaHeight) / 2)
+        areaAnimator.addUpdateListener {
+            mActualAreaWidth = it.animatedValue as Int
+            if (Build.VERSION.SDK_INT >= 21) {
+                invalidateOutline()
+            }
+            invalidateArea()
+        }
+
+        val tickAnimator: ValueAnimator
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+            // Fallback not using AVD.
+            tickAnimator = ValueAnimator.ofInt(0, 255)
+            tickAnimator.addUpdateListener {
+                mTickMargin = mIconMargin
+                mFlagDrawTick = true
+                mDrawableTick.alpha = it.animatedValue as Int
+                invalidateArea()
+            }
         } else {
-            val animSet = AnimatorSet()
-
-            // Animator that moves the cursor
-            val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
-            finalPositionAnimator.addUpdateListener {
-                mPosition = it.animatedValue as Int
-                invalidateArea()
-            }
-
-            // Animator that bounce away the cursors
-            val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
-            marginAnimator.addUpdateListener {
-                mActualAreaMargin = it.animatedValue as Int
-                invalidateArea()
-            }
-            marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
-
-            // Animator that reduces the outer area (to right)
-            val areaAnimator = ValueAnimator.ofInt(0, (mAreaWidth - mAreaHeight) / 2)
-            areaAnimator.addUpdateListener {
-                mActualAreaWidth = it.animatedValue as Int
-                if (Build.VERSION.SDK_INT >= 21) {
-                    invalidateOutline()
-                }
-                invalidateArea()
-            }
-
-            val tickAnimator: ValueAnimator
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-                // Fallback not using AVD.
-                tickAnimator = ValueAnimator.ofInt(0, 255)
-                tickAnimator.addUpdateListener {
+            // Used AVD Animation.
+            tickAnimator = ValueAnimator.ofInt(0)
+            tickAnimator.addUpdateListener {
+                if (!mFlagDrawTick) {
                     mTickMargin = mIconMargin
                     mFlagDrawTick = true
-                    mDrawableTick.alpha = it.animatedValue as Int
+                    startTickAnimation()
                     invalidateArea()
                 }
-            } else {
-                // Used AVD Animation.
-                tickAnimator = ValueAnimator.ofInt(0)
-                tickAnimator.addUpdateListener {
-                    if (!mFlagDrawTick) {
-                        mTickMargin = mIconMargin
-                        mFlagDrawTick = true
-                        startTickAnimation()
-                        invalidateArea()
-                    }
-                }
             }
-
-            if (mPosition >= mAreaWidth - mAreaHeight) {
-                animSet.playSequentially(marginAnimator, areaAnimator, tickAnimator)
-            } else {
-                animSet.playSequentially(finalPositionAnimator, marginAnimator, areaAnimator, tickAnimator)
-            }
-
-            animSet.duration = 300
-
-            animSet.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(this@SlideToActView, mPositionPerc)
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-                    mIsCompleted = true
-                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
-                    onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                }
-            })
-            animSet.start()
         }
+
+        val animators = mutableListOf<Animator>()
+        if (mPosition < mAreaWidth - mAreaHeight) {
+            animators.add(finalPositionAnimator)
+        }
+
+        if (isAnimateCompletion) {
+            animators.add(marginAnimator)
+            animators.add(areaAnimator)
+            animators.add(tickAnimator)
+        }
+
+        animSet.playSequentially(*animators.toTypedArray())
+
+        animSet.duration = 300
+
+        animSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+                onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(this@SlideToActView, mPositionPerc)
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                mIsCompleted = true
+                onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
+                onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+        })
+        animSet.start()
     }
 
     /**
@@ -599,7 +600,13 @@ class SlideToActView @JvmOverloads constructor (
 
 
         marginAnimator.interpolator = OvershootInterpolator(2f)
-        animSet.playSequentially(tickAnimator, areaAnimator, positionAnimator, marginAnimator, arrowAnimator)
+
+        if (isAnimateCompletion) {
+            animSet.playSequentially(tickAnimator, areaAnimator, positionAnimator, marginAnimator, arrowAnimator)
+        } else {
+            animSet.playSequentially(positionAnimator)
+        }
+
         animSet.duration = 300
 
         animSet.addListener(object : Animator.AnimatorListener {
