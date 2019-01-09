@@ -172,6 +172,9 @@ class SlideToActView @JvmOverloads constructor (
     /** Public flag to lock the rotation icon */
     var isRotateIcon = true
 
+    /** Public flag to enable complete animation */
+    var isAnimateCompletion = true
+
     /** Public Slide event listeners */
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
     var onSlideCompleteListener: OnSlideCompleteListener? = null
@@ -204,6 +207,7 @@ class SlideToActView @JvmOverloads constructor (
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
+            isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
@@ -482,11 +486,18 @@ class SlideToActView @JvmOverloads constructor (
             }
         }
 
-        if (mPosition >= mAreaWidth - mAreaHeight) {
-            animSet.playSequentially(marginAnimator, areaAnimator, tickAnimator)
-        } else {
-            animSet.playSequentially(finalPositionAnimator, marginAnimator, areaAnimator, tickAnimator)
+        val animators = mutableListOf<Animator>()
+        if (mPosition < mAreaWidth - mAreaHeight) {
+            animators.add(finalPositionAnimator)
         }
+
+        if (isAnimateCompletion) {
+            animators.add(marginAnimator)
+            animators.add(areaAnimator)
+            animators.add(tickAnimator)
+        }
+
+        animSet.playSequentially(*animators.toTypedArray())
 
         animSet.duration = 300
 
@@ -585,7 +596,13 @@ class SlideToActView @JvmOverloads constructor (
 
 
         marginAnimator.interpolator = OvershootInterpolator(2f)
-        animSet.playSequentially(tickAnimator, areaAnimator, positionAnimator, marginAnimator, arrowAnimator)
+
+        if (isAnimateCompletion) {
+            animSet.playSequentially(tickAnimator, areaAnimator, positionAnimator, marginAnimator, arrowAnimator)
+        } else {
+            animSet.playSequentially(positionAnimator)
+        }
+
         animSet.duration = 300
 
         animSet.addListener(object : Animator.AnimatorListener {
