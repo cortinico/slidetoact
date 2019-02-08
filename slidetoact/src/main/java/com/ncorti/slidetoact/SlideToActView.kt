@@ -14,14 +14,18 @@ import android.support.annotation.RequiresApi
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.ColorUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.util.Xml
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
+import android.widget.LinearLayout
+import android.widget.TextView
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -62,6 +66,7 @@ class SlideToActView @JvmOverloads constructor (
     var text: CharSequence = ""
         set(value) {
             field = value
+            mTextView.text = value
             invalidate()
         }
 
@@ -69,15 +74,13 @@ class SlideToActView @JvmOverloads constructor (
     var typeFace = Typeface.NORMAL
         set(value) {
             field = value
-            mTextPaint.typeface = Typeface.create("sans-serif-light" , value)
+            mTextView.typeface = Typeface.create("sans-serif-light" , value)
             invalidate()
         }
 
     /** Size for the text message */
     private val mTextSize: Int
 
-    private var mTextYPosition = -1f
-    private var mTextXPosition = -1f
 
     /** Outer color used by the slider (primary) */
     var outerColor: Int = 0
@@ -99,7 +102,7 @@ class SlideToActView @JvmOverloads constructor (
     var textColor: Int = 0
         set(value) {
             field = value
-            mTextPaint.color = value
+            mTextView.setTextColor(value)
             invalidate()
         }
 
@@ -148,8 +151,11 @@ class SlideToActView @JvmOverloads constructor (
     /** Paint used for inner elements */
     private val mInnerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    /** Paint used for text elements */
-    private val mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    /** TextView used for text elements */
+    private var mTextView: TextView
+
+    /** Needed to be able to center text view */
+    private var textViewContainer: LinearLayout
 
     /** Inner rectangle (used for arrow rotation) */
     private var mInnerRect: RectF
@@ -185,6 +191,12 @@ class SlideToActView @JvmOverloads constructor (
         val actualOuterColor : Int
         val actualInnerColor : Int
         val actualTextColor : Int
+
+        mTextView = TextView(context)
+        textViewContainer = LinearLayout(context).apply {
+            addView(mTextView)
+            gravity = Gravity.CENTER
+        }
 
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
             R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
@@ -233,8 +245,7 @@ class SlideToActView @JvmOverloads constructor (
             AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
         }
 
-        mTextPaint.textAlign = Paint.Align.CENTER
-        mTextPaint.textSize = mTextSize.toFloat()
+        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize.toFloat())
 
         outerColor = actualOuterColor
         innerColor = actualInnerColor
@@ -282,10 +293,6 @@ class SlideToActView @JvmOverloads constructor (
         mAreaHeight = h
         if (mBorderRadius == -1) // Round if not set up
             mBorderRadius = h / 2
-
-        // Text horizontal/vertical positioning (both centered)
-        mTextXPosition = mAreaWidth.toFloat() / 2
-        mTextYPosition = (mAreaHeight.toFloat() / 2) - (mTextPaint.descent() + mTextPaint.ascent()) / 2
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -306,10 +313,12 @@ class SlideToActView @JvmOverloads constructor (
         canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat() * ratio, mBorderRadius.toFloat() * ratio, mInnerPaint)
 
         // Text alpha
-        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        val alpha = 255 * mPositionPercInv
+        mTextView.setTextColor(ColorUtils.setAlphaComponent(textColor, alpha.toInt()))
 
-        // Vertical + Horizontal centering
-        canvas.drawText(text.toString(), mTextXPosition, mTextYPosition, mTextPaint)
+        textViewContainer.measure(width, height)
+        textViewContainer.layout(0, 0, width, height)
+        textViewContainer.draw(canvas)
 
         // Arrow angle
         if (isRotateIcon) {
