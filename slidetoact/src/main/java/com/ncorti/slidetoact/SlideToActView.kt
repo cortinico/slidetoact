@@ -79,6 +79,13 @@ class SlideToActView @JvmOverloads constructor (
             invalidate()
         }
 
+    var textAllCaps = false
+        set(value) {
+            field = value
+            mTextView.setAllCaps(value)
+            invalidate()
+        }
+
     /** Text style for the text field */
     var fontStyle = -1
 
@@ -221,6 +228,7 @@ class SlideToActView @JvmOverloads constructor (
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
             fontStyle = layoutAttrs.getResourceId(R.styleable.SlideToActView_font_style, -1)
+            textAllCaps = layoutAttrs.getBoolean(R.styleable.SlideToActView_text_all_caps, false)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)

@@ -8,6 +8,7 @@
             <enum name="bold" value="1" />
             <enum name="italic" value="2" />
         </attr>
+        <attr name="text_all_caps" format="boolean" />
         <attr name="font_style" format="integer" />
         <attr name="area_margin" format="dimension" />
         <attr name="inner_color" format="color" />
