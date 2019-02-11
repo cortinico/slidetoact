@@ -45,5 +45,10 @@
             style="@style/SlideToActView.Example"
             app:text_size="18sp"
             app:text="TextSize 18sp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:font_style="@style/CustomFontMontserrat"
+            app:text="Custom font" />
     </LinearLayout>
 </ScrollView>

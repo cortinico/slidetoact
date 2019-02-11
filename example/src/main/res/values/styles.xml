@@ -20,4 +20,9 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
+    <style name="CustomFontMontserrat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/montserrat_extrabold</item>
+    </style>
+
 </resources>
