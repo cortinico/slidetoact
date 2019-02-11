@@ -15,6 +15,7 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.ColorUtils
+import android.support.v4.widget.TextViewCompat
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.util.Xml
@@ -77,6 +78,9 @@ class SlideToActView @JvmOverloads constructor (
             mTextView.typeface = Typeface.create("sans-serif-light" , value)
             invalidate()
         }
+
+    /** Text style for the text field */
+    var fontStyle = -1
 
     /** Size for the text message */
     private val mTextSize: Int
@@ -216,6 +220,7 @@ class SlideToActView @JvmOverloads constructor (
 
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
+            fontStyle = layoutAttrs.getResourceId(R.styleable.SlideToActView_font_style, -1)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
@@ -245,7 +250,8 @@ class SlideToActView @JvmOverloads constructor (
             AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
         }
 
-        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize.toFloat())
+        if (fontStyle != -1) TextViewCompat.setTextAppearance(mTextView, fontStyle)
+        else mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize.toFloat())
 
         outerColor = actualOuterColor
         innerColor = actualInnerColor
