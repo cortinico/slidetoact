@@ -1,6 +1,3 @@
-## Status
-**READY/IN DEVELOPMENT/HOLD**
-
 ## Description
 A few sentences describing the overall goals of the pull request's commits.
 
@@ -11,7 +8,3 @@ List related PRs and Issues for this Pull Request.
 - [ ] Tests
 - [ ] Documentation
 - [ ] Screenshots
-
-## Feedback Reviews
-
-@cortinico
