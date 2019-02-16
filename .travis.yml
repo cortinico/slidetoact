@@ -24,6 +24,7 @@ android:
     - extra-google-m2repository
 
 before_script:
+  - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
   - echo no | android create avd --force -n test -t "android-"$EMULATOR_API_LEVEL --abi armeabi-v7a --skin 480x800
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
