@@ -15,7 +15,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``area_margin``](#area_margin)
         * [``inner_color`` & ``outer_color``](#inner_color--outer_color)
         * [``border_radius``](#border_radius)
-        * [``text``, ``text_size``, ``text_style``, ``text_appearance``](#text-text_size-text_style)
+        * [``text``, ``text_size``, ``text_style``, ``text_appearance``](#text-text_size-text_style-text_appearance)
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
         * [``slider_icon``](#slider_icon)
