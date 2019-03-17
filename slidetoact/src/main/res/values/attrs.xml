@@ -8,8 +8,6 @@
             <enum name="bold" value="1" />
             <enum name="italic" value="2" />
         </attr>
-        <attr name="text_all_caps" format="boolean" />
-        <attr name="font_style" format="integer" />
         <attr name="area_margin" format="dimension" />
         <attr name="inner_color" format="color" />
         <attr name="outer_color" format="color" />
@@ -20,6 +18,7 @@
         <attr name="slider_icon" format="reference" />
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
+        <attr name="text_appearance" format="reference" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference"/>

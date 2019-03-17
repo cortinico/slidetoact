@@ -48,13 +48,17 @@
 
         <com.ncorti.slidetoact.SlideToActView
             style="@style/SlideToActView.Example"
-            app:text_size="18sp"
-            app:text_all_caps="true"
-            app:text="Text all caps" />
+            app:text_appearance="@style/TextAppearanceAllCaps"
+            app:text="TextAppearance - All caps" />
 
         <com.ncorti.slidetoact.SlideToActView
             style="@style/SlideToActView.Example"
-            app:font_style="@style/CustomFontMontserrat"
+            app:text_appearance="@style/TextAppearanceBlueShadow"
+            app:text="TextAppearance - Blue Shadow" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:text_appearance="@style/TextAppearancaCustomFont"
             app:text="Custom font" />
     </LinearLayout>
 </ScrollView>
