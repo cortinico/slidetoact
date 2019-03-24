@@ -18,6 +18,7 @@
         <attr name="slider_icon" format="reference" />
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
+        <attr name="text_appearance" format="reference" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference"/>

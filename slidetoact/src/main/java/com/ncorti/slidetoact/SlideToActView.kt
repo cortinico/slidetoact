@@ -14,6 +14,8 @@ import android.support.annotation.RequiresApi
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.ColorUtils
+import android.support.v4.widget.TextViewCompat
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.util.Xml
@@ -22,6 +24,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
+import android.widget.TextView
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -62,6 +65,8 @@ class SlideToActView @JvmOverloads constructor (
     var text: CharSequence = ""
         set(value) {
             field = value
+            mTextView.text = value
+            mTextPaint.set(mTextView.paint)
             invalidate()
         }
 
@@ -69,15 +74,21 @@ class SlideToActView @JvmOverloads constructor (
     var typeFace = Typeface.NORMAL
         set(value) {
             field = value
-            mTextPaint.typeface = Typeface.create("sans-serif-light" , value)
+            mTextView.typeface = Typeface.create("sans-serif-light" , value)
+            mTextPaint.set(mTextView.paint)
             invalidate()
         }
 
-    /** Size for the text message */
-    private val mTextSize: Int
-
-    private var mTextYPosition = -1f
-    private var mTextXPosition = -1f
+    /** Text Appearance used to fully customize the font */
+    var textAppearance : Int = 0
+        set(value) {
+            field = value
+            if (value != 0) {
+                TextViewCompat.setTextAppearance(mTextView, value)
+                mTextPaint.set(mTextView.paint)
+                mTextPaint.color = mTextView.currentTextColor
+            }
+        }
 
     /** Outer color used by the slider (primary) */
     var outerColor: Int = 0
@@ -99,7 +110,8 @@ class SlideToActView @JvmOverloads constructor (
     var textColor: Int = 0
         set(value) {
             field = value
-            mTextPaint.color = value
+            mTextView.setTextColor(value)
+            mTextPaint.color = textColor
             invalidate()
         }
 
@@ -116,6 +128,19 @@ class SlideToActView @JvmOverloads constructor (
             mPositionPerc = value.toFloat() / (mAreaWidth - mAreaHeight).toFloat()
             mPositionPercInv = 1 - value.toFloat() / (mAreaWidth - mAreaHeight).toFloat()
         }
+
+    /** Positioning of text */
+    private var mTextYPosition = -1f
+    private var mTextXPosition = -1f
+
+    /** Private size for the text message */
+    private var mTextSize: Int = 0
+        set(value) {
+            field = value
+            mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize.toFloat())
+            mTextPaint.set(mTextView.paint)
+        }
+
     /** Slider cursor position in percentage (between 0f and 1f) */
     private var mPositionPerc: Float = 0f
     /** 1/mPositionPerc */
@@ -149,7 +174,10 @@ class SlideToActView @JvmOverloads constructor (
     private val mInnerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     /** Paint used for text elements */
-    private val mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    /** TextView used for text elements */
+    private var mTextView: TextView
 
     /** Inner rectangle (used for arrow rotation) */
     private var mInnerRect: RectF
@@ -186,6 +214,9 @@ class SlideToActView @JvmOverloads constructor (
         val actualInnerColor : Int
         val actualTextColor : Int
 
+        mTextView = TextView(context)
+        mTextPaint = mTextView.paint
+
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
             R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
         try {
@@ -200,16 +231,29 @@ class SlideToActView @JvmOverloads constructor (
 
             actualOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
             actualInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultWhite)
-            actualTextColor = layoutAttrs.getColor(R.styleable.SlideToActView_text_color, defaultWhite)
+
+            // For text color, check if the `text_color` is set.
+            // if not check if the `outer_color` is set.
+            // if not, default to white.
+            actualTextColor = when {
+                layoutAttrs.hasValue(R.styleable.SlideToActView_text_color) ->
+                    layoutAttrs.getColor(R.styleable.SlideToActView_text_color, defaultWhite)
+                layoutAttrs.hasValue(R.styleable.SlideToActView_inner_color) -> actualInnerColor
+                else -> defaultWhite
+            }
 
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
+            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
+            textColor = actualTextColor
+
+            // TextAppearance is the last as will have precedence over everything text related.
+            textAppearance = layoutAttrs.getResourceId(R.styleable.SlideToActView_text_appearance, 0)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
-            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
 
@@ -234,11 +278,9 @@ class SlideToActView @JvmOverloads constructor (
         }
 
         mTextPaint.textAlign = Paint.Align.CENTER
-        mTextPaint.textSize = mTextSize.toFloat()
 
         outerColor = actualOuterColor
         innerColor = actualInnerColor
-        textColor = actualTextColor
 
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
@@ -296,6 +338,12 @@ class SlideToActView @JvmOverloads constructor (
         mOuterRect.set(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
         canvas.drawRoundRect(mOuterRect, mBorderRadius.toFloat(), mBorderRadius.toFloat(), mOuterPaint)
 
+        // Text alpha
+        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
+        val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
+        canvas.drawText(textToDraw, 0, textToDraw.length, mTextXPosition, mTextYPosition, mTextPaint)
+
         // Inner Cursor
         // ratio is used to compute the proper border radius for the inner rect (see #8).
         val ratio = (mAreaHeight - 2 * mActualAreaMargin).toFloat() / mAreaHeight.toFloat()
@@ -304,12 +352,6 @@ class SlideToActView @JvmOverloads constructor (
                 (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
                 mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
         canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat() * ratio, mBorderRadius.toFloat() * ratio, mInnerPaint)
-
-        // Text alpha
-        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
-
-        // Vertical + Horizontal centering
-        canvas.drawText(text.toString(), mTextXPosition, mTextYPosition, mTextPaint)
 
         // Arrow angle
         if (isRotateIcon) {
