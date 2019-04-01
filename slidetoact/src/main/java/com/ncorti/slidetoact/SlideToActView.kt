@@ -14,7 +14,6 @@ import android.support.annotation.RequiresApi
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
 import android.support.v4.widget.TextViewCompat
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -200,6 +199,9 @@ class SlideToActView @JvmOverloads constructor (
     /** Public flag to lock the rotation icon */
     var isRotateIcon = true
 
+    /** Public flag to rotate text in degree */
+    var rotateTextDegree: Int = 0
+
     /** Public flag to enable complete animation */
     var isAnimateCompletion = true
 
@@ -253,6 +255,7 @@ class SlideToActView @JvmOverloads constructor (
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
+            rotateTextDegree = layoutAttrs.getInteger(R.styleable.SlideToActView_text_rotation, 0)
 
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
@@ -342,7 +345,15 @@ class SlideToActView @JvmOverloads constructor (
         mTextPaint.alpha = (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
-        canvas.drawText(textToDraw, 0, textToDraw.length, mTextXPosition, mTextYPosition, mTextPaint)
+
+        if(rotateTextDegree != 0) {
+            canvas.save()
+            canvas.rotate(rotateTextDegree.toFloat(), mTextXPosition, mTextYPosition - (mTextView.lineHeight / 2) + 10)
+            canvas.drawText(textToDraw, 0, textToDraw.length, mTextXPosition, mTextYPosition, mTextPaint)
+            canvas.restore()
+        } else {
+            canvas.drawText(textToDraw, 0, textToDraw.length, mTextXPosition, mTextYPosition, mTextPaint)
+        }
 
         // Inner Cursor
         // ratio is used to compute the proper border radius for the inner rect (see #8).

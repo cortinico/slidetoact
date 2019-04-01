@@ -19,6 +19,7 @@
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
         <attr name="text_appearance" format="reference" />
+        <attr name="text_rotation" format="integer" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference"/>

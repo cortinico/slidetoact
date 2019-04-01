@@ -60,5 +60,11 @@
             style="@style/SlideToActView.Example"
             app:text_appearance="@style/TextAppearancaCustomFont"
             app:text="Custom font" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:text_style="italic"
+            app:text="TextStyle Rotation (180deg)"
+            app:text_rotation="180"/>
     </LinearLayout>
 </ScrollView>

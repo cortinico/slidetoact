@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:gravity="center"
+            android:textSize="25sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <com.ncorti.slidetoact.SlideToActView
@@ -24,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="6dp"
+            app:text_rotation="180"
             app:text="Sample SlideToActView"/>
 
         <TextView

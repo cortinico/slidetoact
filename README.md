@@ -20,6 +20,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``slider_locked``](#slider_locked)
         * [``slider_icon``](#slider_icon)
         * [``rotate_icon``](#rotate_icon)
+        * [``rotate_text``](#rotate_text)
         * [``android:elevation``](#androidelevation)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
@@ -99,6 +100,7 @@ By the default, every ``SlideToActView`` widget fits to your app using the ``col
     app:border_radius="2dp"
     app:text="Testing all the custom attributes"
     app:text_size="12sp"
+    app:rotate_text="180"
     app:slider_height="80dp"
     app:slider_locked="false" />
 ```
@@ -171,6 +173,10 @@ app:slider_icon="@drawable/custom_icon"
 ```
 
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
+
+#### ``rotate_text``
+
+You can set text rotation in degree rotate_text="180"
 
 #### ``android:elevation``
 
