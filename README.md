@@ -172,6 +172,16 @@ app:slider_icon="@drawable/custom_icon"
 
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
 
+#### ``slider_icon_color``
+
+You can set a custom color for the icon by setting the ``slider_icon_color`` attribute.
+
+<p align="center">
+  <img src="assets/slider_icon_color.png" alt="custom_icon" width="40%"/>
+</p>
+
+This attribute defaults to the ``outer_color`` if set. If ``outer_color`` is not set, this attribute defaults to **colorAccent** from your theme.
+
 #### ``android:elevation``
 
 Use the ``android:elevation`` attribute to set the **elevation** of the widget. The widgets will take care of providing the proper ``ViewOutlineProvider`` during the whole animation (a.k.a. The shadow will be drawn properly).
