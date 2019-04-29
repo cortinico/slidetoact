@@ -14,7 +14,6 @@ import android.support.annotation.RequiresApi
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
 import android.support.v4.widget.TextViewCompat
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -90,12 +89,11 @@ class SlideToActView @JvmOverloads constructor (
             }
         }
 
-    /** Outer color used by the slider (primary) */
+    /** Outer color used by the slider (primary)*/
     var outerColor: Int = 0
         set(value) {
             field = value
             mOuterPaint.color = value
-            mDrawableArrow.setTint(value)
             invalidate()
         }
 
@@ -112,6 +110,14 @@ class SlideToActView @JvmOverloads constructor (
             field = value
             mTextView.setTextColor(value)
             mTextPaint.color = textColor
+            invalidate()
+        }
+
+    /** Custom Icon color */
+    var iconColor: Int = 0
+        set(value) {
+            field = value
+            mDrawableArrow.setTint(value)
             invalidate()
         }
 
@@ -213,6 +219,7 @@ class SlideToActView @JvmOverloads constructor (
         val actualOuterColor : Int
         val actualInnerColor : Int
         val actualTextColor : Int
+        val actualIconColor : Int
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
@@ -258,6 +265,16 @@ class SlideToActView @JvmOverloads constructor (
             mActualAreaMargin = mOriginAreaMargin
 
             mIcon = layoutAttrs.getResourceId(R.styleable.SlideToActView_slider_icon, R.drawable.ic_arrow)
+
+            // For icon color. check if the `slide_icon_color` is set.
+            // if not check if the `outer_color` is set.
+            // if not, default to defaultOuter.
+            actualIconColor = when {
+                layoutAttrs.hasValue(R.styleable.SlideToActView_slider_icon_color) ->
+                    layoutAttrs.getColor(R.styleable.SlideToActView_slider_icon_color, defaultOuter)
+                layoutAttrs.hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
+                else -> defaultOuter
+            }
         } finally {
             layoutAttrs.recycle()
         }
@@ -281,6 +298,7 @@ class SlideToActView @JvmOverloads constructor (
 
         outerColor = actualOuterColor
         innerColor = actualInnerColor
+        iconColor = actualIconColor
 
         mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
         mArrowMargin = mIconMargin
