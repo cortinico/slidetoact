@@ -121,7 +121,7 @@ class SlideToActView @JvmOverloads constructor (
             invalidate()
         }
 
-    /** Slider cursor position (between 0 and (`reaWidth - mAreaHeight)) */
+    /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
         set(value) {
             field = value
@@ -133,6 +133,13 @@ class SlideToActView @JvmOverloads constructor (
             }
             mPositionPerc = value.toFloat() / (mAreaWidth - mAreaHeight).toFloat()
             mPositionPercInv = 1 - value.toFloat() / (mAreaWidth - mAreaHeight).toFloat()
+            mEffectivePosition = mPosition
+        }
+
+    /** Slider cursor effective position. This is used to handle the `reversed` scenario. */
+    private var mEffectivePosition : Int = 0
+        set(value) {
+            field = if (isReversed) (mAreaWidth - mAreaHeight) - value else value
         }
 
     /** Positioning of text */
@@ -203,6 +210,15 @@ class SlideToActView @JvmOverloads constructor (
     /** Public flag to lock the slider */
     var isLocked = false
 
+    /** Public flag to reverse the slider by 180 degree */
+    var isReversed = false
+        set(value) {
+            field = value
+            // We reassign the position field to trigger the re-computation of the effective position.
+            mPosition = mPosition
+            invalidate()
+        }
+
     /** Public flag to lock the rotation icon */
     var isRotateIcon = true
 
@@ -258,6 +274,7 @@ class SlideToActView @JvmOverloads constructor (
             textAppearance = layoutAttrs.getResourceId(R.styleable.SlideToActView_text_appearance, 0)
 
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
+            isReversed = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_reversed, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
@@ -279,8 +296,9 @@ class SlideToActView @JvmOverloads constructor (
             layoutAttrs.recycle()
         }
 
-        mInnerRect = RectF((mActualAreaMargin + mPosition).toFloat(), mActualAreaMargin.toFloat(),
-            (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
+        mInnerRect = RectF((mActualAreaMargin + mEffectivePosition).toFloat(),
+                mActualAreaMargin.toFloat(),
+            (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
             mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
 
         mOuterRect = RectF(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
@@ -346,6 +364,9 @@ class SlideToActView @JvmOverloads constructor (
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
         mTextYPosition = (mAreaHeight.toFloat() / 2) - (mTextPaint.descent() + mTextPaint.ascent()) / 2
+
+        // Make sure the position is recomputed.
+        mPosition = 0
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -365,15 +386,20 @@ class SlideToActView @JvmOverloads constructor (
         // Inner Cursor
         // ratio is used to compute the proper border radius for the inner rect (see #8).
         val ratio = (mAreaHeight - 2 * mActualAreaMargin).toFloat() / mAreaHeight.toFloat()
-        mInnerRect.set((mActualAreaMargin + mPosition).toFloat(),
+        mInnerRect.set((mActualAreaMargin + mEffectivePosition).toFloat(),
                 mActualAreaMargin.toFloat(),
-                (mAreaHeight + mPosition).toFloat() - mActualAreaMargin.toFloat(),
+                (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
                 mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
         canvas.drawRoundRect(mInnerRect, mBorderRadius.toFloat() * ratio, mBorderRadius.toFloat() * ratio, mInnerPaint)
 
         // Arrow angle
+        // We compute the rotation of the arrow and we apply .rotate transformation on the canvas.
+        canvas.save()
+        if (isReversed) {
+            canvas.rotate(180f, mInnerRect.centerX(), mInnerRect.centerY())
+        }
         if (isRotateIcon) {
-            mArrowAngle = -180 * mPositionPerc
+            mArrowAngle = 180 * mPositionPerc * (if (isReversed) 1 else -1)
             canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         }
         mDrawableArrow.setBounds(mInnerRect.left.toInt() + mArrowMargin,
@@ -384,10 +410,7 @@ class SlideToActView @JvmOverloads constructor (
             mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
             mDrawableArrow.draw(canvas)
         }
-
-        if (isRotateIcon) {
-            canvas.rotate(-1 * mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
-        }
+        canvas.restore()
 
         // Tick drawing
         mDrawableTick.setBounds(
@@ -402,7 +425,6 @@ class SlideToActView @JvmOverloads constructor (
         } else {
             (mDrawableTick as AnimatedVectorDrawableCompat).setTint(innerColor)
         }
-
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
@@ -475,17 +497,19 @@ class SlideToActView @JvmOverloads constructor (
      * @return A boolean that informs if user has pressed or not
      */
     private fun checkInsideButton(x: Float, y: Float): Boolean {
-        return (0 < y && y < mAreaHeight && mPosition < x && x < (mAreaHeight + mPosition))
+        return (0 < y && y < mAreaHeight && mEffectivePosition < x && x < (mAreaHeight + mEffectivePosition))
     }
 
     /**
      * Private method for increasing/decreasing the position
-     * Ensure that position never exits from its range [0, (mAreaWidth - mAreaHeight)]
+     * Ensure that position never exits from its range [0, (mAreaWidth - mAreaHeight)].
+     *
+     * Please note that the increment is inverted in case of a reversed slider.
      *
      * @param inc Increment to be performed (negative if it's a decrement)
      */
     private fun increasePosition(inc: Int) {
-        mPosition += inc
+        mPosition = if (isReversed) mPosition - inc else mPosition + inc
         if (mPosition < 0)
             mPosition = 0
         if (mPosition > (mAreaWidth - mAreaHeight))

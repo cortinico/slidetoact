@@ -61,6 +61,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_custom_icon:
                 setContentView(R.layout.content_custom_icon);
                 break;
+            case R.id.button_reversed_slider:
+                setContentView(R.layout.content_reversed_slider);
+                break;
             default:
                 finish();
                 break;
