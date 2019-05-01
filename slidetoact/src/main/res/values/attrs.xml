@@ -15,6 +15,7 @@
         <attr name="border_radius" format="dimension" />
         <attr name="slider_height" format="dimension" />
         <attr name="slider_locked" format="boolean" />
+        <attr name="slider_reversed" format="boolean" />
         <attr name="slider_icon" format="reference" />
         <attr name="slider_icon_color" format="color"/>
         <attr name="rotate_icon" format="boolean" />

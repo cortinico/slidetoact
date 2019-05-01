@@ -18,6 +18,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``text``, ``text_size``, ``text_style``, ``text_appearance``](#text-text_size-text_style-text_appearance)
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
+        * [``slider_reversed``](#slider_reversed)
         * [``slider_icon``](#slider_icon)
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
@@ -157,6 +158,20 @@ SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
 sta.setLocked(true);
 ```
 
+#### ``slider_reversed``
+
+Use the ``slider_reversed`` attribute to **reverse the slider** (this is a boolean attribute). When a slider is reversed, the cursor will appear on the right and will progress to the left. (default is false).
+
+<p align="center">
+  <img src="assets/reversed_slider.gif" alt="reversed_slider gif"/>
+</p>
+
+You can also toggle this attribute programmatically with the provided setter.
+
+```java
+SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
+sta.setReversed(true);
+```
 
 #### ``slider_icon``
 

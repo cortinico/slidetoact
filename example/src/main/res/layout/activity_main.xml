@@ -88,5 +88,11 @@
             android:layout_height="wrap_content"
             android:text="@string/custom_icon" />
 
+        <Button
+            android:id="@+id/button_reversed_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reversed_slider" />
+
     </LinearLayout>
 </ScrollView>
