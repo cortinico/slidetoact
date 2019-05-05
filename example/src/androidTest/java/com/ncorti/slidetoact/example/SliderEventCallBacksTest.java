@@ -34,7 +34,7 @@ public class SliderEventCallBacksTest {
                 protected Intent getActivityIntent() {
                     Context targetContext = InstrumentationRegistry.getInstrumentation()
                             .getTargetContext();
-                    Intent result = new Intent(targetContext, MainActivity.class);
+                    Intent result = new Intent(targetContext, SampleActivity.class);
                     result.putExtra(SampleActivity.EXTRA_PRESSED_BUTTON, R.id.button_area_margin);
                     return result;
                 }
