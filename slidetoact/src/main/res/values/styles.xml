@@ -2,8 +2,8 @@
 <resources>
     <style name="SlideToActView">
         <item name="text">SlideToActView</item>
-        <item name="text_size">@dimen/default_text_size</item>
-        <item name="area_margin">@dimen/default_area_margin</item>
+        <item name="text_size">@dimen/slidetoact_default_text_size</item>
+        <item name="area_margin">@dimen/slidetoact_default_area_margin</item>
         <item name="inner_color">?android:colorBackground</item>
         <item name="outer_color">?colorAccent</item>
         <item name="slider_locked">false</item>

@@ -177,7 +177,7 @@ class SlideToActView @JvmOverloads constructor (
     private var mFlagDrawTick: Boolean = false
 
     /** The icon for the drawable */
-    private var mIcon: Int = R.drawable.ic_arrow
+    private var mIcon: Int = R.drawable.slidetoact_ic_arrow
 
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
@@ -249,8 +249,8 @@ class SlideToActView @JvmOverloads constructor (
 
             mBorderRadius = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_border_radius, -1)
 
-            val defaultOuter = ContextCompat.getColor(this.context, R.color.defaultAccent)
-            val defaultWhite = ContextCompat.getColor(this.context, R.color.white)
+            val defaultOuter = ContextCompat.getColor(this.context, R.color.slidetoact_defaultAccent)
+            val defaultWhite = ContextCompat.getColor(this.context, R.color.slidetoact_white)
 
             actualOuterColor = layoutAttrs.getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
             actualInnerColor = layoutAttrs.getColor(R.styleable.SlideToActView_inner_color, defaultWhite)
@@ -267,7 +267,7 @@ class SlideToActView @JvmOverloads constructor (
 
             text = layoutAttrs.getString(R.styleable.SlideToActView_text)
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
-            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.default_text_size))
+            mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.slidetoact_default_text_size))
             textColor = actualTextColor
 
             // TextAppearance is the last as will have precedence over everything text related.
@@ -278,10 +278,10 @@ class SlideToActView @JvmOverloads constructor (
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
 
-            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.default_area_margin))
+            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
 
-            mIcon = layoutAttrs.getResourceId(R.styleable.SlideToActView_slider_icon, R.drawable.ic_arrow)
+            mIcon = layoutAttrs.getResourceId(R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow)
 
             // For icon color. check if the `slide_icon_color` is set.
             // if not check if the `outer_color` is set.
@@ -307,9 +307,9 @@ class SlideToActView @JvmOverloads constructor (
 
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            context.resources.getDrawable(R.drawable.animated_ic_check, context.theme) as AnimatedVectorDrawable
+            context.resources.getDrawable(R.drawable.slidetoact_animated_ic_check, context.theme) as AnimatedVectorDrawable
         } else {
-            AnimatedVectorDrawableCompat.create(context, R.drawable.animated_ic_check)!!
+            AnimatedVectorDrawableCompat.create(context, R.drawable.slidetoact_animated_ic_check)!!
         }
 
         mTextPaint.textAlign = Paint.Align.CENTER
@@ -318,7 +318,7 @@ class SlideToActView @JvmOverloads constructor (
         innerColor = actualInnerColor
         iconColor = actualIconColor
 
-        mIconMargin = context.resources.getDimensionPixelSize(R.dimen.default_icon_margin)
+        mIconMargin = context.resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
         mArrowMargin = mIconMargin
         mTickMargin = mIconMargin
 
