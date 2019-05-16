@@ -17,5 +17,19 @@
             app:slider_reversed="true"
             app:text="Reversed Slider" />
 
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_animate_completion_off"
+            style="@style/SlideToActView.Example"
+            app:animate_completion="false"
+            app:text="Slider that doesn't complete" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_animate_completion_off_and_text"
+            style="@style/SlideToActView.Example"
+            app:animate_completion="false"
+            app:compete_text="...and has a complete_text!"
+            app:text="Slider that doesn't complete..." />
+
+
     </LinearLayout>
 </ScrollView>

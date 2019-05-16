@@ -69,6 +69,16 @@ class SlideToActView @JvmOverloads constructor (
             invalidate()
         }
 
+    /** Complete Text message
+     * This field can be used to show a message when the slider is completed and the
+     * [isAnimateCompletion] is set to false (otherwise there is no space for a completeText).
+     */
+    var completeText: CharSequence = ""
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     /** Typeface for the text field */
     var typeFace = Typeface.NORMAL
         set(value) {
@@ -265,7 +275,8 @@ class SlideToActView @JvmOverloads constructor (
                 else -> defaultWhite
             }
 
-            text = layoutAttrs.getString(R.styleable.SlideToActView_text)
+            text = layoutAttrs.getString(R.styleable.SlideToActView_text) ?: ""
+            completeText = layoutAttrs.getString(R.styleable.SlideToActView_compete_text) ?: ""
             typeFace = layoutAttrs.getInt(R.styleable.SlideToActView_text_style, 0)
             mTextSize = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_text_size, resources.getDimensionPixelSize(R.dimen.slidetoact_default_text_size))
             textColor = actualTextColor
@@ -276,7 +287,7 @@ class SlideToActView @JvmOverloads constructor (
             isLocked = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_locked, false)
             isReversed = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_reversed, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
-            isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
+            isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, false)
 
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
@@ -377,10 +388,24 @@ class SlideToActView @JvmOverloads constructor (
         mOuterRect.set(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
         canvas.drawRoundRect(mOuterRect, mBorderRadius.toFloat(), mBorderRadius.toFloat(), mOuterPaint)
 
-        // Text alpha
-        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        // Text String and Alpha
+        val textString: CharSequence
+        // If the slider is not animating to a "tick" and you set a "completeText",
+        // we want to cross-fade between them.
+        if (!isAnimateCompletion && completeText.isNotEmpty()) {
+            textString = if (mPositionPercInv > 0.5) text else completeText
+            mTextPaint.alpha = if (mPositionPercInv > 0.5) {
+                (((mPositionPercInv - 0.5) * 2) * 255).toInt()
+            } else {
+                ((1 - (mPositionPercInv * 2)) * 255).toInt()
+            }.toInt()
+        } else {
+            textString = text
+            mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        }
+
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
-        val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
+        val textToDraw = mTextView.transformationMethod?.getTransformation(textString, mTextView) ?: textString
         canvas.drawText(textToDraw, 0, textToDraw.length, mTextXPosition, mTextYPosition, mTextPaint)
 
         // Inner Cursor
@@ -461,6 +486,9 @@ class SlideToActView @JvmOverloads constructor (
                             invalidateArea()
                         }
                         positionAnimator.start()
+                        // Reset the isCompleted so the value returned is consistent
+                        // when using `isAnimateCompletion`.
+                        mIsCompleted = false
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
                         startAnimationComplete()
@@ -595,6 +623,14 @@ class SlideToActView @JvmOverloads constructor (
 
             override fun onAnimationEnd(p0: Animator?) {
                 mIsCompleted = true
+
+
+                // When the slider is not completed to a "tick" we want to allow touch events.
+                // This will make possible to "drag" the arrow back to the starting point.
+                if (!isAnimateCompletion) {
+                    isEnabled = true
+                }
+
                 onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
                 onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
             }
@@ -832,6 +868,3 @@ class SlideToActView @JvmOverloads constructor (
         }
     }
 }
-
-
-

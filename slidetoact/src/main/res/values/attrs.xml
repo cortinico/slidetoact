@@ -20,6 +20,7 @@
         <attr name="slider_icon_color" format="color"/>
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
+        <attr name="compete_text" format="string" />
         <attr name="text_appearance" format="reference" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
