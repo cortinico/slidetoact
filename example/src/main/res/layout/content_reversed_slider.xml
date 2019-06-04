@@ -27,7 +27,7 @@
             android:id="@+id/slide_animate_completion_off_and_text"
             style="@style/SlideToActView.Example"
             app:animate_completion="false"
-            app:compete_text="...and has a complete_text!"
+            app:complete_text="...and has a complete_text!"
             app:text="Slider that doesn't complete..." />
 
 
