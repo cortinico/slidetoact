@@ -39,14 +39,14 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 If you're using the Android Gradle plugin version 3:
 ```groovy
 dependencies {
-   implementation 'com.ncorti:slidetoact:0.6.0'
+   implementation 'com.ncorti:slidetoact:0.7.0'
 }
 ```
 
 If you're using an Older version of the Android Gradle plugin:
 ```groovy
 dependencies {
-   compile 'com.ncorti:slidetoact:0.6.0'
+   compile 'com.ncorti:slidetoact:0.7.0'
 }
 ```
 
