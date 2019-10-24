@@ -94,5 +94,10 @@
             android:layout_height="wrap_content"
             android:text="@string/reversed_slider" />
 
+        <Button
+            android:id="@+id/button_animation_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/animation_duration" />
     </LinearLayout>
 </ScrollView>

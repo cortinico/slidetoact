@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_locked_slider).setOnClickListener(this);
         findViewById(R.id.button_custom_icon).setOnClickListener(this);
         findViewById(R.id.button_reversed_slider).setOnClickListener(this);
+        findViewById(R.id.button_animation_duration).setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

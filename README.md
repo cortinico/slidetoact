@@ -95,6 +95,7 @@ By the default, every ``SlideToActView`` widget fits to your app using the ``col
     android:layout_height="wrap_content"
     android:elevation="6dp"
     app:area_margin="4dp"
+    app:animation_duration="250"
     app:outer_color="@color/green"
     app:inner_color="@color/grey"
     app:border_radius="2dp"
@@ -146,6 +147,18 @@ Use the ``slider_height`` attribute to control the **desired height** of the wid
 #### ``slider_locked``
 
 Use the ``slider_locked`` attribute to **lock the slider** (this is a boolean attribute). When a slider is locked, will always bump the button to the beginning (default is false).
+
+#### ``animation_duration``
+
+Use the ``animation_duration`` attribute to **set the duration**
+
+
+You can also toggle this attribute programmatically with the provided setter.
+
+```kotlin
+val sta = (SlideToActView) findViewById(R.id.slider);
+sta.animDuration(600)
+```
 
 <p align="center">
   <img src="assets/locked_slider.gif" alt="locked_slider gif"/>
