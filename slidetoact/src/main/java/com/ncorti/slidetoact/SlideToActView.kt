@@ -103,13 +103,13 @@ class SlideToActView @JvmOverloads constructor (
             field = value
             mInnerPaint.color = value
             invalidate()
-        }    /** Inner color used by the slider (secondary, icon and border) */
+        }
 
-    var animDuration: Long = 0
+    /** Duration of the complete and reset animation (in milliseconds). */
+    var animDuration: Long = 300
         set(value) {
             field = value
             mAnimDuration = value
-            invalidate()
         }
 
     var textColor: Int = 0

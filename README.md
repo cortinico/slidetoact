@@ -150,8 +150,7 @@ Use the ``slider_locked`` attribute to **lock the slider** (this is a boolean at
 
 #### ``animation_duration``
 
-Use the ``animation_duration`` attribute to **set the duration**
-
+Use the ``animation_duration`` attribute to **set the duration** of the complete and reset animation (in milliseconds).
 
 You can also toggle this attribute programmatically with the provided setter.
 
