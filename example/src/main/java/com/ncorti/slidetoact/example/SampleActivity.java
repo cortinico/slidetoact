@@ -64,6 +64,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_reversed_slider:
                 setContentView(R.layout.content_reversed_slider);
                 break;
+            case R.id.button_animation_duration:
+                setContentView(R.layout.content_animation_duration);
+                break;
             default:
                 finish();
                 break;
