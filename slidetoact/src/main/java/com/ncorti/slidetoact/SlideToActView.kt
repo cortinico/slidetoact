@@ -107,10 +107,6 @@ class SlideToActView @JvmOverloads constructor (
 
     /** Duration of the complete and reset animation (in milliseconds). */
     var animDuration: Long = 300
-        set(value) {
-            field = value
-            mAnimDuration = value
-        }
 
     var textColor: Int = 0
         set(value) {
@@ -192,8 +188,6 @@ class SlideToActView @JvmOverloads constructor (
 
     /** Paint used for inner elements */
     private val mInnerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-
-    private var mAnimDuration: Long = 300
 
     /** Paint used for text elements */
     private var mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -286,7 +280,7 @@ class SlideToActView @JvmOverloads constructor (
             isReversed = layoutAttrs.getBoolean(R.styleable.SlideToActView_slider_reversed, false)
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
-            mAnimDuration = layoutAttrs.getInteger(R.styleable.SlideToActView_animation_duration, 300).toLong()
+            animDuration = layoutAttrs.getInteger(R.styleable.SlideToActView_animation_duration, 300).toLong()
 
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
@@ -465,7 +459,7 @@ class SlideToActView @JvmOverloads constructor (
                     if ((mPosition > 0 && isLocked) || (mPosition > 0 && mPositionPerc < mGraceValue)) {
                         // Check for grace value
                         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
-                        positionAnimator.duration = mAnimDuration
+                        positionAnimator.duration = animDuration
                         positionAnimator.addUpdateListener {
                             mPosition = it.animatedValue as Int
                             invalidateArea()
@@ -593,7 +587,7 @@ class SlideToActView @JvmOverloads constructor (
 
         animSet.playSequentially(*animators.toTypedArray())
 
-        animSet.duration = mAnimDuration
+        animSet.duration = animDuration
 
         animSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
@@ -697,7 +691,7 @@ class SlideToActView @JvmOverloads constructor (
             animSet.playSequentially(positionAnimator)
         }
 
-        animSet.duration = mAnimDuration
+        animSet.duration = animDuration
 
         animSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
