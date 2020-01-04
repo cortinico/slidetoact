@@ -182,7 +182,7 @@ sta.setLocked(true);
 
 Use the ``animation_duration`` attribute to **set the duration** of the complete and reset animation (in milliseconds).
 
-You can also set animation duration programmatically with the provided property.
+You can also set animation duration programmatically with the provided setter.
 
 ```kotlin
 val sta = (SlideToActView) findViewById(R.id.slider);
