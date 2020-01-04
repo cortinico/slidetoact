@@ -752,7 +752,6 @@ class SlideToActView @JvmOverloads constructor (
 
     /**
      * Private method to handle vibration logic, called when the cursor it moved to the end of it's path
-     * @throws SecurityException if bumpVibration is greater than 0 but the permission
      * */
     @SuppressLint("MissingPermission")
     private fun handleVibration() {
