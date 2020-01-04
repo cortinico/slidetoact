@@ -761,7 +761,7 @@ class SlideToActView @JvmOverloads constructor (
     @SuppressLint("MissingPermission")
     private fun handleVibration() {
 
-        if (bumpVibration < 0) return
+        if (bumpVibration <= 0) return
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
                 PackageManager.PERMISSION_GRANTED) {
