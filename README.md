@@ -20,6 +20,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``slider_locked``](#slider_locked)
         * [``slider_reversed``](#slider_reversed)
         * [``slider_icon``](#slider_icon)
+        * [``bump_vibration``](#bump_vibration)
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
     * [Event callbacks](#event-callbacks)
@@ -226,6 +227,29 @@ You can set a custom color for the icon by setting the ``slider_icon_color`` att
 </p>
 
 This attribute defaults to the ``outer_color`` if set. If ``outer_color`` is not set, this attribute defaults to **colorAccent** from your theme.
+
+#### ``bump_vibration``
+
+You can make the device vibrate when the cursor "bumps" to the end of the sliding path by setting the period of vibration through bump_vibration attribute in your layout XML (default is 0)
+
+```xml
+app:bump_vibration="50"
+```
+
+Note that the period of vibration is in milliseconds
+
+You can achieve the same programmatically using the setter:
+
+```java
+SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
+sta.setBumpVibration(50);
+```
+
+In order for this feature to work, you need have the permission ```android.permission.VIBRATE``` in your AndroidManifest.xml
+
+```xml
+<uses-permission android:name="android.permission.VIBRATE"/>
+```
 
 #### ``android:elevation``
 
