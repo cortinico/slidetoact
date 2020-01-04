@@ -18,6 +18,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``text``, ``text_size``, ``text_style``, ``text_appearance``](#text-text_size-text_style-text_appearance)
         * [``slider_height``](#slider_height)
         * [``slider_locked``](#slider_locked)
+        * [``animation_duration``](#animation_duration)
         * [``slider_reversed``](#slider_reversed)
         * [``slider_icon``](#slider_icon)
         * [``rotate_icon``](#rotate_icon)
@@ -166,17 +167,6 @@ Use the ``slider_height`` attribute to control the **desired height** of the wid
 
 Use the ``slider_locked`` attribute to **lock the slider** (this is a boolean attribute). When a slider is locked, will always bump the button to the beginning (default is false).
 
-#### ``animation_duration``
-
-Use the ``animation_duration`` attribute to **set the duration** of the complete and reset animation (in milliseconds).
-
-You can also toggle this attribute programmatically with the provided property.
-
-```kotlin
-val sta = (SlideToActView) findViewById(R.id.slider);
-sta.animDuration = 600
-```
-
 <p align="center">
   <img src="assets/locked_slider.gif" alt="locked_slider gif"/>
 </p>
@@ -186,6 +176,17 @@ You can also toggle this attribute programmatically with the provided setter.
 ```java
 SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
 sta.setLocked(true);
+```
+
+#### ``animation_duration``
+
+Use the ``animation_duration`` attribute to **set the duration** of the complete and reset animation (in milliseconds).
+
+You can also set animation duration programmatically with the provided setter.
+
+```kotlin
+val sta = (SlideToActView) findViewById(R.id.slider);
+sta.animDuration = 600
 ```
 
 #### ``slider_reversed``
