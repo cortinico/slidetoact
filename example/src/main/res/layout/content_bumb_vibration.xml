@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/slide_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="30"
+            app:text="Bump vibration 30" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="50"
+            app:text="Bump vibration 50" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="100"
+            app:text="Bump vibration 100" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="130"
+            app:text="Bump vibration 130" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="150"
+            app:text="Bump vibration 150" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:bump_vibration="200"
+            app:text="Bump vibration 200" />
+
+    </LinearLayout>
+
+</ScrollView>
