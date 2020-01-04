@@ -471,7 +471,7 @@ class SlideToActView @JvmOverloads constructor (
                         positionAnimator.duration = animDuration
                         positionAnimator.addUpdateListener {
                             mPosition = it.animatedValue as Int
-                            invalidateArea()
+                            invalidate()
                         }
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
@@ -494,17 +494,18 @@ class SlideToActView @JvmOverloads constructor (
                         val diffX = event.x - mLastX
                         mLastX = event.x
                         increasePosition(diffX.toInt())
-                        invalidateArea()
+                        invalidate()
+
+                        //If this event brought the cursor to the end position, we can vibrate
+                        if(bumpVibration > 0 && wasIncomplete && mPositionPerc == 1f) {
+                            handleVibration()
+                        }
                     }
                 }
             }
             return true
         }
         return super.onTouchEvent(event)
-    }
-
-    private fun invalidateArea() {
-        invalidate(mOuterRect.left.toInt(), mOuterRect.top.toInt(), mOuterRect.right.toInt(), mOuterRect.bottom.toInt())
     }
 
     /**
@@ -543,14 +544,14 @@ class SlideToActView @JvmOverloads constructor (
         val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
         finalPositionAnimator.addUpdateListener {
             mPosition = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
 
         // Animator that bounce away the cursors
         val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin)
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
@@ -561,7 +562,7 @@ class SlideToActView @JvmOverloads constructor (
             if (Build.VERSION.SDK_INT >= 21) {
                 invalidateOutline()
             }
-            invalidateArea()
+            invalidate()
         }
 
         val tickAnimator: ValueAnimator
@@ -572,7 +573,7 @@ class SlideToActView @JvmOverloads constructor (
                 mTickMargin = mIconMargin
                 mFlagDrawTick = true
                 mDrawableTick.alpha = it.animatedValue as Int
-                invalidateArea()
+                invalidate()
             }
         } else {
             // Used AVD Animation.
@@ -582,7 +583,7 @@ class SlideToActView @JvmOverloads constructor (
                     mTickMargin = mIconMargin
                     mFlagDrawTick = true
                     startTickAnimation()
-                    invalidateArea()
+                    invalidate()
                 }
             }
         }
@@ -659,7 +660,7 @@ class SlideToActView @JvmOverloads constructor (
         val tickAnimator = ValueAnimator.ofInt(mTickMargin, mAreaWidth / 2)
         tickAnimator.addUpdateListener {
             mTickMargin = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
 
         // Animator that enlarges the outer area
@@ -671,20 +672,20 @@ class SlideToActView @JvmOverloads constructor (
             if (Build.VERSION.SDK_INT >= 21) {
                 invalidateOutline()
             }
-            invalidateArea()
+            invalidate()
         }
 
         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
         positionAnimator.addUpdateListener {
             mPosition = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
 
         // Animator that re-draw the cursors
         val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, mOriginAreaMargin)
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
@@ -692,7 +693,7 @@ class SlideToActView @JvmOverloads constructor (
         val arrowAnimator = ValueAnimator.ofInt(mArrowMargin, mIconMargin)
         arrowAnimator.addUpdateListener {
             mArrowMargin = it.animatedValue as Int
-            invalidateArea()
+            invalidate()
         }
 
 
@@ -872,3 +873,6 @@ class SlideToActView @JvmOverloads constructor (
         }
     }
 }
+
+
+
