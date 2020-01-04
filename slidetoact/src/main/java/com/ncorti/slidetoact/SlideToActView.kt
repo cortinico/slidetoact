@@ -21,6 +21,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.util.Xml
 import android.view.MotionEvent
@@ -43,6 +44,10 @@ class SlideToActView @JvmOverloads constructor (
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.attr.slideToActViewStyle
 ) : View(context, attrs, defStyleAttr) {
+
+    companion object {
+        const val TAG = "SlideToActView"
+    }
 
     /* -------------------- LAYOUT BOUNDS -------------------- */
 
@@ -761,10 +766,9 @@ class SlideToActView @JvmOverloads constructor (
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
                 PackageManager.PERMISSION_GRANTED) {
 
-            System.err.println("bumpVibration is set but permissions are unavailable." +
+            Log.w(TAG,"bumpVibration is set but permissions are unavailable." +
                     "You must have the permission android.permission.VIBRATE in " +
                     "AndroidManifest.xml to use bumpVibration")
-
             return
         }
 
