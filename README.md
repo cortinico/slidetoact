@@ -111,6 +111,24 @@ Use the ``area_marging`` attribute to control the **margin of the inner circular
 
 <p align="center"><img src="assets/area_margin_1.png" alt="area_margin_1" width="40%"/> <img src="assets/area_margin_2.png" alt="area_margin_2" width="40%"/></p>
 
+You can also use a **negative** value to have the inner circular button bigger than the slider. To achieve this effect you also need to set `android:clipChildren="false"` on the parent layout, like:
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false">
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:area_margin="-8dp"/>
+```
+
+to obtain this behavior:
+
+<p align="center"><img src="assets/area_margin_3.png" alt="area_margin_3" width="40%"/></p>
+
 #### ``inner_color`` & ``outer_color``
 
 Use the ``outer_color`` attribute to control the **color of the external area** and the **color of the arrow icon**. If not set, this attribute defaults to **colorAccent** from your theme.
