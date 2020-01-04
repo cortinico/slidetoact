@@ -756,13 +756,18 @@ class SlideToActView @JvmOverloads constructor (
      * */
     @SuppressLint("MissingPermission")
     private fun handleVibration() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
-                PackageManager.PERMISSION_GRANTED)
 
-            throw SecurityException(
-                    "bumpVibration is set but permissions are unavailable." +
+        if (bumpVibration < 0) return
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            System.err.println("bumpVibration is set but permissions are unavailable." +
                     "You must have the permission android.permission.VIBRATE in " +
                     "AndroidManifest.xml to use bumpVibration")
+
+            return
+        }
 
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
