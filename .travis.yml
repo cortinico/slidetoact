@@ -23,5 +23,8 @@ android:
     - extra-android-m2repository
     - extra-google-m2repository
 
+before_install:
+  - yes | sdkmanager "platforms;android-29"
+
 script:
    - ./gradlew clean build lint test
