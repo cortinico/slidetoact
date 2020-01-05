@@ -99,5 +99,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/animation_duration" />
+
+        <Button
+            android:id="@+id/button_bump_vibration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bump_vibration" />
+
     </LinearLayout>
 </ScrollView>

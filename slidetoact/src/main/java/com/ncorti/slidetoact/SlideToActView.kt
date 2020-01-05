@@ -1,21 +1,27 @@
 package com.ncorti.slidetoact
 
+import android.Manifest
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.*
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.annotation.RequiresApi
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.util.Xml
 import android.view.MotionEvent
@@ -38,6 +44,10 @@ class SlideToActView @JvmOverloads constructor (
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.attr.slideToActViewStyle
 ) : View(context, attrs, defStyleAttr) {
+
+    companion object {
+        const val TAG = "SlideToActView"
+    }
 
     /* -------------------- LAYOUT BOUNDS -------------------- */
 
@@ -107,6 +117,9 @@ class SlideToActView @JvmOverloads constructor (
 
     /** Duration of the complete and reset animation (in milliseconds). */
     var animDuration: Long = 300
+
+    /** Duration of vibration after bumping to the end point */
+    var bumpVibration :Long = 0L
 
     var textColor: Int = 0
         set(value) {
@@ -281,6 +294,7 @@ class SlideToActView @JvmOverloads constructor (
             isRotateIcon = layoutAttrs.getBoolean(R.styleable.SlideToActView_rotate_icon, true)
             isAnimateCompletion = layoutAttrs.getBoolean(R.styleable.SlideToActView_animate_completion, true)
             animDuration = layoutAttrs.getInteger(R.styleable.SlideToActView_animation_duration, 300).toLong()
+            bumpVibration = layoutAttrs.getInt(R.styleable.SlideToActView_bump_vibration, 0).toLong()
 
             mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
             mActualAreaMargin = mOriginAreaMargin
@@ -478,10 +492,19 @@ class SlideToActView @JvmOverloads constructor (
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if (mFlagMoving) {
+
+                        //True if the cursor was not at the end position before this event
+                        val wasIncomplete = mPositionPerc < 1f
+
                         val diffX = event.x - mLastX
                         mLastX = event.x
                         increasePosition(diffX.toInt())
                         invalidate()
+
+                        //If this event brought the cursor to the end position, we can vibrate
+                        if(bumpVibration > 0 && wasIncomplete && mPositionPerc == 1f) {
+                            handleVibration()
+                        }
                     }
                 }
             }
@@ -729,6 +752,32 @@ class SlideToActView @JvmOverloads constructor (
             (mDrawableTick as AnimatedVectorDrawable).stop()
         } else {
             (mDrawableTick as AnimatedVectorDrawableCompat).stop()
+        }
+    }
+
+    /**
+     * Private method to handle vibration logic, called when the cursor it moved to the end of it's path
+     * */
+    @SuppressLint("MissingPermission")
+    private fun handleVibration() {
+
+        if (bumpVibration <= 0) return
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+            Log.w(TAG,"bumpVibration is set but permissions are unavailable." +
+                    "You must have the permission android.permission.VIBRATE in " +
+                    "AndroidManifest.xml to use bumpVibration")
+            return
+        }
+
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(bumpVibration, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(bumpVibration)
         }
     }
 

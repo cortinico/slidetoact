@@ -15,6 +15,7 @@
         <attr name="border_radius" format="dimension" />
         <attr name="slider_height" format="dimension" />
         <attr name="animation_duration" format="integer" />
+        <attr name="bump_vibration" format="integer"/>
         <attr name="slider_locked" format="boolean" />
         <attr name="slider_reversed" format="boolean" />
         <attr name="slider_icon" format="reference" />

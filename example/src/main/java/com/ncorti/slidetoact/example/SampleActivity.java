@@ -67,6 +67,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_animation_duration:
                 setContentView(R.layout.content_animation_duration);
                 break;
+            case R.id.button_bump_vibration:
+                setContentView(R.layout.content_bumb_vibration);
+                break;
             default:
                 finish();
                 break;
