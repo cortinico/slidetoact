@@ -177,7 +177,7 @@ class SlideToActView @JvmOverloads constructor (
 
     /* -------------------- ICONS -------------------- */
 
-    private val mIconMargin: Int
+    var iconMargin: Int
     /** Margin for Arrow Icon */
     private var mArrowMargin: Int
     /** Current angle for Arrow Icon */
@@ -189,7 +189,7 @@ class SlideToActView @JvmOverloads constructor (
     private val mDrawableArrow: VectorDrawableCompat
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
-    private val mDrawableTick: Drawable
+    var completedDrawable: Drawable
     private var mFlagDrawTick: Boolean = false
 
     /** The icon for the drawable */
@@ -324,7 +324,7 @@ class SlideToActView @JvmOverloads constructor (
         mDrawableArrow = parseVectorDrawableCompat(context.resources, mIcon, context.theme)
 
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
-        mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        completedDrawable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             context.resources.getDrawable(R.drawable.slidetoact_animated_ic_check, context.theme) as AnimatedVectorDrawable
         } else {
             AnimatedVectorDrawableCompat.create(context, R.drawable.slidetoact_animated_ic_check)!!
@@ -336,9 +336,9 @@ class SlideToActView @JvmOverloads constructor (
         innerColor = actualInnerColor
         iconColor = actualIconColor
 
-        mIconMargin = context.resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
-        mArrowMargin = mIconMargin
-        mTickMargin = mIconMargin
+        iconMargin = context.resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
+        mArrowMargin = iconMargin
+        mTickMargin = iconMargin
 
         // This outline provider force removal of shadow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -431,7 +431,7 @@ class SlideToActView @JvmOverloads constructor (
         canvas.restore()
 
         // Tick drawing
-        mDrawableTick.setBounds(
+        completedDrawable.setBounds(
             mActualAreaWidth + mTickMargin,
             mTickMargin,
             mAreaWidth - mTickMargin - mActualAreaWidth,
@@ -439,12 +439,12 @@ class SlideToActView @JvmOverloads constructor (
 
         // Tinting the tick with the proper implementation method
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDrawableTick.setTint(innerColor)
+            completedDrawable.setTint(innerColor)
         } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(innerColor)
+            (completedDrawable as AnimatedVectorDrawableCompat).setTint(innerColor)
         }
         if (mFlagDrawTick) {
-            mDrawableTick.draw(canvas)
+            completedDrawable.draw(canvas)
         }
     }
 
@@ -575,9 +575,9 @@ class SlideToActView @JvmOverloads constructor (
             // Fallback not using AVD.
             tickAnimator = ValueAnimator.ofInt(0, 255)
             tickAnimator.addUpdateListener {
-                mTickMargin = mIconMargin
+                mTickMargin = iconMargin
                 mFlagDrawTick = true
-                mDrawableTick.alpha = it.animatedValue as Int
+                completedDrawable.alpha = it.animatedValue as Int
                 invalidate()
             }
         } else {
@@ -585,7 +585,7 @@ class SlideToActView @JvmOverloads constructor (
             tickAnimator = ValueAnimator.ofInt(0)
             tickAnimator.addUpdateListener {
                 if (!mFlagDrawTick) {
-                    mTickMargin = mIconMargin
+                    mTickMargin = iconMargin
                     mFlagDrawTick = true
                     startTickAnimation()
                     invalidate()
@@ -695,7 +695,7 @@ class SlideToActView @JvmOverloads constructor (
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
 
         // Animator that makes the arrow appear
-        val arrowAnimator = ValueAnimator.ofInt(mArrowMargin, mIconMargin)
+        val arrowAnimator = ValueAnimator.ofInt(mArrowMargin, iconMargin)
         arrowAnimator.addUpdateListener {
             mArrowMargin = it.animatedValue as Int
             invalidate()
@@ -738,9 +738,9 @@ class SlideToActView @JvmOverloads constructor (
      */
     private fun startTickAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).start()
+            (completedDrawable as AnimatedVectorDrawable).start()
         } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).start()
+            (completedDrawable as AnimatedVectorDrawableCompat).start()
         }
     }
 
@@ -749,9 +749,9 @@ class SlideToActView @JvmOverloads constructor (
      */
     private fun stopTickAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).stop()
+            (completedDrawable as AnimatedVectorDrawable).stop()
         } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).stop()
+            (completedDrawable as AnimatedVectorDrawableCompat).stop()
         }
     }
 
