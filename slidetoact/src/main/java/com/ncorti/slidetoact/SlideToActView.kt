@@ -177,7 +177,12 @@ class SlideToActView @JvmOverloads constructor (
 
     /* -------------------- ICONS -------------------- */
 
-    var iconMargin: Int
+    var iconMargin: Int = 0
+    set(value) {
+        mArrowMargin = value
+        mTickMargin = value
+        field = value
+    }
     /** Margin for Arrow Icon */
     private var mArrowMargin: Int
     /** Current angle for Arrow Icon */
