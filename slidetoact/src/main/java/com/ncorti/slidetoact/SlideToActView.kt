@@ -486,7 +486,7 @@ class SlideToActView @JvmOverloads constructor (
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
-                        startAnimationComplete()
+                        startAnimationComplete(true)
                     } else if (mFlagMoving && mPosition == 0) {
                         // mFlagMoving == true means user successfully grabbed the slider,
                         // but mPosition == 0 means that the slider is released at the beginning
@@ -547,7 +547,7 @@ class SlideToActView @JvmOverloads constructor (
     /**
      * Private method that is performed when user completes the slide
      */
-    private fun startAnimationComplete() {
+    private fun startAnimationComplete(notifyListener: Boolean) {
         val animSet = AnimatorSet()
 
         // Animator that moves the cursor
@@ -624,6 +624,7 @@ class SlideToActView @JvmOverloads constructor (
             override fun onAnimationEnd(p0: Animator?) {
                 mIsCompleted = true
                 onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(this@SlideToActView)
+                if (notifyListener)
                 onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
             }
 
@@ -638,7 +639,7 @@ class SlideToActView @JvmOverloads constructor (
      */
     fun completeSlider() {
         if (!mIsCompleted) {
-            startAnimationComplete()
+            startAnimationComplete(false)
         }
     }
 
