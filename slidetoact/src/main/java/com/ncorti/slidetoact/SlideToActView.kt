@@ -486,7 +486,7 @@ class SlideToActView @JvmOverloads constructor (
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
-                        startAnimationComplete(true)
+                        startAnimationComplete(true, true)
                     } else if (mFlagMoving && mPosition == 0) {
                         // mFlagMoving == true means user successfully grabbed the slider,
                         // but mPosition == 0 means that the slider is released at the beginning
@@ -547,7 +547,7 @@ class SlideToActView @JvmOverloads constructor (
     /**
      * Private method that is performed when user completes the slide
      */
-    private fun startAnimationComplete(notifyListener: Boolean) {
+    private fun startAnimationComplete(notifyListener: Boolean, animated: Boolean) {
         val animSet = AnimatorSet()
 
         // Animator that moves the cursor
@@ -611,7 +611,7 @@ class SlideToActView @JvmOverloads constructor (
 
         animSet.playSequentially(*animators.toTypedArray())
 
-        animSet.duration = animDuration
+        animSet.duration = if (animated) animDuration else 0
 
         animSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
@@ -637,18 +637,18 @@ class SlideToActView @JvmOverloads constructor (
     /**
      * Method that completes the slider
      */
-    fun completeSlider() {
+    fun completeSlider(animated: Boolean = true) {
         if (!mIsCompleted) {
-            startAnimationComplete(false)
+            startAnimationComplete(false, animated)
         }
     }
 
     /**
      * Method that reset the slider
      */
-    fun resetSlider() {
+    fun resetSlider(animated: Boolean = true) {
         if (mIsCompleted) {
-            startAnimationReset()
+            startAnimationReset(animated)
         }
     }
 
@@ -663,7 +663,7 @@ class SlideToActView @JvmOverloads constructor (
     /**
      * Private method that is performed when you want to reset the cursor
      */
-    private fun startAnimationReset() {
+    private fun startAnimationReset(animated: Boolean) {
         mIsCompleted = false
         val animSet = AnimatorSet()
 
@@ -716,7 +716,7 @@ class SlideToActView @JvmOverloads constructor (
             animSet.playSequentially(positionAnimator)
         }
 
-        animSet.duration = animDuration
+        animSet.duration = if (animated) animDuration else 0
 
         animSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
