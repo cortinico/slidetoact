@@ -646,10 +646,9 @@ class SlideToActView @JvmOverloads constructor (
     /**
      * Method that reset the slider
      */
+    @JvmOverloads
     fun resetSlider(animated: Boolean = true) {
-        if (mIsCompleted) {
             startAnimationReset(animated)
-        }
     }
 
     /**
