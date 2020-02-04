@@ -15,11 +15,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.annotation.RequiresApi
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import androidx.core.content.ContextCompat
-import androidx.core.widget.TextViewCompat
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -30,6 +25,11 @@ import android.view.ViewOutlineProvider
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.widget.TextViewCompat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -39,7 +39,7 @@ import org.xmlpull.v1.XmlPullParserException
  *  SlideToActView is an elegant material designed slider, that enrich your app
  *  with a "Slide-to-unlock" like widget.
  */
-class SlideToActView @JvmOverloads constructor (
+class SlideToActView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = R.attr.slideToActViewStyle
@@ -83,13 +83,13 @@ class SlideToActView @JvmOverloads constructor (
     var typeFace = Typeface.NORMAL
         set(value) {
             field = value
-            mTextView.typeface = Typeface.create("sans-serif-light" , value)
+            mTextView.typeface = Typeface.create("sans-serif-light", value)
             mTextPaint.set(mTextView.paint)
             invalidate()
         }
 
     /** Text Appearance used to fully customize the font */
-    var textAppearance : Int = 0
+    var textAppearance: Int = 0
         set(value) {
             field = value
             if (value != 0) {
@@ -119,7 +119,7 @@ class SlideToActView @JvmOverloads constructor (
     var animDuration: Long = 300
 
     /** Duration of vibration after bumping to the end point */
-    var bumpVibration :Long = 0L
+    var bumpVibration: Long = 0L
 
     var textColor: Int = 0
         set(value) {
@@ -153,7 +153,7 @@ class SlideToActView @JvmOverloads constructor (
         }
 
     /** Slider cursor effective position. This is used to handle the `reversed` scenario. */
-    private var mEffectivePosition : Int = 0
+    private var mEffectivePosition: Int = 0
         set(value) {
             field = if (isReversed) (mAreaWidth - mAreaHeight) - value else value
         }
@@ -248,16 +248,16 @@ class SlideToActView @JvmOverloads constructor (
     var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
     init {
-        val actualOuterColor : Int
-        val actualInnerColor : Int
-        val actualTextColor : Int
-        val actualIconColor : Int
+        val actualOuterColor: Int
+        val actualInnerColor: Int
+        val actualTextColor: Int
+        val actualIconColor: Int
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
 
         val layoutAttrs: TypedArray = context.theme.obtainStyledAttributes(attrs,
-            R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
+                R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView)
         try {
             mDesiredSliderHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderHeightDp, resources.displayMetrics).toInt()
             mDesiredSliderWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mDesiredSliderWidthDp, resources.displayMetrics).toInt()
@@ -296,7 +296,9 @@ class SlideToActView @JvmOverloads constructor (
             animDuration = layoutAttrs.getInteger(R.styleable.SlideToActView_animation_duration, 300).toLong()
             bumpVibration = layoutAttrs.getInt(R.styleable.SlideToActView_bump_vibration, 0).toLong()
 
-            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin, resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
+            mOriginAreaMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_area_margin,
+                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin))
+
             mActualAreaMargin = mOriginAreaMargin
 
             mIcon = layoutAttrs.getResourceId(R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow)
@@ -310,14 +312,21 @@ class SlideToActView @JvmOverloads constructor (
                 layoutAttrs.hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                 else -> defaultOuter
             }
+
+            mIconMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_icon_margin,
+                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin))
+
+            mArrowMargin = mIconMargin
+            mTickMargin = mIconMargin
+
         } finally {
             layoutAttrs.recycle()
         }
 
         mInnerRect = RectF((mActualAreaMargin + mEffectivePosition).toFloat(),
                 mActualAreaMargin.toFloat(),
-            (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
-            mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
+                (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
+                mAreaHeight.toFloat() - mActualAreaMargin.toFloat())
 
         mOuterRect = RectF(mActualAreaWidth.toFloat(), 0f, mAreaWidth.toFloat() - mActualAreaWidth.toFloat(), mAreaHeight.toFloat())
 
@@ -335,10 +344,6 @@ class SlideToActView @JvmOverloads constructor (
         outerColor = actualOuterColor
         innerColor = actualInnerColor
         iconColor = actualIconColor
-
-        mIconMargin = context.resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
-        mArrowMargin = mIconMargin
-        mTickMargin = mIconMargin
 
         // This outline provider force removal of shadow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -421,21 +426,21 @@ class SlideToActView @JvmOverloads constructor (
             canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         }
         mDrawableArrow.setBounds(mInnerRect.left.toInt() + mArrowMargin,
-            mInnerRect.top.toInt() + mArrowMargin,
-            mInnerRect.right.toInt() - mArrowMargin,
-            mInnerRect.bottom.toInt() - mArrowMargin)
+                mInnerRect.top.toInt() + mArrowMargin,
+                mInnerRect.right.toInt() - mArrowMargin,
+                mInnerRect.bottom.toInt() - mArrowMargin)
         if (mDrawableArrow.bounds.left <= mDrawableArrow.bounds.right &&
-            mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
+                mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom) {
             mDrawableArrow.draw(canvas)
         }
         canvas.restore()
 
         // Tick drawing
         mDrawableTick.setBounds(
-            mActualAreaWidth + mTickMargin,
-            mTickMargin,
-            mAreaWidth - mTickMargin - mActualAreaWidth,
-            mAreaHeight - mTickMargin)
+                mActualAreaWidth + mTickMargin,
+                mTickMargin,
+                mAreaWidth - mTickMargin - mActualAreaWidth,
+                mAreaHeight - mTickMargin)
 
         // Tinting the tick with the proper implementation method
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -502,7 +507,7 @@ class SlideToActView @JvmOverloads constructor (
                         invalidate()
 
                         //If this event brought the cursor to the end position, we can vibrate
-                        if(bumpVibration > 0 && wasIncomplete && mPositionPerc == 1f) {
+                        if (bumpVibration > 0 && wasIncomplete && mPositionPerc == 1f) {
                             handleVibration()
                         }
                     }
@@ -766,7 +771,7 @@ class SlideToActView @JvmOverloads constructor (
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
                 PackageManager.PERMISSION_GRANTED) {
 
-            Log.w(TAG,"bumpVibration is set but permissions are unavailable." +
+            Log.w(TAG, "bumpVibration is set but permissions are unavailable." +
                     "You must have the permission android.permission.VIBRATE in " +
                     "AndroidManifest.xml to use bumpVibration")
             return
@@ -877,7 +882,7 @@ class SlideToActView @JvmOverloads constructor (
             if (view == null || outline == null)
                 return
 
-            outline.setRoundRect(mActualAreaWidth, 0, mAreaWidth - mActualAreaWidth, mAreaHeight,mBorderRadius.toFloat())
+            outline.setRoundRect(mActualAreaWidth, 0, mAreaWidth - mActualAreaWidth, mAreaHeight, mBorderRadius.toFloat())
         }
     }
 }
