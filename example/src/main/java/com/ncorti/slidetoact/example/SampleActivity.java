@@ -1,13 +1,14 @@
 package com.ncorti.slidetoact.example;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ncorti.slidetoact.SlideToActView;
 
@@ -35,6 +36,9 @@ public class SampleActivity extends AppCompatActivity {
         switch (pressedButton) {
             case R.id.button_area_margin:
                 setContentView(R.layout.content_area_margin);
+                break;
+            case R.id.button_icon_margin:
+                setContentView(R.layout.content_icon_margin);
                 break;
             case R.id.button_colors:
                 setContentView(R.layout.content_color);

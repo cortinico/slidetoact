@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ((TextView) findViewById(R.id.welcome_text)).setText("Welcome 😁");
 
         findViewById(R.id.button_area_margin).setOnClickListener(this);
+        findViewById(R.id.button_icon_margin).setOnClickListener(this);
         findViewById(R.id.button_colors).setOnClickListener(this);
         findViewById(R.id.button_border_radius).setOnClickListener(this);
         findViewById(R.id.button_elevation).setOnClickListener(this);
