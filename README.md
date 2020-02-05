@@ -131,6 +131,16 @@ to obtain this behavior:
 
 <p align="center"><img src="assets/area_margin_3.png" alt="area_margin_3" width="40%"/></p>
 
+#### ``icon_margin``
+
+The attribute ``icon_margin`` let you control the margin of the icon inside the circular button. This makes the icon bigger because can take up more space in the button. 
+
+This is especially useful when you want to make the height of the slider smaller (see ``slider_height``). In this case, if you don't adjust the ``icon_margin`` the image can be too much tiny. By default, the ``icon_margin`` is set to 16dp.
+
+In next image you can see how it looks like:
+
+<p align="center"><img src="assets/icon_margin.png" alt="icon_margin" width="40%"/></p>
+
 #### ``inner_color`` & ``outer_color``
 
 Use the ``outer_color`` attribute to control the **color of the external area** and the **color of the arrow icon**. If not set, this attribute defaults to **colorAccent** from your theme.
