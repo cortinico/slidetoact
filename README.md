@@ -139,7 +139,7 @@ This is especially useful when you want to make the height of the slider smaller
 
 In next image you can see how it looks like:
 
-<p align="center"><img src="assets/icon_margin_1.png" alt="icon_margin" width="40%"/></p> <p align="center"><img src="assets/icon_margin_2.png" alt="icon_margin" width="40%"/></p>
+<p align="center"><img src="assets/icon_margin_1.png" alt="icon_margin" width="40%"/> <img src="assets/icon_margin_2.png" alt="icon_margin" width="40%"/></p>
 
 #### ``inner_color`` & ``outer_color``
 
