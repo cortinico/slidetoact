@@ -2,6 +2,7 @@
     <string name="app_name">SlideToAct Example</string>
     <string name="reset">Reset</string>
     <string name="area_margin">area margin</string>
+    <string name="icon_margin">icon margin</string>
     <string name="colors">Colors</string>
     <string name="border_radius">Border Radius</string>
     <string name="elevation">Elevation</string>

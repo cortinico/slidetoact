@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="6dp"
-            app:text="Sample SlideToActView"/>
+            app:text="Sample SlideToActView" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,13 +32,19 @@
             android:layout_margin="8dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:text="@string/welcome_body"/>
+            android:text="@string/welcome_body" />
 
         <Button
             android:id="@+id/button_area_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/area_margin" />
+
+        <Button
+            android:id="@+id/button_icon_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/icon_margin" />
 
         <Button
             android:id="@+id/button_colors"

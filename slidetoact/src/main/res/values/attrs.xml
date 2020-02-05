@@ -9,6 +9,7 @@
             <enum name="italic" value="2" />
         </attr>
         <attr name="area_margin" format="dimension" />
+        <attr name="icon_margin" format="dimension" />
         <attr name="inner_color" format="color" />
         <attr name="outer_color" format="color" />
         <attr name="text_color" format="color" />

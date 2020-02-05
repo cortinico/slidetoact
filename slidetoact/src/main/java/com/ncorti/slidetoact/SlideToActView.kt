@@ -310,6 +310,13 @@ class SlideToActView @JvmOverloads constructor (
                 layoutAttrs.hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                 else -> defaultOuter
             }
+
+            mIconMargin = layoutAttrs.getDimensionPixelSize(R.styleable.SlideToActView_icon_margin,
+                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin))
+
+            mArrowMargin = mIconMargin
+            mTickMargin = mIconMargin
+
         } finally {
             layoutAttrs.recycle()
         }
@@ -335,10 +342,6 @@ class SlideToActView @JvmOverloads constructor (
         outerColor = actualOuterColor
         innerColor = actualInnerColor
         iconColor = actualIconColor
-
-        mIconMargin = context.resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
-        mArrowMargin = mIconMargin
-        mTickMargin = mIconMargin
 
         // This outline provider force removal of shadow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -766,7 +769,7 @@ class SlideToActView @JvmOverloads constructor (
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
                 PackageManager.PERMISSION_GRANTED) {
 
-            Log.w(TAG,"bumpVibration is set but permissions are unavailable." +
+            Log.w(TAG, "bumpVibration is set but permissions are unavailable." +
                     "You must have the permission android.permission.VIBRATE in " +
                     "AndroidManifest.xml to use bumpVibration")
             return

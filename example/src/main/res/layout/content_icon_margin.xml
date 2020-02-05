@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/slide_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_1"
+            style="@style/SlideToActView.Example"
+            app:icon_margin="0dp"
+            app:text="Icon margin 0dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="2dp"
+            app:text="Icon margin 2dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="4dp"
+            app:text="Icon margin 4dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="8dp"
+            app:text="Icon margin 8dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="12dp"
+            app:text="Icon margin 12dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="16dp"
+            app:text="Icon margin 16dp (default)" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="20dp"
+            app:text="Icon margin 20dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="24dp"
+            app:text="Icon margin 24dp" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
+            app:icon_margin="28dp"
+            app:text="Icon margin 28dp" />
+    </LinearLayout>
+</ScrollView>
