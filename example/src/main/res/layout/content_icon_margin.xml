@@ -39,6 +39,11 @@
 
         <com.ncorti.slidetoact.SlideToActView
             style="@style/SlideToActView.Example"
+            app:icon_margin="16dp"
+            app:text="Icon margin 16dp (default)" />
+
+        <com.ncorti.slidetoact.SlideToActView
+            style="@style/SlideToActView.Example"
             app:icon_margin="20dp"
             app:text="Icon margin 20dp" />
 
