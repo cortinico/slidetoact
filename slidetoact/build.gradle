@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 version = "0.7.0"
 
@@ -113,5 +114,18 @@ bintray {
                 passphrase = properties.getProperty("bintray.gpg.password")
             }
         }
+    }
+}
+
+ktlint {
+    version = "0.36.0"
+    debug = false
+    verbose = true
+    android = true
+    outputToConsole = true
+    ignoreFailures = false
+    enableExperimentalRules = true
+    filter {
+        exclude("**/generated/**")
     }
 }

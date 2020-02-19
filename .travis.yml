@@ -28,4 +28,4 @@ before_install:
   - yes | sdkmanager "build-tools;28.0.3"
 
 script:
-   - ./gradlew clean build lint test
+   - ./gradlew clean build lint test ktlintCheck
