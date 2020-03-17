@@ -36,19 +36,11 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 
 ## Getting Started 👣
 
-**Slide To Act** is distributed through [JCenter](https://bintray.com/bintray/jcenter?filterByPkgName=slidetoact). To use it you need to add the following **Gradle dependency** to your **android app gradle file** (NOT the root file).
+**Slide To Act** is distributed through [JCenter](https://bintray.com/bintray/jcenter?filterByPkgName=slidetoact). To use it you need to add the following **Gradle dependency** to your **android app gradle file** (NOT the root file):
 
-If you're using the Android Gradle plugin version 3:
 ```groovy
 dependencies {
-   implementation 'com.ncorti:slidetoact:0.7.0'
-}
-```
-
-If you're using an Older version of the Android Gradle plugin:
-```groovy
-dependencies {
-   compile 'com.ncorti:slidetoact:0.7.0'
+   implementation "com.ncorti:slidetoact:0.8.0"
 }
 ```
 
