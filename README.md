@@ -32,6 +32,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
     * [Building locally](#building-locally)
     * [Testing](#testing)
 * [Contributing](#contributing-)
+* [Honorable Mentions](#honorable-mentions-)
 * [License](#license-)
 
 ## Getting Started 👣
@@ -326,6 +327,10 @@ Make sure your tests are all green ✅ locally before submitting PRs.
 
 * When reporting a new Issue, make sure to attach **Screenshots**, **Videos** or **GIFs** of the problem you are reporting.
 * When submitting a new PR, make sure tests are all green. Write new tests if necessary.
+
+## Honorable mentions 🎖
+
+* [flutter-slide-to-act](https://github.com/imtoori/flutter-slide-to-act) - A porting of this widget for Flutter
 
 ## License 📄
 
