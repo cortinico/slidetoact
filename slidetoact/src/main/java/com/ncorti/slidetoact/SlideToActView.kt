@@ -142,7 +142,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Custom Icon */
-    public fun setIcon(resId: Int) {
+    fun setIcon(resId: Int) {
         mDrawableArrow = parseVectorDrawableCompat(context.resources, resId, context.theme)
         mDrawableArrow.setTint(iconColor)
         invalidate()
