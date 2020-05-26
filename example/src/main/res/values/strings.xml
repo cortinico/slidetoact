@@ -11,9 +11,12 @@
     <string name="event_callback">Event Callback</string>
     <string name="locked_slider">Locked Slider</string>
     <string name="custom_icon">Custom Icon</string>
+    <string name="custom_icon_runtime">Custom Icon at Runtime</string>
     <string name="reversed_slider">Reversed Slider</string>
     <string name="animation_duration">Animation duration</string>
     <string name="bump_vibration">Bump Vibration</string>
     <string name="event_log">Event Log</string>
     <string name="welcome_body">Press the following buttons to checkout different SlideToActView and understand each parameter. You can reset the sliders pressing the Reset button in the Toolbar. Enjoy :)</string>
+    <string name="use_android_icon">Use Android icon</string>
+    <string name="use_cloud_icon">Use Cloud icon</string>
 </resources>

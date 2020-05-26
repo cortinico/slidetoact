@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/slide_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <com.ncorti.slidetoact.SlideToActView
+            android:id="@+id/slide_custom_icon_runtime"
+            style="@style/SlideToActView.Example"
+            app:text="Custom Icon at Runtime"
+            app:slider_icon="@drawable/custom_icon"/>
+
+        <Button
+            android:id="@+id/button_android_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/use_android_icon" />
+
+        <Button
+            android:id="@+id/button_cloud_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/use_cloud_icon" />
+
+    </LinearLayout>
+</ScrollView>

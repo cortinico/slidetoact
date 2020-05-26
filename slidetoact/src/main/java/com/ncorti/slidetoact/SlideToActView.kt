@@ -141,6 +141,13 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
+    /** Custom Icon */
+    public fun setIcon(resId: Int) {
+        mDrawableArrow = parseVectorDrawableCompat(context.resources, resId, context.theme)
+        mDrawableArrow.setTint(iconColor)
+        invalidate()
+    }
+
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
         set(value) {
@@ -190,7 +197,7 @@ class SlideToActView @JvmOverloads constructor(
     private var mTickMargin: Int
 
     /** Arrow drawable */
-    private val mDrawableArrow: VectorDrawableCompat
+    private var mDrawableArrow: VectorDrawableCompat
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
     private val mDrawableTick: Drawable

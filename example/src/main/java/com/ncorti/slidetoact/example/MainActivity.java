@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_event_callbacks).setOnClickListener(this);
         findViewById(R.id.button_locked_slider).setOnClickListener(this);
         findViewById(R.id.button_custom_icon).setOnClickListener(this);
+        findViewById(R.id.button_custom_icon_runtime).setOnClickListener(this);
         findViewById(R.id.button_reversed_slider).setOnClickListener(this);
         findViewById(R.id.button_animation_duration).setOnClickListener(this);
         findViewById(R.id.button_bump_vibration).setOnClickListener(this);
