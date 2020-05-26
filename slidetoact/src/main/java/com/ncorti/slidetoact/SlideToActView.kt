@@ -199,7 +199,7 @@ class SlideToActView @JvmOverloads constructor(
     private var mTickMargin: Int
 
     /** Arrow drawable */
-    private var mDrawableArrow: VectorDrawableCompat
+    private lateinit var mDrawableArrow: VectorDrawableCompat
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
     private val mDrawableTick: Drawable
@@ -378,8 +378,6 @@ class SlideToActView @JvmOverloads constructor(
             mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
             mAreaHeight.toFloat()
         )
-
-        mDrawableArrow = parseVectorDrawableCompat(context.resources, icon, context.theme)
 
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
