@@ -145,7 +145,7 @@ class SlideToActView @JvmOverloads constructor(
     var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
         set(value) {
             field = value
-            if(field != 0) {
+            if (field != 0) {
                 mDrawableArrow = parseVectorDrawableCompat(context.resources, value, context.theme)
                 mDrawableArrow.setTint(iconColor)
                 invalidate()
