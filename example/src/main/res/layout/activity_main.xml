@@ -95,12 +95,6 @@
             android:text="@string/custom_icon" />
 
         <Button
-            android:id="@+id/button_custom_icon_runtime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/custom_icon_runtime" />
-
-        <Button
             android:id="@+id/button_reversed_slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

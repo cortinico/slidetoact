@@ -220,11 +220,11 @@ You can set a custom icon by setting the ``slider_icon``attribute to a drawable 
 app:slider_icon="@drawable/custom_icon"
 ```
 
-You can also set a custom icon programmtically with the provided setter.
+You can also set a custom icon programmatically with the provided setter.
 
 ```java
 SlideToActView sta = findViewById(R.id.slider);
-sta.setIcon(R.drawable.custom_icon);
+sta.setSliderIcon(R.drawable.custom_icon);
 ```
 
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.

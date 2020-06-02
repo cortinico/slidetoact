@@ -64,20 +64,16 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_custom_icon:
                 setContentView(R.layout.content_custom_icon);
-                break;
-            case R.id.button_custom_icon_runtime:
-                setContentView(R.layout.content_custom_icon_runtime);
-
-                final SlideToActView slider = findViewById(R.id.slide_custom_icon_runtime);
+                final SlideToActView slider = findViewById(R.id.slide_custom_icon);
                 View.OnClickListener listener = new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
                         switch(v.getId()) {
                             case R.id.button_android_icon:
-                                slider.setIcon(R.drawable.ic_android);
+                                slider.setSliderIcon(R.drawable.ic_android);
                                 break;
                             case R.id.button_cloud_icon:
-                                slider.setIcon(R.drawable.ic_cloud);
+                                slider.setSliderIcon(R.drawable.ic_cloud);
                                 break;
                             default:
                                 break;
@@ -88,7 +84,7 @@ public class SampleActivity extends AppCompatActivity {
                 slider.setOnSlideResetListener(new SlideToActView.OnSlideResetListener() {
                     @Override
                     public void onSlideReset(SlideToActView view) {
-                        slider.setIcon(R.drawable.custom_icon);
+                        slider.setSliderIcon(R.drawable.custom_icon);
                     }
                 });
 

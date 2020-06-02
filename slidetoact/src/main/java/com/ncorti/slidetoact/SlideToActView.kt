@@ -141,13 +141,15 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
-    /** Custom Icon */
-    var icon: Int = R.drawable.slidetoact_ic_arrow
+    /** Custom Slider Icon */
+    var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
         set(value) {
             field = value
-            mDrawableArrow = parseVectorDrawableCompat(context.resources, value, context.theme)
-            mDrawableArrow.setTint(iconColor)
-            invalidate()
+            if(field != 0) {
+                mDrawableArrow = parseVectorDrawableCompat(context.resources, value, context.theme)
+                mDrawableArrow.setTint(iconColor)
+                invalidate()
+            }
         }
 
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
@@ -339,7 +341,7 @@ class SlideToActView @JvmOverloads constructor(
                 )
                 mActualAreaMargin = mOriginAreaMargin
 
-                icon = getResourceId(
+                sliderIcon = getResourceId(
                     R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow
                 )
 
