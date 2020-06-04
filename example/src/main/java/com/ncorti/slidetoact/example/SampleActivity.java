@@ -64,6 +64,32 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_custom_icon:
                 setContentView(R.layout.content_custom_icon);
+                final SlideToActView slider = findViewById(R.id.slide_custom_icon);
+                View.OnClickListener listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        switch(v.getId()) {
+                            case R.id.button_android_icon:
+                                slider.setSliderIcon(R.drawable.ic_android);
+                                break;
+                            case R.id.button_cloud_icon:
+                                slider.setSliderIcon(R.drawable.ic_cloud);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                };
+
+                slider.setOnSlideResetListener(new SlideToActView.OnSlideResetListener() {
+                    @Override
+                    public void onSlideReset(SlideToActView view) {
+                        slider.setSliderIcon(R.drawable.custom_icon);
+                    }
+                });
+
+                findViewById(R.id.button_android_icon).setOnClickListener(listener);
+                findViewById(R.id.button_cloud_icon).setOnClickListener(listener);
                 break;
             case R.id.button_reversed_slider:
                 setContentView(R.layout.content_reversed_slider);

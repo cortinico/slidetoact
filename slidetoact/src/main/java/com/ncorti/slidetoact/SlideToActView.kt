@@ -141,6 +141,17 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
+    /** Custom Slider Icon */
+    var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
+        set(value) {
+            field = value
+            if (field != 0) {
+                mDrawableArrow = parseVectorDrawableCompat(context.resources, value, context.theme)
+                mDrawableArrow.setTint(iconColor)
+                invalidate()
+            }
+        }
+
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
         set(value) {
@@ -190,14 +201,11 @@ class SlideToActView @JvmOverloads constructor(
     private var mTickMargin: Int
 
     /** Arrow drawable */
-    private val mDrawableArrow: VectorDrawableCompat
+    private lateinit var mDrawableArrow: VectorDrawableCompat
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
     private val mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
-
-    /** The icon for the drawable */
-    private var mIcon: Int = R.drawable.slidetoact_ic_arrow
 
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
@@ -333,7 +341,7 @@ class SlideToActView @JvmOverloads constructor(
                 )
                 mActualAreaMargin = mOriginAreaMargin
 
-                mIcon = getResourceId(
+                sliderIcon = getResourceId(
                     R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow
                 )
 
@@ -372,8 +380,6 @@ class SlideToActView @JvmOverloads constructor(
             mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
             mAreaHeight.toFloat()
         )
-
-        mDrawableArrow = parseVectorDrawableCompat(context.resources, mIcon, context.theme)
 
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
