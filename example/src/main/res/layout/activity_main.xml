@@ -112,5 +112,11 @@
             android:layout_height="wrap_content"
             android:text="@string/bump_vibration" />
 
+        <Button
+            android:id="@+id/button_tick_custom_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tick_custom_icon" />
+
     </LinearLayout>
 </ScrollView>

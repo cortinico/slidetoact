@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_reversed_slider).setOnClickListener(this);
         findViewById(R.id.button_animation_duration).setOnClickListener(this);
         findViewById(R.id.button_bump_vibration).setOnClickListener(this);
+        findViewById(R.id.button_tick_custom_icon).setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

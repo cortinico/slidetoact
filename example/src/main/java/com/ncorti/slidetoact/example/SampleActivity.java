@@ -68,7 +68,7 @@ public class SampleActivity extends AppCompatActivity {
                 View.OnClickListener listener = new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        switch(v.getId()) {
+                        switch (v.getId()) {
                             case R.id.button_android_icon:
                                 slider.setSliderIcon(R.drawable.ic_android);
                                 break;
@@ -100,12 +100,22 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_bump_vibration:
                 setContentView(R.layout.content_bumb_vibration);
                 break;
+            case R.id.button_tick_custom_icon:
+                setContentView(R.layout.content_tick_custom_icon);
+                final SlideToActView tickSlider = findViewById(R.id.slide_custom_tick_icon);
+                findViewById(R.id.tick_progress).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tickSlider.setDrawableTick(R.drawable.custom_tick_animated);
+                        tickSlider.startAnimateTickIcon();
+                    }
+                });
+                break;
             default:
                 finish();
                 break;
         }
         mSlideList = getSlideList();
-
     }
 
     private List<SlideToActView> getSlideList() {
