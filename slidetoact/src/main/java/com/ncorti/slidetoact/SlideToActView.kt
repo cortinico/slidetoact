@@ -212,13 +212,13 @@ class SlideToActView @JvmOverloads constructor(
             if (field != 0) {
                 mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     context.resources.getDrawable(
-                            value,
-                            context.theme
+                        value,
+                        context.theme
                     ) as AnimatedVectorDrawable
                 } else {
                     AnimatedVectorDrawableCompat.create(
-                            context,
-                            value
+                        context,
+                        value
                     )!!
                 }
                 invalidate()
@@ -406,25 +406,25 @@ class SlideToActView @JvmOverloads constructor(
         mDrawableTick = if (actualTickDrawable != 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 context.resources.getDrawable(
-                        actualTickDrawable,
-                        context.theme
+                    actualTickDrawable,
+                    context.theme
                 ) as AnimatedVectorDrawable
             } else {
                 AnimatedVectorDrawableCompat.create(
-                        context,
-                        actualTickDrawable
+                    context,
+                    actualTickDrawable
                 )!!
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 context.resources.getDrawable(
-                        R.drawable.slidetoact_animated_ic_check,
-                        context.theme
+                    R.drawable.slidetoact_animated_ic_check,
+                    context.theme
                 ) as AnimatedVectorDrawable
             } else {
                 AnimatedVectorDrawableCompat.create(
-                        context,
-                        R.drawable.slidetoact_animated_ic_check
+                    context,
+                    R.drawable.slidetoact_animated_ic_check
                 )!!
             }
         }
