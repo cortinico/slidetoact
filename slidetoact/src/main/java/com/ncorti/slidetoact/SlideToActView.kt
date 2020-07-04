@@ -21,7 +21,6 @@ import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
-import android.util.Xml
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
