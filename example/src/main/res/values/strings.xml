@@ -18,5 +18,5 @@
     <string name="welcome_body">Press the following buttons to checkout different SlideToActView and understand each parameter. You can reset the sliders pressing the Reset button in the Toolbar. Enjoy :)</string>
     <string name="use_android_icon">Use Android icon</string>
     <string name="use_cloud_icon">Use Cloud icon</string>
-    <string name="tick_custom_icon">Tick custom icon</string>
+    <string name="complete_custom_icon">Complete custom icon</string>
 </resources>

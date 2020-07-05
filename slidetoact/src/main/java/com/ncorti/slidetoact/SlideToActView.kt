@@ -206,21 +206,11 @@ class SlideToActView @JvmOverloads constructor(
     private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
-    var drawableTick: Int = 0
+    var completeIcon: Int = 0
         set(value) {
             field = value
             if (field != 0) {
-                mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    context.resources.getDrawable(
-                        value,
-                        context.theme
-                    ) as AnimatedVectorDrawable
-                } else {
-                    AnimatedVectorDrawableCompat.create(
-                        context,
-                        value
-                    )!!
-                }
+                mDrawableTick = changeCompleteIcon(value)
                 invalidate()
             }
         }
@@ -283,7 +273,7 @@ class SlideToActView @JvmOverloads constructor(
         val actualTextColor: Int
         val actualIconColor: Int
 
-        val actualTickDrawable: Int
+        val actualCompleteDrawable: Int
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
@@ -374,7 +364,7 @@ class SlideToActView @JvmOverloads constructor(
                     hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                     else -> defaultOuter
                 }
-                actualTickDrawable = getResourceId(R.styleable.SlideToActView_tick_icon, 0)
+                actualCompleteDrawable = getResourceId(R.styleable.SlideToActView_complete_icon, 0)
 
                 mIconMargin = getDimensionPixelSize(
                     R.styleable.SlideToActView_icon_margin,
@@ -402,31 +392,10 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight.toFloat()
         )
 
-        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
-        mDrawableTick = if (actualTickDrawable != 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.resources.getDrawable(
-                    actualTickDrawable,
-                    context.theme
-                ) as AnimatedVectorDrawable
-            } else {
-                AnimatedVectorDrawableCompat.create(
-                    context,
-                    actualTickDrawable
-                )!!
-            }
+        mDrawableTick = if (actualCompleteDrawable != 0) {
+            changeCompleteIcon(actualCompleteDrawable)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                context.resources.getDrawable(
-                    R.drawable.slidetoact_animated_ic_check,
-                    context.theme
-                ) as AnimatedVectorDrawable
-            } else {
-                AnimatedVectorDrawableCompat.create(
-                    context,
-                    R.drawable.slidetoact_animated_ic_check
-                )!!
-            }
+            changeCompleteIcon(R.drawable.slidetoact_animated_ic_check)
         }
 
         mTextPaint.textAlign = Paint.Align.CENTER
@@ -440,7 +409,7 @@ class SlideToActView @JvmOverloads constructor(
             outlineProvider = SlideToActOutlineProvider()
         }
     }
-
+    
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
@@ -765,12 +734,6 @@ class SlideToActView @JvmOverloads constructor(
     fun completeSlider() {
         if (!mIsCompleted) {
             startAnimationComplete()
-        }
-    }
-
-    fun startAnimateTickIcon() {
-        if (mIsCompleted) {
-            startTickAnimation()
         }
     }
 

@@ -75,6 +75,9 @@ public class SampleActivity extends AppCompatActivity {
                             case R.id.button_cloud_icon:
                                 slider.setSliderIcon(R.drawable.ic_cloud);
                                 break;
+                            case R.id.button_complete_icon:
+                                slider.setCompleteIcon(R.drawable.custom_complete_animated);
+                                break;
                             default:
                                 break;
                         }
@@ -85,11 +88,13 @@ public class SampleActivity extends AppCompatActivity {
                     @Override
                     public void onSlideReset(SlideToActView view) {
                         slider.setSliderIcon(R.drawable.custom_icon);
+                        slider.setCompleteIcon(R.drawable.slidetoact_animated_ic_check);
                     }
                 });
 
                 findViewById(R.id.button_android_icon).setOnClickListener(listener);
                 findViewById(R.id.button_cloud_icon).setOnClickListener(listener);
+                findViewById(R.id.button_complete_icon).setOnClickListener(listener);
                 break;
             case R.id.button_reversed_slider:
                 setContentView(R.layout.content_reversed_slider);
@@ -99,17 +104,6 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_bump_vibration:
                 setContentView(R.layout.content_bumb_vibration);
-                break;
-            case R.id.button_tick_custom_icon:
-                setContentView(R.layout.content_tick_custom_icon);
-                final SlideToActView tickSlider = findViewById(R.id.slide_custom_tick_icon);
-                findViewById(R.id.tick_progress).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tickSlider.setDrawableTick(R.drawable.custom_tick_animated);
-                        tickSlider.startAnimateTickIcon();
-                    }
-                });
                 break;
             default:
                 finish();

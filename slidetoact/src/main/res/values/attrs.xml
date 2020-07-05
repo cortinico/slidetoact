@@ -24,7 +24,7 @@
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
         <attr name="text_appearance" format="reference" />
-        <attr name="tick_icon" format="reference" />
+        <attr name="complete_icon" format="reference" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference" />
