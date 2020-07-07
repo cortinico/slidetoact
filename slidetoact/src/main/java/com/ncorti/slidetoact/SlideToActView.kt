@@ -210,7 +210,7 @@ class SlideToActView @JvmOverloads constructor(
         set(value) {
             field = value
             if (field != 0) {
-                mDrawableTick = changeCompleteIcon(value)
+                mDrawableTick = loadAnimatedVectorDrawableCompat(value)
                 invalidate()
             }
         }
@@ -393,9 +393,9 @@ class SlideToActView @JvmOverloads constructor(
         )
 
         mDrawableTick = if (actualCompleteDrawable != 0) {
-            changeCompleteIcon(actualCompleteDrawable)
+            loadAnimatedVectorDrawableCompat(actualCompleteDrawable)
         } else {
-            changeCompleteIcon(R.drawable.slidetoact_animated_ic_check)
+            loadAnimatedVectorDrawableCompat(R.drawable.slidetoact_animated_ic_check)
         }
 
         mTextPaint.textAlign = Paint.Align.CENTER
@@ -409,7 +409,7 @@ class SlideToActView @JvmOverloads constructor(
             outlineProvider = SlideToActOutlineProvider()
         }
     }
-    
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
