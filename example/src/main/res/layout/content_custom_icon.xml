@@ -14,7 +14,6 @@
         <com.ncorti.slidetoact.SlideToActView
             android:id="@+id/slide_custom_icon"
             style="@style/SlideToActView.Example"
-            app:complete_icon="@drawable/slidetoact_ic_check"
             app:slider_icon="@drawable/custom_icon"
             app:text="Custom Icon" />
 

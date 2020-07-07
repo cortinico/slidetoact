@@ -88,7 +88,6 @@ public class SampleActivity extends AppCompatActivity {
                     @Override
                     public void onSlideReset(SlideToActView view) {
                         slider.setSliderIcon(R.drawable.custom_icon);
-                        slider.setCompleteIcon(R.drawable.slidetoact_animated_ic_check);
                     }
                 });
 
