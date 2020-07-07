@@ -7,7 +7,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Outline
@@ -22,7 +21,6 @@ import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
-import android.util.Xml
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -31,11 +29,10 @@ import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
 
 /**
  *  Class representing the custom view, SlideToActView.
@@ -137,7 +134,7 @@ class SlideToActView @JvmOverloads constructor(
     var iconColor: Int = 0
         set(value) {
             field = value
-            mDrawableArrow.setTint(value)
+            DrawableCompat.setTint(mDrawableArrow, value)
             invalidate()
         }
 
@@ -146,8 +143,10 @@ class SlideToActView @JvmOverloads constructor(
         set(value) {
             field = value
             if (field != 0) {
-                mDrawableArrow = parseVectorDrawableCompat(context.resources, value, context.theme)
-                mDrawableArrow.setTint(iconColor)
+                ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
+                    mDrawableArrow = it
+                    DrawableCompat.setTint(it, iconColor)
+                }
                 invalidate()
             }
         }
@@ -201,7 +200,7 @@ class SlideToActView @JvmOverloads constructor(
     private var mTickMargin: Int
 
     /** Arrow drawable */
-    private lateinit var mDrawableArrow: VectorDrawableCompat
+    private lateinit var mDrawableArrow: Drawable
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
     private val mDrawableTick: Drawable
@@ -404,23 +403,6 @@ class SlideToActView @JvmOverloads constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             outlineProvider = SlideToActOutlineProvider()
         }
-    }
-
-    private fun parseVectorDrawableCompat(
-        res: Resources,
-        resId: Int,
-        theme: Resources.Theme
-    ): VectorDrawableCompat {
-        val parser = res.getXml(resId)
-        val attrs = Xml.asAttributeSet(parser)
-        var type: Int = parser.next()
-        while (type != XmlPullParser.START_TAG && type != XmlPullParser.END_DOCUMENT) {
-            type = parser.next()
-        }
-        if (type != XmlPullParser.START_TAG) {
-            throw XmlPullParserException("No start tag found")
-        }
-        return VectorDrawableCompat.createFromXmlInner(res, parser, attrs, theme)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
