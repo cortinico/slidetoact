@@ -203,8 +203,17 @@ class SlideToActView @JvmOverloads constructor(
     private lateinit var mDrawableArrow: Drawable
 
     /** Tick drawable, is actually an AnimatedVectorDrawable */
-    private val mDrawableTick: Drawable
+    private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
+
+    var completeIcon: Int = 0
+        set(value) {
+            field = value
+            if (field != 0) {
+                mDrawableTick = loadAnimatedVectorDrawableCompat(value)
+                invalidate()
+            }
+        }
 
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
@@ -263,6 +272,8 @@ class SlideToActView @JvmOverloads constructor(
         val actualInnerColor: Int
         val actualTextColor: Int
         val actualIconColor: Int
+
+        val actualCompleteDrawable: Int
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
@@ -353,6 +364,7 @@ class SlideToActView @JvmOverloads constructor(
                     hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                     else -> defaultOuter
                 }
+                actualCompleteDrawable = getResourceId(R.styleable.SlideToActView_complete_icon, 0)
 
                 mIconMargin = getDimensionPixelSize(
                     R.styleable.SlideToActView_icon_margin,
@@ -380,17 +392,10 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight.toFloat()
         )
 
-        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
-        mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            context.resources.getDrawable(
-                R.drawable.slidetoact_animated_ic_check,
-                context.theme
-            ) as AnimatedVectorDrawable
+        mDrawableTick = if (actualCompleteDrawable != 0) {
+            loadAnimatedVectorDrawableCompat(actualCompleteDrawable)
         } else {
-            AnimatedVectorDrawableCompat.create(
-                context,
-                R.drawable.slidetoact_animated_ic_check
-            )!!
+            loadAnimatedVectorDrawableCompat(R.drawable.slidetoact_animated_ic_check)
         }
 
         mTextPaint.textAlign = Paint.Align.CENTER
@@ -835,6 +840,15 @@ class SlideToActView @JvmOverloads constructor(
             }
         })
         animSet.start()
+    }
+
+    private fun loadAnimatedVectorDrawableCompat(value: Int): Drawable {
+        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            context.resources.getDrawable(value, context.theme) as AnimatedVectorDrawable
+        } else {
+            AnimatedVectorDrawableCompat.create(context, value)!!
+        }
     }
 
     /**
