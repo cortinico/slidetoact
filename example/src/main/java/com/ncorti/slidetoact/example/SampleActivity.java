@@ -84,13 +84,6 @@ public class SampleActivity extends AppCompatActivity {
                     }
                 };
 
-                slider.setOnSlideResetListener(new SlideToActView.OnSlideResetListener() {
-                    @Override
-                    public void onSlideReset(SlideToActView view) {
-                        slider.setSliderIcon(R.drawable.custom_icon);
-                    }
-                });
-
                 findViewById(R.id.button_android_icon).setOnClickListener(listener);
                 findViewById(R.id.button_cloud_icon).setOnClickListener(listener);
                 findViewById(R.id.button_complete_icon).setOnClickListener(listener);

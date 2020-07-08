@@ -842,6 +842,15 @@ class SlideToActView @JvmOverloads constructor(
         animSet.start()
     }
 
+    private fun loadAnimatedVectorDrawableCompat(value : Int) : Drawable {
+        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            context.resources.getDrawable(value, context.theme) as AnimatedVectorDrawable
+        } else {
+            AnimatedVectorDrawableCompat.create(context, value)!!
+        }
+    }
+
     /**
      * Private method to start the Tick AVD animation, with the proper library based on API level.
      */
