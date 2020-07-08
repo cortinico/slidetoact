@@ -842,7 +842,7 @@ class SlideToActView @JvmOverloads constructor(
         animSet.start()
     }
 
-    private fun loadAnimatedVectorDrawableCompat(value : Int) : Drawable {
+    private fun loadAnimatedVectorDrawableCompat(value: Int): Drawable {
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             context.resources.getDrawable(value, context.theme) as AnimatedVectorDrawable
