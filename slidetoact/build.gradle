@@ -4,7 +4,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
-version = "0.8.0"
+version = "0.9.0"
 
 android {
     compileSdkVersion 29
@@ -12,8 +12,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
-        versionCode 8
-        versionName "0.8.0"
+        versionCode 9
+        versionName "0.9.0"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
