@@ -3,6 +3,13 @@
     android:height="24dp"
     android:viewportHeight="48.0"
     android:viewportWidth="48.0">
+
+    <!--
+    Please note that this icon has trimPathEnd set to 0 as the library is animating it
+    with an AnimatedVectorDrawable. For API < 25 trimPathEnd is not set as we just
+    fade in the Icon (though we need it visible
+    -->
+
     <path
         android:name="check"
         android:fillColor="#00000000"
