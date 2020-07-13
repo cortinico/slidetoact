@@ -13,7 +13,6 @@ import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
@@ -32,7 +31,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
+import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
+import com.ncorti.slidetoact.SlideToActIconUtil.stopIconAnimation
+import com.ncorti.slidetoact.SlideToActIconUtil.tintIconCompat
 
 /**
  *  Class representing the custom view, SlideToActView.
@@ -202,7 +204,7 @@ class SlideToActView @JvmOverloads constructor(
     /** Arrow drawable */
     private lateinit var mDrawableArrow: Drawable
 
-    /** Tick drawable, is actually an AnimatedVectorDrawable */
+    /** Tick drawable, if is an AnimatedVectorDrawable it will be animated */
     private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
@@ -210,7 +212,7 @@ class SlideToActView @JvmOverloads constructor(
         set(value) {
             field = value
             if (field != 0) {
-                mDrawableTick = loadAnimatedVectorDrawableCompat(value)
+                mDrawableTick = loadIconCompat(context, value)
                 invalidate()
             }
         }
@@ -364,7 +366,10 @@ class SlideToActView @JvmOverloads constructor(
                     hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                     else -> defaultOuter
                 }
-                actualCompleteDrawable = getResourceId(R.styleable.SlideToActView_complete_icon, 0)
+                actualCompleteDrawable = getResourceId(
+                    R.styleable.SlideToActView_complete_icon,
+                    R.drawable.slidetoact_animated_ic_check
+                )
 
                 mIconMargin = getDimensionPixelSize(
                     R.styleable.SlideToActView_icon_margin,
@@ -392,11 +397,7 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight.toFloat()
         )
 
-        mDrawableTick = if (actualCompleteDrawable != 0) {
-            loadAnimatedVectorDrawableCompat(actualCompleteDrawable)
-        } else {
-            loadAnimatedVectorDrawableCompat(R.drawable.slidetoact_animated_ic_check)
-        }
+        mDrawableTick = loadIconCompat(context, actualCompleteDrawable)
 
         mTextPaint.textAlign = Paint.Align.CENTER
 
@@ -519,12 +520,7 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight - mTickMargin
         )
 
-        // Tinting the tick with the proper implementation method
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDrawableTick.setTint(innerColor)
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(innerColor)
-        }
+        tintIconCompat(mDrawableTick, innerColor)
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
@@ -666,28 +662,14 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
-        val tickAnimator: ValueAnimator
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-            // Fallback not using AVD.
-            tickAnimator = ValueAnimator.ofInt(0, 255)
-            tickAnimator.addUpdateListener {
-                mTickMargin = mIconMargin
+        val tickListener = ValueAnimator.AnimatorUpdateListener {
+            // We need to enable the drawing of the AnimatedVectorDrawable before starting it.
+            if (!mFlagDrawTick) {
                 mFlagDrawTick = true
-                mDrawableTick.alpha = it.animatedValue as Int
-                invalidate()
-            }
-        } else {
-            // Used AVD Animation.
-            tickAnimator = ValueAnimator.ofInt(0)
-            tickAnimator.addUpdateListener {
-                if (!mFlagDrawTick) {
-                    mTickMargin = mIconMargin
-                    mFlagDrawTick = true
-                    startTickAnimation()
-                    invalidate()
-                }
+                mTickMargin = mIconMargin
             }
         }
+        val tickAnimator: ValueAnimator = createIconAnimator(this, mDrawableTick, tickListener)
 
         val animators = mutableListOf<Animator>()
         if (mPosition < mAreaWidth - mAreaHeight) {
@@ -761,7 +743,7 @@ class SlideToActView @JvmOverloads constructor(
         mIsCompleted = false
         val animSet = AnimatorSet()
 
-        // Animator that enlarges the outer area
+        // Animator that reduces the tick size
         val tickAnimator = ValueAnimator.ofInt(mTickMargin, mAreaWidth / 2)
         tickAnimator.addUpdateListener {
             mTickMargin = it.animatedValue as Int
@@ -829,7 +811,7 @@ class SlideToActView @JvmOverloads constructor(
 
             override fun onAnimationEnd(p0: Animator?) {
                 isEnabled = true
-                stopTickAnimation()
+                stopIconAnimation(mDrawableTick)
                 onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
                     this@SlideToActView
                 )
@@ -840,37 +822,6 @@ class SlideToActView @JvmOverloads constructor(
             }
         })
         animSet.start()
-    }
-
-    private fun loadAnimatedVectorDrawableCompat(value: Int): Drawable {
-        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            context.resources.getDrawable(value, context.theme) as AnimatedVectorDrawable
-        } else {
-            AnimatedVectorDrawableCompat.create(context, value)!!
-        }
-    }
-
-    /**
-     * Private method to start the Tick AVD animation, with the proper library based on API level.
-     */
-    private fun startTickAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).start()
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).start()
-        }
-    }
-
-    /**
-     * Private method to stop the Tick AVD animation, with the proper library based on API level.
-     */
-    private fun stopTickAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).stop()
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).stop()
-        }
     }
 
     /**
