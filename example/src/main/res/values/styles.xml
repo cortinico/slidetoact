@@ -20,7 +20,7 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <style name="TextAppearancaCustomFont">
+    <style name="TextAppearanceCustomFont">
         <item name="android:fontFamily">@font/montserrat_extrabold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:capitalize">characters</item>

@@ -58,7 +58,7 @@
 
         <com.ncorti.slidetoact.SlideToActView
             style="@style/SlideToActView.Example"
-            app:text_appearance="@style/TextAppearancaCustomFont"
+            app:text_appearance="@style/TextAppearanceCustomFont"
             app:text="Custom font" />
     </LinearLayout>
 </ScrollView>
