@@ -1,6 +1,7 @@
 package com.ncorti.slidetoact.example;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 public class SampleActivity extends AppCompatActivity {
@@ -96,6 +98,30 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_bump_vibration:
                 setContentView(R.layout.content_bumb_vibration);
+                break;
+            case R.id.button_loadable_slider:
+                setContentView(R.layout.content_loadable_slider);
+                final SlideToActView loadableSlider = findViewById(R.id.slide_loadable);
+                loadableSlider.setOnSlideLoadingStartedListener(new SlideToActView.OnSlideLoadingStartedListener() {
+                    @Override
+                    public void onSlideLoadingStarted(SlideToActView view) {
+                        Random ran = new Random();
+                        // Simulate an indeterminate amount of time
+                        int delay = ran.nextInt(3000);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (loadableSlider.isLoadable()) {
+                                    if (loadableSlider.isAnimateCompletion()) {
+                                        loadableSlider.completeSlider();
+                                    } else {
+                                        loadableSlider.resetSlider();
+                                    }
+                                }
+                            }
+                        }, delay);
+                    }
+                });
                 break;
             default:
                 finish();

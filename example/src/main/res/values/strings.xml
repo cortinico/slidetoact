@@ -19,4 +19,5 @@
     <string name="use_android_icon">Use Android icon</string>
     <string name="use_cloud_icon">Use Cloud icon</string>
     <string name="complete_custom_icon">Complete custom icon</string>
+    <string name="loadable_slider">Loadable Slider</string>
 </resources>
