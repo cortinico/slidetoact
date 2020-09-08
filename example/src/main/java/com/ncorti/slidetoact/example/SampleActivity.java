@@ -172,6 +172,28 @@ public class SampleActivity extends AppCompatActivity {
     private void setupEventCallbacks() {
         final SlideToActView slide = findViewById(R.id.event_slider);
         final TextView log = findViewById(R.id.event_log);
+        slide.setOnSlideLoadingStartedListener(new SlideToActView.OnSlideLoadingStartedListener() {
+            @Override
+            public void onSlideLoadingStarted(@NonNull final SlideToActView view) {
+                log.append("\n" + getTime() + " onSlideLoadingStartedListener");
+                Random ran = new Random();
+                // Simulate an indeterminate amount of time
+                final int delay = ran.nextInt(3000);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        log.append("\n" + getTime() + " simulated loading for " + delay + "ms");
+                        if (view.isLoadable()) {
+                            if (view.isAnimateCompletion()) {
+                                view.completeSlider();
+                            } else {
+                                view.resetSlider();
+                            }
+                        }
+                    }
+                }, delay);
+            }
+        });
         slide.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
             public void onSlideComplete(@NonNull SlideToActView view) {

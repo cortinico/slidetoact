@@ -10,6 +10,7 @@
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/event_slider"
         style="@style/SlideToActView.Example"
+        app:slider_loadable="true"
         app:text="Test me and read the log" />
 
     <TextView
