@@ -296,7 +296,7 @@ app:slider_loadable="true"
 ```
 
 <p align="center">
-  <img src="assets/loading.gif" alt="custom_complete_iconcon" width="40%"/>
+  <img src="assets/loading.gif" alt="loading gif" width="60%"/>
 </p>
 
 ### Event callbacks
@@ -305,7 +305,7 @@ You can use the ``OnSlideCompleteListener`` and the ``OnSlideResetListener`` to 
 
 You can try the **Event Callbacks** in the [Demo app](#demo) to better understand where every callback is called.
 
-<p align="center"><img src="assets/event_log.png" alt="event_log" width="40%"/></p>
+<p align="center"><img src="assets/event_log.gif" alt="event_log gif" width="60%" /></p>
 
 ## Demo 📲
 
