@@ -14,8 +14,25 @@
         <com.ncorti.slidetoact.SlideToActView
             android:id="@+id/slide_custom_icon"
             style="@style/SlideToActView.Example"
-            app:text="Custom Icon"
-            app:slider_icon="@drawable/custom_icon"/>
+            app:slider_icon="@drawable/custom_icon"
+            app:text="Custom Icon" />
 
+        <Button
+            android:id="@+id/button_android_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/use_android_icon" />
+
+        <Button
+            android:id="@+id/button_cloud_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/use_cloud_icon" />
+
+        <Button
+            android:id="@+id/button_complete_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/complete_custom_icon" />
     </LinearLayout>
 </ScrollView>

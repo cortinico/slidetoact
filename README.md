@@ -21,6 +21,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``animation_duration``](#animation_duration)
         * [``slider_reversed``](#slider_reversed)
         * [``slider_icon``](#slider_icon)
+        * [``complete_icon``](#complete_icon)
         * [``bump_vibration``](#bump_vibration)
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
@@ -41,11 +42,11 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 
 ```groovy
 dependencies {
-   implementation "com.ncorti:slidetoact:0.8.0"
+   implementation "com.ncorti:slidetoact:0.9.0"
 }
 ```
 
-Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.6.0%2Fslidetoact-0.6.0.aar).
+Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.9.0%2Fslidetoact-0.9.0.aar).
 
 ## Example 🚸
 
@@ -220,7 +221,32 @@ You can set a custom icon by setting the ``slider_icon``attribute to a drawable 
 app:slider_icon="@drawable/custom_icon"
 ```
 
+You can also set a custom icon programmatically with the provided setter.
+
+```java
+SlideToActView sta = findViewById(R.id.slider);
+sta.setSliderIcon(R.drawable.custom_icon);
+```
+
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
+
+#### ``complete_icon``
+You can set a custom complete icon by setting the ``complete_icon``attribute to a drawable resource.
+
+<p align="center">
+  <img src="assets/complete_icon.gif" alt="custom_complete_iconcon" width="40%"/>
+</p>
+
+```xml
+app:complete_icon="@drawable/slidetoact_ic_check"
+```
+
+You can also set a custom complete icon programmatically with the provided setter.
+
+```java
+SlideToActView sta = findViewById(R.id.slider);
+sta.setCompleteIcon(R.drawable.custom_complete_animated);
+```
 
 #### ``slider_icon_color``
 

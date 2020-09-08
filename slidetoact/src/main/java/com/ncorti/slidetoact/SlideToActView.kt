@@ -7,14 +7,12 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Outline
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
@@ -22,7 +20,6 @@ import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
-import android.util.Xml
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -31,11 +28,13 @@ import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-import org.xmlpull.v1.XmlPullParser
-import org.xmlpull.v1.XmlPullParserException
+import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
+import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
+import com.ncorti.slidetoact.SlideToActIconUtil.stopIconAnimation
+import com.ncorti.slidetoact.SlideToActIconUtil.tintIconCompat
 
 /**
  *  Class representing the custom view, SlideToActView.
@@ -137,8 +136,21 @@ class SlideToActView @JvmOverloads constructor(
     var iconColor: Int = 0
         set(value) {
             field = value
-            mDrawableArrow.setTint(value)
+            DrawableCompat.setTint(mDrawableArrow, value)
             invalidate()
+        }
+
+    /** Custom Slider Icon */
+    var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
+        set(value) {
+            field = value
+            if (field != 0) {
+                ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
+                    mDrawableArrow = it
+                    DrawableCompat.setTint(it, iconColor)
+                }
+                invalidate()
+            }
         }
 
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
@@ -190,14 +202,20 @@ class SlideToActView @JvmOverloads constructor(
     private var mTickMargin: Int
 
     /** Arrow drawable */
-    private val mDrawableArrow: VectorDrawableCompat
+    private lateinit var mDrawableArrow: Drawable
 
-    /** Tick drawable, is actually an AnimatedVectorDrawable */
-    private val mDrawableTick: Drawable
+    /** Tick drawable, if is an AnimatedVectorDrawable it will be animated */
+    private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
-    /** The icon for the drawable */
-    private var mIcon: Int = R.drawable.slidetoact_ic_arrow
+    var completeIcon: Int = 0
+        set(value) {
+            field = value
+            if (field != 0) {
+                mDrawableTick = loadIconCompat(context, value)
+                invalidate()
+            }
+        }
 
     /* -------------------- PAINT & DRAW -------------------- */
     /** Paint used for outer elements */
@@ -256,6 +274,8 @@ class SlideToActView @JvmOverloads constructor(
         val actualInnerColor: Int
         val actualTextColor: Int
         val actualIconColor: Int
+
+        val actualCompleteDrawable: Int
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
@@ -333,7 +353,7 @@ class SlideToActView @JvmOverloads constructor(
                 )
                 mActualAreaMargin = mOriginAreaMargin
 
-                mIcon = getResourceId(
+                sliderIcon = getResourceId(
                     R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow
                 )
 
@@ -346,6 +366,10 @@ class SlideToActView @JvmOverloads constructor(
                     hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor
                     else -> defaultOuter
                 }
+                actualCompleteDrawable = getResourceId(
+                    R.styleable.SlideToActView_complete_icon,
+                    R.drawable.slidetoact_animated_ic_check
+                )
 
                 mIconMargin = getDimensionPixelSize(
                     R.styleable.SlideToActView_icon_margin,
@@ -373,20 +397,7 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight.toFloat()
         )
 
-        mDrawableArrow = parseVectorDrawableCompat(context.resources, mIcon, context.theme)
-
-        // Due to bug in the AVD implementation in the support library, we use it only for API < 21
-        mDrawableTick = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            context.resources.getDrawable(
-                R.drawable.slidetoact_animated_ic_check,
-                context.theme
-            ) as AnimatedVectorDrawable
-        } else {
-            AnimatedVectorDrawableCompat.create(
-                context,
-                R.drawable.slidetoact_animated_ic_check
-            )!!
-        }
+        mDrawableTick = loadIconCompat(context, actualCompleteDrawable)
 
         mTextPaint.textAlign = Paint.Align.CENTER
 
@@ -398,23 +409,6 @@ class SlideToActView @JvmOverloads constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             outlineProvider = SlideToActOutlineProvider()
         }
-    }
-
-    private fun parseVectorDrawableCompat(
-        res: Resources,
-        resId: Int,
-        theme: Resources.Theme
-    ): VectorDrawableCompat {
-        val parser = res.getXml(resId)
-        val attrs = Xml.asAttributeSet(parser)
-        var type: Int = parser.next()
-        while (type != XmlPullParser.START_TAG && type != XmlPullParser.END_DOCUMENT) {
-            type = parser.next()
-        }
-        if (type != XmlPullParser.START_TAG) {
-            throw XmlPullParserException("No start tag found")
-        }
-        return VectorDrawableCompat.createFromXmlInner(res, parser, attrs, theme)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -526,12 +520,7 @@ class SlideToActView @JvmOverloads constructor(
             mAreaHeight - mTickMargin
         )
 
-        // Tinting the tick with the proper implementation method
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mDrawableTick.setTint(innerColor)
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).setTint(innerColor)
-        }
+        tintIconCompat(mDrawableTick, innerColor)
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
@@ -673,28 +662,14 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
-        val tickAnimator: ValueAnimator
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
-            // Fallback not using AVD.
-            tickAnimator = ValueAnimator.ofInt(0, 255)
-            tickAnimator.addUpdateListener {
-                mTickMargin = mIconMargin
+        val tickListener = ValueAnimator.AnimatorUpdateListener {
+            // We need to enable the drawing of the AnimatedVectorDrawable before starting it.
+            if (!mFlagDrawTick) {
                 mFlagDrawTick = true
-                mDrawableTick.alpha = it.animatedValue as Int
-                invalidate()
-            }
-        } else {
-            // Used AVD Animation.
-            tickAnimator = ValueAnimator.ofInt(0)
-            tickAnimator.addUpdateListener {
-                if (!mFlagDrawTick) {
-                    mTickMargin = mIconMargin
-                    mFlagDrawTick = true
-                    startTickAnimation()
-                    invalidate()
-                }
+                mTickMargin = mIconMargin
             }
         }
+        val tickAnimator: ValueAnimator = createIconAnimator(this, mDrawableTick, tickListener)
 
         val animators = mutableListOf<Animator>()
         if (mPosition < mAreaWidth - mAreaHeight) {
@@ -768,7 +743,7 @@ class SlideToActView @JvmOverloads constructor(
         mIsCompleted = false
         val animSet = AnimatorSet()
 
-        // Animator that enlarges the outer area
+        // Animator that reduces the tick size
         val tickAnimator = ValueAnimator.ofInt(mTickMargin, mAreaWidth / 2)
         tickAnimator.addUpdateListener {
             mTickMargin = it.animatedValue as Int
@@ -836,7 +811,7 @@ class SlideToActView @JvmOverloads constructor(
 
             override fun onAnimationEnd(p0: Animator?) {
                 isEnabled = true
-                stopTickAnimation()
+                stopIconAnimation(mDrawableTick)
                 onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
                     this@SlideToActView
                 )
@@ -847,28 +822,6 @@ class SlideToActView @JvmOverloads constructor(
             }
         })
         animSet.start()
-    }
-
-    /**
-     * Private method to start the Tick AVD animation, with the proper library based on API level.
-     */
-    private fun startTickAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).start()
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).start()
-        }
-    }
-
-    /**
-     * Private method to stop the Tick AVD animation, with the proper library based on API level.
-     */
-    private fun stopTickAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (mDrawableTick as AnimatedVectorDrawable).stop()
-        } else {
-            (mDrawableTick as AnimatedVectorDrawableCompat).stop()
-        }
     }
 
     /**
