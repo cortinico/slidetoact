@@ -376,7 +376,7 @@ class SlideToActView @JvmOverloads constructor(
                 originalSliderIcon = sliderIcon
 
                 loadingIcon = getResourceId(
-                        R.styleable.SlideToActView_loading_icon, R.drawable.slidetoact_ic_rotate_right
+                    R.styleable.SlideToActView_loading_icon, R.drawable.slidetoact_ic_rotate_right
                 )
 
                 // For icon color. check if the `slide_icon_color` is set.
@@ -485,7 +485,7 @@ class SlideToActView @JvmOverloads constructor(
         )
 
         // Text alpha
-        mTextPaint.alpha = if(mForceShowText) 255 else (255 * mPositionPercInv).toInt()
+        mTextPaint.alpha = if (mForceShowText) 255 else (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
         canvas.drawText(
@@ -754,12 +754,10 @@ class SlideToActView @JvmOverloads constructor(
             }
             animSet.play(finalPositionAnimator)
         }
-        
         animSet.duration = animDuration
 
         animSet.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(p0: Animator?) {
-
             }
 
             override fun onAnimationCancel(p0: Animator?) {
@@ -991,7 +989,6 @@ class SlideToActView @JvmOverloads constructor(
          */
         fun onSlideLoadingStarted(view: SlideToActView)
     }
-
 
     /**
      * Event handler for the slide react event.
