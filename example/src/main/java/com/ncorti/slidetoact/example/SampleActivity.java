@@ -101,27 +101,33 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_loadable_slider:
                 setContentView(R.layout.content_loadable_slider);
-                final SlideToActView loadableSlider = findViewById(R.id.slide_loadable);
-                loadableSlider.setOnSlideLoadingStartedListener(new SlideToActView.OnSlideLoadingStartedListener() {
+                final SlideToActView loadableSliderReset = findViewById(R.id.slide_loadable_reset);
+                final SlideToActView loadableSliderComplete = findViewById(R.id.slide_loadable_complete);
+                SlideToActView.OnSlideLoadingStartedListener loadingListener = new SlideToActView.OnSlideLoadingStartedListener() {
                     @Override
-                    public void onSlideLoadingStarted(SlideToActView view) {
+                    public void onSlideLoadingStarted(final SlideToActView view) {
+                        // Set the text of the slider when it's loading
+                        view.setText(getString(R.string.loading));
+
                         Random ran = new Random();
                         // Simulate an indeterminate amount of time
                         int delay = ran.nextInt(3000);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (loadableSlider.isLoadable()) {
-                                    if (loadableSlider.isAnimateCompletion()) {
-                                        loadableSlider.completeSlider();
+                                if (view.isLoadable()) {
+                                    if (view.isAnimateCompletion()) {
+                                        view.completeSlider();
                                     } else {
-                                        loadableSlider.resetSlider();
+                                        view.resetSlider();
                                     }
                                 }
                             }
                         }, delay);
                     }
-                });
+                };
+                loadableSliderReset.setOnSlideLoadingStartedListener(loadingListener);
+                loadableSliderComplete.setOnSlideLoadingStartedListener(loadingListener);
                 break;
             default:
                 finish();

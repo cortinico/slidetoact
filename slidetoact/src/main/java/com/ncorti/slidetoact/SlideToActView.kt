@@ -72,6 +72,9 @@ class SlideToActView @JvmOverloads constructor(
     /** Margin of the cursor from the outer area */
     private var mActualAreaMargin: Int
     private val mOriginAreaMargin: Int
+    private var mForceShowText: Boolean = false
+
+    var originalText: CharSequence = ""
 
     /** Text message */
     var text: CharSequence = ""
@@ -79,6 +82,7 @@ class SlideToActView @JvmOverloads constructor(
             field = value
             mTextView.text = value
             mTextPaint.set(mTextView.paint)
+            mForceShowText = true
             invalidate()
         }
 
@@ -334,6 +338,7 @@ class SlideToActView @JvmOverloads constructor(
                 }
 
                 text = getString(R.styleable.SlideToActView_text) ?: ""
+                originalText = text
                 typeFace = getInt(R.styleable.SlideToActView_text_style, 0)
                 mTextSize = getDimensionPixelSize(
                     R.styleable.SlideToActView_text_size,
@@ -395,6 +400,8 @@ class SlideToActView @JvmOverloads constructor(
 
                 mArrowMargin = mIconMargin
                 mTickMargin = mIconMargin
+
+                mForceShowText = false
             }
         } finally {
             attrs.recycle()
@@ -478,7 +485,7 @@ class SlideToActView @JvmOverloads constructor(
         )
 
         // Text alpha
-        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        mTextPaint.alpha = if(mForceShowText) 255 else (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
         canvas.drawText(
@@ -654,6 +661,7 @@ class SlideToActView @JvmOverloads constructor(
      * Private method that is performed when user completes the slide
      */
     private fun startAnimationComplete() {
+        mForceShowText = false
         val animSet = AnimatorSet()
 
         // Animator that moves the cursor
@@ -827,6 +835,8 @@ class SlideToActView @JvmOverloads constructor(
             // When resetting the slider, we need to reset the icon before the handle resets
             // Changing the icon here is a timing optimisation
             sliderIcon = originalSliderIcon
+            text = originalText
+            mForceShowText = false
             invalidate()
         }
 
