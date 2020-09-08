@@ -211,7 +211,7 @@ sta.setReversed(true);
 
 #### ``slider_icon``
 
-You can set a custom icon by setting the ``slider_icon``attribute to a drawable resource.
+You can set a custom icon by setting the ``slider_icon`` attribute to a drawable resource.
 
 <p align="center">
   <img src="assets/custom_icon.png" alt="custom_icon" width="40%"/>
@@ -231,7 +231,7 @@ sta.setSliderIcon(R.drawable.custom_icon);
 You can also disable the rotation by setting the ``rotate_icon`` attribute to false.
 
 #### ``complete_icon``
-You can set a custom complete icon by setting the ``complete_icon``attribute to a drawable resource.
+You can set a custom complete icon by setting the ``complete_icon`` attribute to a drawable resource.
 
 <p align="center">
   <img src="assets/complete_icon.gif" alt="custom_complete_iconcon" width="40%"/>
@@ -286,6 +286,18 @@ In order for this feature to work, you need have the permission ```android.permi
 Use the ``android:elevation`` attribute to set the **elevation** of the widget. The widgets will take care of providing the proper ``ViewOutlineProvider`` during the whole animation (a.k.a. The shadow will be drawn properly).
 
 <p align="center"><img src="assets/elevation_1.png" alt="elevation_1" width="40%"/> <img src="assets/elevation_2.png" alt="elevation_2" width="40%"/></p>
+
+#### ``slider_loadable``
+
+You can mark a slider as `loadable`. This means that when the slider has started loading (interaction with the slider is complete), your app can perform some work before completing or resetting the slider.
+
+```xml
+app:slider_loadable="true"
+```
+
+<p align="center">
+  <img src="assets/loading.gif" alt="custom_complete_iconcon" width="40%"/>
+</p>
 
 ### Event callbacks
 
