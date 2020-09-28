@@ -543,6 +543,10 @@ class SlideToActView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event != null && event.action == MotionEvent.ACTION_DOWN) {
+            // Calling performClick on every ACTION_DOWN so OnClickListener is triggered properly.
+            performClick()
+        }
         if (event != null && isEnabled) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -554,7 +558,6 @@ class SlideToActView @JvmOverloads constructor(
                         // Clicking outside the area -> User failed, notify the listener.
                         onSlideUserFailedListener?.onSlideFailed(this, true)
                     }
-                    performClick()
                 }
                 MotionEvent.ACTION_UP -> {
                     parent.requestDisallowInterceptTouchEvent(false)
