@@ -26,7 +26,10 @@ import android.view.ViewOutlineProvider
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -92,6 +95,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Text Appearance used to fully customize the font */
+    @StyleRes
     var textAppearance: Int = 0
         set(value) {
             field = value
@@ -103,6 +107,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Outer color used by the slider (primary)*/
+    @ColorInt
     var outerColor: Int = 0
         set(value) {
             field = value
@@ -111,6 +116,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Inner color used by the slider (secondary, icon and border) */
+    @ColorInt
     var innerColor: Int = 0
         set(value) {
             field = value
@@ -124,6 +130,7 @@ class SlideToActView @JvmOverloads constructor(
     /** Duration of vibration after bumping to the end point */
     var bumpVibration: Long = 0L
 
+    @ColorInt
     var textColor: Int = 0
         set(value) {
             field = value
@@ -133,6 +140,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Custom Icon color */
+    @ColorInt
     var iconColor: Int = 0
         set(value) {
             field = value
@@ -141,6 +149,7 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Custom Slider Icon */
+    @DrawableRes
     var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
         set(value) {
             field = value
@@ -208,6 +217,7 @@ class SlideToActView @JvmOverloads constructor(
     private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
+    @DrawableRes
     var completeIcon: Int = 0
         set(value) {
             field = value
