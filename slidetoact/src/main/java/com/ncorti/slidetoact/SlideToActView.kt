@@ -292,7 +292,9 @@ class SlideToActView @JvmOverloads constructor(
 
         val attrs: TypedArray = context.theme.obtainStyledAttributes(
             xmlAttrs,
-            R.styleable.SlideToActView, defStyleAttr, R.style.SlideToActView
+            R.styleable.SlideToActView,
+            defStyleAttr,
+            R.style.SlideToActView
         )
         try {
             mDesiredSliderHeight = TypedValue.applyDimension(
@@ -307,10 +309,12 @@ class SlideToActView @JvmOverloads constructor(
             ).toInt()
 
             val defaultOuter = ContextCompat.getColor(
-                this.context, R.color.slidetoact_defaultAccent
+                this.context,
+                R.color.slidetoact_defaultAccent
             )
             val defaultWhite = ContextCompat.getColor(
-                this.context, R.color.slidetoact_white
+                this.context,
+                R.color.slidetoact_white
             )
 
             with(attrs) {
@@ -348,13 +352,16 @@ class SlideToActView @JvmOverloads constructor(
                 isReversed = getBoolean(R.styleable.SlideToActView_slider_reversed, false)
                 isRotateIcon = getBoolean(R.styleable.SlideToActView_rotate_icon, true)
                 isAnimateCompletion = getBoolean(
-                    R.styleable.SlideToActView_animate_completion, true
+                    R.styleable.SlideToActView_animate_completion,
+                    true
                 )
                 animDuration = getInteger(
-                    R.styleable.SlideToActView_animation_duration, 300
+                    R.styleable.SlideToActView_animation_duration,
+                    300
                 ).toLong()
                 bumpVibration = getInt(
-                    R.styleable.SlideToActView_bump_vibration, 0
+                    R.styleable.SlideToActView_bump_vibration,
+                    0
                 ).toLong()
 
                 mOriginAreaMargin = getDimensionPixelSize(
@@ -364,7 +371,8 @@ class SlideToActView @JvmOverloads constructor(
                 mActualAreaMargin = mOriginAreaMargin
 
                 sliderIcon = getResourceId(
-                    R.styleable.SlideToActView_slider_icon, R.drawable.slidetoact_ic_arrow
+                    R.styleable.SlideToActView_slider_icon,
+                    R.drawable.slidetoact_ic_arrow
                 )
 
                 // For icon color. check if the `slide_icon_color` is set.
@@ -657,7 +665,8 @@ class SlideToActView @JvmOverloads constructor(
 
         // Animator that bounce away the cursors
         val marginAnimator = ValueAnimator.ofInt(
-            mActualAreaMargin, (mInnerRect.width() / 2).toInt() + mActualAreaMargin
+            mActualAreaMargin,
+            (mInnerRect.width() / 2).toInt() + mActualAreaMargin
         )
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
@@ -699,27 +708,30 @@ class SlideToActView @JvmOverloads constructor(
 
         animSet.duration = animDuration
 
-        animSet.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-                onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(
-                    this@SlideToActView, mPositionPerc
-                )
-            }
+        animSet.addListener(
+            object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(
+                        this@SlideToActView,
+                        mPositionPerc
+                    )
+                }
 
-            override fun onAnimationCancel(p0: Animator?) {
-            }
+                override fun onAnimationCancel(p0: Animator?) {
+                }
 
-            override fun onAnimationEnd(p0: Animator?) {
-                mIsCompleted = true
-                onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
-                    this@SlideToActView
-                )
-                onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
-            }
+                override fun onAnimationEnd(p0: Animator?) {
+                    mIsCompleted = true
+                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
+                        this@SlideToActView
+                    )
+                    onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+                }
 
-            override fun onAnimationRepeat(p0: Animator?) {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
             }
-        })
+        )
         animSet.start()
     }
 
@@ -812,28 +824,30 @@ class SlideToActView @JvmOverloads constructor(
 
         animSet.duration = animDuration
 
-        animSet.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(p0: Animator?) {
-                onSlideToActAnimationEventListener?.onSlideResetAnimationStarted(
-                    this@SlideToActView
-                )
-            }
+        animSet.addListener(
+            object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+                    onSlideToActAnimationEventListener?.onSlideResetAnimationStarted(
+                        this@SlideToActView
+                    )
+                }
 
-            override fun onAnimationCancel(p0: Animator?) {
-            }
+                override fun onAnimationCancel(p0: Animator?) {
+                }
 
-            override fun onAnimationEnd(p0: Animator?) {
-                isEnabled = true
-                stopIconAnimation(mDrawableTick)
-                onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
-                    this@SlideToActView
-                )
-                onSlideResetListener?.onSlideReset(this@SlideToActView)
-            }
+                override fun onAnimationEnd(p0: Animator?) {
+                    isEnabled = true
+                    stopIconAnimation(mDrawableTick)
+                    onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
+                        this@SlideToActView
+                    )
+                    onSlideResetListener?.onSlideReset(this@SlideToActView)
+                }
 
-            override fun onAnimationRepeat(p0: Animator?) {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
             }
-        })
+        )
         animSet.start()
     }
 
