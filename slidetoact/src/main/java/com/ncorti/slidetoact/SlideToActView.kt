@@ -511,10 +511,10 @@ class SlideToActView @JvmOverloads constructor(
         // We compute the rotation of the arrow and we apply .rotate transformation on the canvas.
         canvas.save()
         if (isReversed) {
-            canvas.rotate(180f, mInnerRect.centerX(), mInnerRect.centerY())
+            canvas.scale(-1F, 1F, mInnerRect.centerX(), mInnerRect.centerY())
         }
         if (isRotateIcon) {
-            mArrowAngle = 180 * mPositionPerc * (if (isReversed) 1 else -1)
+            mArrowAngle = -180 * mPositionPerc
             canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         }
         mDrawableArrow.setBounds(
