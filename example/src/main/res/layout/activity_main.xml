@@ -22,8 +22,6 @@
             android:id="@+id/welcome_slider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:elevation="6dp"
             app:text="Sample SlideToActView" />
 
         <TextView
