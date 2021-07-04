@@ -131,6 +131,28 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
+    /** Stroke for inner borders **/
+    var innerStroke: Stroke? = null
+        set(value) {
+            field = value
+            value?.also {
+                mInnerStrokePaint.strokeWidth = it.width
+                mInnerStrokePaint.color = it.color
+            }
+            invalidate()
+        }
+
+    /** Stroke for outer borders **/
+    var outerStroke: Stroke? = null
+        set(value) {
+            field = value
+            value?.also {
+                mOuterStrokePaint.strokeWidth = it.width
+                mOuterStrokePaint.color = it.color
+            }
+            invalidate()
+        }
+
     /** Duration of the complete and reset animation (in milliseconds). */
     var animDuration: Long = 300
 
@@ -247,6 +269,16 @@ class SlideToActView @JvmOverloads constructor(
     /** Paint used for inner elements */
     private val mInnerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    /** Paint stroke used for inner elements */
+    private val mInnerStrokePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeJoin = Paint.Join.ROUND
+        strokeCap = Paint.Cap.ROUND
+    }
+
+    /** Paint stroke used for outer elements */
+    private val mOuterStrokePaint: Paint = Paint(mInnerStrokePaint)
+
     /** Paint used for text elements */
     private var mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -256,8 +288,16 @@ class SlideToActView @JvmOverloads constructor(
     /** Inner rectangle (used for arrow rotation) */
     private var mInnerRect: RectF
 
+    /** Inner stroke rectangle (used for arrow rotation) */
+    private var mInnerStrokeRect: RectF
+
+
     /** Outer rectangle (used for area drawing) */
     private var mOuterRect: RectF
+
+    /** Outer stroke rectangle (used for area drawing) */
+    private var mOuterStrokeRect: RectF
+
 
     /** Grace value, when mPositionPerc > mGraceValue slider will perform the 'complete' operations */
     var graceValue: Float = 0.8F
@@ -300,8 +340,13 @@ class SlideToActView @JvmOverloads constructor(
         val actualInnerColor: Int
         val actualTextColor: Int
         val actualIconColor: Int
-
+        val actualStrokeInnerColor: Int
+        val actualStrokeInnerWidth: Float
+        val actualStrokeOuterColor: Int
+        val actualStrokeOuterWidth: Float
         val actualCompleteDrawable: Int
+
+        val defaultStrokeWidth: Float = resources.getDimension(R.dimen.slidetoact_default_stroke_width)
 
         mTextView = TextView(context)
         mTextPaint = mTextView.paint
@@ -342,6 +387,12 @@ class SlideToActView @JvmOverloads constructor(
 
                 actualOuterColor = getColor(R.styleable.SlideToActView_outer_color, defaultOuter)
                 actualInnerColor = getColor(R.styleable.SlideToActView_inner_color, defaultWhite)
+
+                actualStrokeInnerColor = getColor(R.styleable.SlideToActView_inner_stroke_color, -1)
+                actualStrokeOuterColor = getColor(R.styleable.SlideToActView_outer_stroke_color, -1)
+
+                  actualStrokeInnerWidth = getDimension(R.styleable.SlideToActView_inner_stroke_width, defaultStrokeWidth)
+                actualStrokeOuterWidth = getDimension(R.styleable.SlideToActView_outer_stroke_width, defaultStrokeWidth)
 
                 // For text color, check if the `text_color` is set.
                 // if not check if the `outer_color` is set.
@@ -441,11 +492,25 @@ class SlideToActView @JvmOverloads constructor(
                 mAreaHeight.toFloat() - mActualAreaMargin.toFloat()
         )
 
+        mInnerStrokeRect = RectF(
+                mInnerRect.left + mInnerStrokePaint.strokeWidth / 2,
+                mInnerRect.top + mInnerStrokePaint.strokeWidth / 2,
+                mInnerRect.right - mInnerStrokePaint.strokeWidth / 2,
+                mInnerRect.bottom - mInnerStrokePaint.strokeWidth / 2
+        )
+
         mOuterRect = RectF(
                 mActualAreaWidth.toFloat(),
                 0f,
                 mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
                 mAreaHeight.toFloat()
+        )
+
+        mOuterStrokeRect = RectF(
+                mOuterRect.left + mOuterStrokePaint.strokeWidth / 2,
+                mOuterRect.top + mOuterStrokePaint.strokeWidth / 2,
+                mOuterRect.right - mOuterStrokePaint.strokeWidth / 2,
+                mOuterRect.bottom - mOuterStrokePaint.strokeWidth / 2
         )
 
         mDrawableTick = loadIconCompat(context, actualCompleteDrawable)
@@ -455,6 +520,13 @@ class SlideToActView @JvmOverloads constructor(
         outerColor = actualOuterColor
         innerColor = actualInnerColor
         iconColor = actualIconColor
+
+
+        if (actualStrokeInnerColor != -1)
+            innerStroke = Stroke(actualStrokeInnerWidth, actualStrokeInnerColor)
+
+        if (actualStrokeOuterColor != -1)
+            outerStroke = Stroke(actualStrokeOuterWidth, actualStrokeOuterColor)
 
         // This outline provider force removal of shadow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -511,6 +583,22 @@ class SlideToActView @JvmOverloads constructor(
                 mOuterPaint
         )
 
+        outerStroke?.also {
+            mOuterStrokeRect.set(
+                    mOuterRect.left + it.width / 2,
+                    mOuterRect.top + it.width / 2,
+                    mOuterRect.right - it.width / 2,
+                    mOuterRect.bottom - it.width / 2,
+            )
+            val outerRadius = mBorderRadius.toFloat()
+            canvas.drawRoundRect(
+                    mOuterStrokeRect,
+                    outerRadius,
+                    outerRadius,
+                    mOuterStrokePaint
+            )
+        }
+
         // Text alpha
         mTextPaint.alpha = (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
@@ -539,6 +627,22 @@ class SlideToActView @JvmOverloads constructor(
                 mBorderRadius.toFloat() * ratio,
                 mInnerPaint
         )
+
+        innerStroke?.also {
+            val innerRadius = (mBorderRadius.toFloat() * ratio)
+            mInnerStrokeRect.set(
+                    mInnerRect.left + it.width / 2,
+                    mInnerRect.top + it.width / 2,
+                    mInnerRect.right - it.width / 2,
+                    mInnerRect.bottom - it.width / 2,
+            )
+            canvas.drawRoundRect(
+                    mInnerStrokeRect,
+                    innerRadius,
+                    innerRadius,
+                    mInnerStrokePaint
+            )
+        }
 
         // Arrow angle
         // We compute the rotation of the arrow and we apply .rotate transformation on the canvas.
@@ -571,7 +675,7 @@ class SlideToActView @JvmOverloads constructor(
                 mAreaHeight - mTickMargin
         )
 
-        if(enableCompleteIconTint)
+        if (enableCompleteIconTint)
             tintIconCompat(mDrawableTick, innerColor)
 
         if (mFlagDrawTick) {
@@ -705,6 +809,12 @@ class SlideToActView @JvmOverloads constructor(
         )
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
+            innerStroke?.also { stroke ->
+                mInnerStrokePaint.apply {
+                    val factor = (1 - it.animatedFraction)
+                    alpha = checkAlphaLimit((factor * 255).toInt())
+                }
+            }
             invalidate()
         }
         marginAnimator.interpolator = LinearInterpolator()
@@ -832,6 +942,12 @@ class SlideToActView @JvmOverloads constructor(
         val marginAnimator = ValueAnimator.ofInt(mActualAreaMargin, mOriginAreaMargin)
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
+            innerStroke?.also { stroke ->
+                mInnerStrokePaint.apply {
+                    val factor = it.animatedFraction
+                    alpha = checkAlphaLimit((factor * 255).toInt())
+                }
+            }
             invalidate()
         }
         marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
@@ -884,6 +1000,13 @@ class SlideToActView @JvmOverloads constructor(
                 }
         )
         animSet.start()
+    }
+
+    /**Check limit for alpha value**/
+    private fun checkAlphaLimit(alpha: Int): Int = when {
+        alpha > 255 -> 255
+        alpha < 0 -> 0
+        else -> alpha
     }
 
     /**
@@ -1021,4 +1144,9 @@ class SlideToActView @JvmOverloads constructor(
             )
         }
     }
+
+    data class Stroke(
+            val width: Float,
+            @ColorInt val color: Int
+    )
 }
