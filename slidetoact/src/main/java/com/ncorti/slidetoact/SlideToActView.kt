@@ -391,7 +391,7 @@ class SlideToActView @JvmOverloads constructor(
                 actualStrokeInnerColor = getColor(R.styleable.SlideToActView_inner_stroke_color, -1)
                 actualStrokeOuterColor = getColor(R.styleable.SlideToActView_outer_stroke_color, -1)
 
-                  actualStrokeInnerWidth = getDimension(R.styleable.SlideToActView_inner_stroke_width, defaultStrokeWidth)
+                actualStrokeInnerWidth = getDimension(R.styleable.SlideToActView_inner_stroke_width, defaultStrokeWidth)
                 actualStrokeOuterWidth = getDimension(R.styleable.SlideToActView_outer_stroke_width, defaultStrokeWidth)
 
                 // For text color, check if the `text_color` is set.
@@ -654,17 +654,15 @@ class SlideToActView @JvmOverloads constructor(
             mArrowAngle = -180 * mPositionPerc
             canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         }
-        mDrawableArrow.setBounds(
-                mInnerRect.left.toInt() + mArrowMargin,
-                mInnerRect.top.toInt() + mArrowMargin,
-                mInnerRect.right.toInt() - mArrowMargin,
-                mInnerRect.bottom.toInt() - mArrowMargin
-        )
+
+        createCropBounds(mDrawableArrow,mInnerRect,mArrowMargin)
+
         if (mDrawableArrow.bounds.left <= mDrawableArrow.bounds.right &&
                 mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom
         ) {
             mDrawableArrow.draw(canvas)
         }
+
         canvas.restore()
 
         // Tick drawing
@@ -681,6 +679,33 @@ class SlideToActView @JvmOverloads constructor(
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
+    }
+
+    private fun createCropBounds(drawable: Drawable,rect:RectF,margin:Int) {
+        val proportion = drawable.intrinsicWidth / drawable.intrinsicHeight.toFloat()
+        val width = rect.right.toInt() - margin * 2 - rect.left.toInt()
+        val height = rect.bottom.toInt() - margin * 2 - rect.top.toInt()
+        val proportionWidth: Int
+        val proportionHeight: Int
+
+        if (proportion >= 1) {
+            proportionHeight = (width * 1 / proportion).toInt()
+            proportionWidth = width
+        } else {
+            proportionHeight = height
+            proportionWidth = (height * proportion).toInt()
+        }
+
+        val left = rect.left.toInt() + margin + width / 2 - proportionWidth / 2
+        val top = rect.top.toInt() + margin + height / 2 - proportionHeight / 2
+        val right = rect.left.toInt() + margin + width / 2 + proportionWidth / 2
+        val bottom = rect.top.toInt() + margin + height / 2 + proportionHeight / 2
+        drawable.setBounds(
+                left,
+                top,
+                right,
+                bottom
+        )
     }
 
     // Intentionally override `performClick` to do not lose accessibility support.
