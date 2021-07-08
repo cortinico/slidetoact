@@ -8,11 +8,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Outline
-import android.graphics.Paint
-import android.graphics.RectF
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
@@ -47,9 +43,9 @@ import com.ncorti.slidetoact.SlideToActIconUtil.tintIconCompat
  *  with a "Slide-to-unlock" like widget.
  */
 class SlideToActView @JvmOverloads constructor(
-    context: Context,
-    xmlAttrs: AttributeSet? = null,
-    defStyleAttr: Int = R.attr.slideToActViewStyle
+        context: Context,
+        xmlAttrs: AttributeSet? = null,
+        defStyleAttr: Int = R.attr.slideToActViewStyle
 ) : View(context, xmlAttrs, defStyleAttr) {
 
     companion object {
@@ -156,7 +152,7 @@ class SlideToActView @JvmOverloads constructor(
         set(value) {
             field = value
             if (value != 0)
-            DrawableCompat.setTint(mDrawableArrow, value)
+                DrawableCompat.setTint(mDrawableArrow, value)
             invalidate()
         }
 
@@ -169,7 +165,7 @@ class SlideToActView @JvmOverloads constructor(
                 ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
                     mDrawableArrow = it
                     if (iconColor != 0)
-                    DrawableCompat.setTint(it, iconColor)
+                        DrawableCompat.setTint(it, iconColor)
                 }
                 invalidate()
             }
@@ -259,13 +255,16 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Inner rectangle (used for arrow rotation) */
     private var mInnerRect: RectF
+
     /** Outer rectangle (used for area drawing) */
     private var mOuterRect: RectF
+
     /** Grace value, when mPositionPerc > mGraceValue slider will perform the 'complete' operations */
-    private val mGraceValue: Float = 0.8F
+    var graceValue: Float = 0.8F
 
     /** Last X coordinate for the touch event */
     private var mLastX: Float = 0F
+
     /** Flag to understand if user is moving the slider cursor */
     private var mFlagMoving: Boolean = false
 
@@ -308,36 +307,36 @@ class SlideToActView @JvmOverloads constructor(
         mTextPaint = mTextView.paint
 
         val attrs: TypedArray = context.theme.obtainStyledAttributes(
-            xmlAttrs,
-            R.styleable.SlideToActView,
-            defStyleAttr,
-            R.style.SlideToActView
+                xmlAttrs,
+                R.styleable.SlideToActView,
+                defStyleAttr,
+                R.style.SlideToActView
         )
         try {
             mDesiredSliderHeight = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                mDesiredSliderHeightDp,
-                resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    mDesiredSliderHeightDp,
+                    resources.displayMetrics
             ).toInt()
             mDesiredSliderWidth = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                mDesiredSliderWidthDp,
-                resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    mDesiredSliderWidthDp,
+                    resources.displayMetrics
             ).toInt()
 
             val defaultOuter = ContextCompat.getColor(
-                this.context,
-                R.color.slidetoact_defaultAccent
+                    this.context,
+                    R.color.slidetoact_defaultAccent
             )
             val defaultWhite = ContextCompat.getColor(
-                this.context,
-                R.color.slidetoact_white
+                    this.context,
+                    R.color.slidetoact_white
             )
 
             with(attrs) {
                 mDesiredSliderHeight = getDimensionPixelSize(
-                    R.styleable.SlideToActView_slider_height,
-                    mDesiredSliderHeight
+                        R.styleable.SlideToActView_slider_height,
+                        mDesiredSliderHeight
                 )
                 mBorderRadius = getDimensionPixelSize(R.styleable.SlideToActView_border_radius, -1)
 
@@ -357,8 +356,8 @@ class SlideToActView @JvmOverloads constructor(
                 text = getString(R.styleable.SlideToActView_text) ?: ""
                 typeFace = getInt(R.styleable.SlideToActView_text_style, 0)
                 mTextSize = getDimensionPixelSize(
-                    R.styleable.SlideToActView_text_size,
-                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_text_size)
+                        R.styleable.SlideToActView_text_size,
+                        resources.getDimensionPixelSize(R.dimen.slidetoact_default_text_size)
                 )
                 textColor = actualTextColor
 
@@ -369,21 +368,27 @@ class SlideToActView @JvmOverloads constructor(
                 isReversed = getBoolean(R.styleable.SlideToActView_slider_reversed, false)
                 isRotateIcon = getBoolean(R.styleable.SlideToActView_rotate_icon, true)
                 isAnimateCompletion = getBoolean(
-                    R.styleable.SlideToActView_animate_completion,
-                    true
+                        R.styleable.SlideToActView_animate_completion,
+                        true
                 )
+
+                graceValue = getFloat(
+                        R.styleable.SlideToActView_grace_value_percent,
+                        graceValue
+                )
+
                 animDuration = getInteger(
-                    R.styleable.SlideToActView_animation_duration,
-                    300
+                        R.styleable.SlideToActView_animation_duration,
+                        300
                 ).toLong()
                 bumpVibration = getInt(
-                    R.styleable.SlideToActView_bump_vibration,
-                    0
+                        R.styleable.SlideToActView_bump_vibration,
+                        0
                 ).toLong()
 
                 mOriginAreaMargin = getDimensionPixelSize(
-                    R.styleable.SlideToActView_area_margin,
-                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin)
+                        R.styleable.SlideToActView_area_margin,
+                        resources.getDimensionPixelSize(R.dimen.slidetoact_default_area_margin)
                 )
                 mActualAreaMargin = mOriginAreaMargin
 
@@ -413,13 +418,13 @@ class SlideToActView @JvmOverloads constructor(
                     else -> defaultOuter
                 }
                 actualCompleteDrawable = getResourceId(
-                    R.styleable.SlideToActView_complete_icon,
-                    R.drawable.slidetoact_animated_ic_check
+                        R.styleable.SlideToActView_complete_icon,
+                        R.drawable.slidetoact_animated_ic_check
                 )
 
                 mIconMargin = getDimensionPixelSize(
-                    R.styleable.SlideToActView_icon_margin,
-                    resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
+                        R.styleable.SlideToActView_icon_margin,
+                        resources.getDimensionPixelSize(R.dimen.slidetoact_default_icon_margin)
                 )
 
                 mArrowMargin = mIconMargin
@@ -430,17 +435,17 @@ class SlideToActView @JvmOverloads constructor(
         }
 
         mInnerRect = RectF(
-            (mActualAreaMargin + mEffectivePosition).toFloat(),
-            mActualAreaMargin.toFloat(),
-            (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
-            mAreaHeight.toFloat() - mActualAreaMargin.toFloat()
+                (mActualAreaMargin + mEffectivePosition).toFloat(),
+                mActualAreaMargin.toFloat(),
+                (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
+                mAreaHeight.toFloat() - mActualAreaMargin.toFloat()
         )
 
         mOuterRect = RectF(
-            mActualAreaWidth.toFloat(),
-            0f,
-            mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
-            mAreaHeight.toFloat()
+                mActualAreaWidth.toFloat(),
+                0f,
+                mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
+                mAreaHeight.toFloat()
         )
 
         mDrawableTick = loadIconCompat(context, actualCompleteDrawable)
@@ -482,7 +487,7 @@ class SlideToActView @JvmOverloads constructor(
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
         mTextYPosition = (mAreaHeight.toFloat() / 2) -
-            (mTextPaint.descent() + mTextPaint.ascent()) / 2
+                (mTextPaint.descent() + mTextPaint.ascent()) / 2
 
         // Make sure the position is recomputed.
         mPosition = 0
@@ -494,16 +499,16 @@ class SlideToActView @JvmOverloads constructor(
 
         // Outer area
         mOuterRect.set(
-            mActualAreaWidth.toFloat(),
-            0f,
-            mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
-            mAreaHeight.toFloat()
+                mActualAreaWidth.toFloat(),
+                0f,
+                mAreaWidth.toFloat() - mActualAreaWidth.toFloat(),
+                mAreaHeight.toFloat()
         )
         canvas.drawRoundRect(
-            mOuterRect,
-            mBorderRadius.toFloat(),
-            mBorderRadius.toFloat(),
-            mOuterPaint
+                mOuterRect,
+                mBorderRadius.toFloat(),
+                mBorderRadius.toFloat(),
+                mOuterPaint
         )
 
         // Text alpha
@@ -511,28 +516,28 @@ class SlideToActView @JvmOverloads constructor(
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
         canvas.drawText(
-            textToDraw,
-            0,
-            textToDraw.length,
-            mTextXPosition,
-            mTextYPosition,
-            mTextPaint
+                textToDraw,
+                0,
+                textToDraw.length,
+                mTextXPosition,
+                mTextYPosition,
+                mTextPaint
         )
 
         // Inner Cursor
         // ratio is used to compute the proper border radius for the inner rect (see #8).
         val ratio = (mAreaHeight - 2 * mActualAreaMargin).toFloat() / mAreaHeight.toFloat()
         mInnerRect.set(
-            (mActualAreaMargin + mEffectivePosition).toFloat(),
-            mActualAreaMargin.toFloat(),
-            (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
-            mAreaHeight.toFloat() - mActualAreaMargin.toFloat()
+                (mActualAreaMargin + mEffectivePosition).toFloat(),
+                mActualAreaMargin.toFloat(),
+                (mAreaHeight + mEffectivePosition).toFloat() - mActualAreaMargin.toFloat(),
+                mAreaHeight.toFloat() - mActualAreaMargin.toFloat()
         )
         canvas.drawRoundRect(
-            mInnerRect,
-            mBorderRadius.toFloat() * ratio,
-            mBorderRadius.toFloat() * ratio,
-            mInnerPaint
+                mInnerRect,
+                mBorderRadius.toFloat() * ratio,
+                mBorderRadius.toFloat() * ratio,
+                mInnerPaint
         )
 
         // Arrow angle
@@ -546,13 +551,13 @@ class SlideToActView @JvmOverloads constructor(
             canvas.rotate(mArrowAngle, mInnerRect.centerX(), mInnerRect.centerY())
         }
         mDrawableArrow.setBounds(
-            mInnerRect.left.toInt() + mArrowMargin,
-            mInnerRect.top.toInt() + mArrowMargin,
-            mInnerRect.right.toInt() - mArrowMargin,
-            mInnerRect.bottom.toInt() - mArrowMargin
+                mInnerRect.left.toInt() + mArrowMargin,
+                mInnerRect.top.toInt() + mArrowMargin,
+                mInnerRect.right.toInt() - mArrowMargin,
+                mInnerRect.bottom.toInt() - mArrowMargin
         )
         if (mDrawableArrow.bounds.left <= mDrawableArrow.bounds.right &&
-            mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom
+                mDrawableArrow.bounds.top <= mDrawableArrow.bounds.bottom
         ) {
             mDrawableArrow.draw(canvas)
         }
@@ -560,9 +565,9 @@ class SlideToActView @JvmOverloads constructor(
 
         // Tick drawing
         mDrawableTick.setBounds(
-            mActualAreaWidth + mTickMargin,
-            mTickMargin,
-            mAreaWidth - mTickMargin - mActualAreaWidth,
+                mActualAreaWidth + mTickMargin,
+                mTickMargin,
+                mAreaWidth - mTickMargin - mActualAreaWidth,
                 mAreaHeight - mTickMargin
         )
 
@@ -600,7 +605,7 @@ class SlideToActView @JvmOverloads constructor(
                 MotionEvent.ACTION_UP -> {
                     parent.requestDisallowInterceptTouchEvent(false)
                     if ((mPosition > 0 && isLocked) ||
-                        (mPosition > 0 && mPositionPerc < mGraceValue)
+                            (mPosition > 0 && mPositionPerc < graceValue)
                     ) {
                         // Check for grace value
                         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
@@ -610,7 +615,7 @@ class SlideToActView @JvmOverloads constructor(
                             invalidate()
                         }
                         positionAnimator.start()
-                    } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
+                    } else if (mPosition > 0 && mPositionPerc >= graceValue) {
                         isEnabled = false // Fully disable touch events
                         startAnimationComplete()
                     } else if (mFlagMoving && mPosition == 0) {
@@ -651,11 +656,11 @@ class SlideToActView @JvmOverloads constructor(
      */
     private fun checkInsideButton(x: Float, y: Float): Boolean {
         return (
-            0 < y &&
-                y < mAreaHeight &&
-                mEffectivePosition < x &&
-                x < (mAreaHeight + mEffectivePosition)
-            )
+                0 < y &&
+                        y < mAreaHeight &&
+                        mEffectivePosition < x &&
+                        x < (mAreaHeight + mEffectivePosition)
+                )
     }
 
     /**
@@ -695,8 +700,8 @@ class SlideToActView @JvmOverloads constructor(
 
         // Animator that bounce away the cursors
         val marginAnimator = ValueAnimator.ofInt(
-            mActualAreaMargin,
-            (mInnerRect.width() / 2).toInt() + mActualAreaMargin
+                mActualAreaMargin,
+                (mInnerRect.width() / 2).toInt() + mActualAreaMargin
         )
         marginAnimator.addUpdateListener {
             mActualAreaMargin = it.animatedValue as Int
@@ -739,28 +744,28 @@ class SlideToActView @JvmOverloads constructor(
         animSet.duration = animDuration
 
         animSet.addListener(
-            object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(
-                        this@SlideToActView,
-                        mPositionPerc
-                    )
-                }
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator?) {
+                        onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(
+                                this@SlideToActView,
+                                mPositionPerc
+                        )
+                    }
 
-                override fun onAnimationCancel(p0: Animator?) {
-                }
+                    override fun onAnimationCancel(p0: Animator?) {
+                    }
 
-                override fun onAnimationEnd(p0: Animator?) {
-                    mIsCompleted = true
-                    onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
-                        this@SlideToActView
-                    )
-                    onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
-                }
+                    override fun onAnimationEnd(p0: Animator?) {
+                        mIsCompleted = true
+                        onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
+                                this@SlideToActView
+                        )
+                        onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+                    }
 
-                override fun onAnimationRepeat(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                    }
                 }
-            }
         )
         animSet.start()
     }
@@ -842,11 +847,11 @@ class SlideToActView @JvmOverloads constructor(
 
         if (isAnimateCompletion) {
             animSet.playSequentially(
-                tickAnimator,
-                areaAnimator,
-                positionAnimator,
-                marginAnimator,
-                arrowAnimator
+                    tickAnimator,
+                    areaAnimator,
+                    positionAnimator,
+                    marginAnimator,
+                    arrowAnimator
             )
         } else {
             animSet.playSequentially(positionAnimator)
@@ -855,28 +860,28 @@ class SlideToActView @JvmOverloads constructor(
         animSet.duration = animDuration
 
         animSet.addListener(
-            object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-                    onSlideToActAnimationEventListener?.onSlideResetAnimationStarted(
-                        this@SlideToActView
-                    )
-                }
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(p0: Animator?) {
+                        onSlideToActAnimationEventListener?.onSlideResetAnimationStarted(
+                                this@SlideToActView
+                        )
+                    }
 
-                override fun onAnimationCancel(p0: Animator?) {
-                }
+                    override fun onAnimationCancel(p0: Animator?) {
+                    }
 
-                override fun onAnimationEnd(p0: Animator?) {
-                    isEnabled = true
-                    stopIconAnimation(mDrawableTick)
-                    onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
-                        this@SlideToActView
-                    )
-                    onSlideResetListener?.onSlideReset(this@SlideToActView)
-                }
+                    override fun onAnimationEnd(p0: Animator?) {
+                        isEnabled = true
+                        stopIconAnimation(mDrawableTick)
+                        onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
+                                this@SlideToActView
+                        )
+                        onSlideResetListener?.onSlideReset(this@SlideToActView)
+                    }
 
-                override fun onAnimationRepeat(p0: Animator?) {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                    }
                 }
-            }
         )
         animSet.start()
     }
@@ -890,13 +895,13 @@ class SlideToActView @JvmOverloads constructor(
         if (bumpVibration <= 0) return
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.VIBRATE) !=
-            PackageManager.PERMISSION_GRANTED
+                PackageManager.PERMISSION_GRANTED
         ) {
             Log.w(
-                TAG,
-                "bumpVibration is set but permissions are unavailable." +
-                    "You must have the permission android.permission.VIBRATE in " +
-                    "AndroidManifest.xml to use bumpVibration"
+                    TAG,
+                    "bumpVibration is set but permissions are unavailable." +
+                            "You must have the permission android.permission.VIBRATE in " +
+                            "AndroidManifest.xml to use bumpVibration"
             )
             return
         }
@@ -905,7 +910,7 @@ class SlideToActView @JvmOverloads constructor(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(
-                VibrationEffect.createOneShot(bumpVibration, VibrationEffect.DEFAULT_AMPLITUDE)
+                    VibrationEffect.createOneShot(bumpVibration, VibrationEffect.DEFAULT_AMPLITUDE)
             )
         } else {
             vibrator.vibrate(bumpVibration)
@@ -1008,11 +1013,11 @@ class SlideToActView @JvmOverloads constructor(
             if (view == null || outline == null) return
 
             outline.setRoundRect(
-                mActualAreaWidth,
-                0,
-                mAreaWidth - mActualAreaWidth,
-                mAreaHeight,
-                mBorderRadius.toFloat()
+                    mActualAreaWidth,
+                    0,
+                    mAreaWidth - mActualAreaWidth,
+                    mAreaHeight,
+                    mBorderRadius.toFloat()
             )
         }
     }
