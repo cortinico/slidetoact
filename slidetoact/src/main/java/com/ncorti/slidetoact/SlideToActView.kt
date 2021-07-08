@@ -83,6 +83,10 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Enable default icon tint for slider **/
     var enableSliderIconTint: Boolean = true
+
+    /** Enable default icon tint for completion **/
+    var enableCompleteIconTint: Boolean = true
+
     /** Text message */
     var text: CharSequence = ""
         set(value) {
@@ -216,8 +220,10 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Margin for Arrow Icon */
     private var mArrowMargin: Int
+
     /** Current angle for Arrow Icon */
     private var mArrowAngle: Float = 0f
+
     /** Margin for Tick Icon */
     private var mTickMargin: Int
 
@@ -386,9 +392,14 @@ class SlideToActView @JvmOverloads constructor(
                         true
                 )
 
+                enableCompleteIconTint = getBoolean(
+                        R.styleable.SlideToActView_enable_tint_complete_icon,
+                        true
+                )
+
                 sliderIcon = getResourceId(
-                    R.styleable.SlideToActView_slider_icon,
-                    R.drawable.slidetoact_ic_arrow
+                        R.styleable.SlideToActView_slider_icon,
+                        R.drawable.slidetoact_ic_arrow
                 )
 
                 // For icon color. check if the `slide_icon_color` is set.
@@ -552,10 +563,12 @@ class SlideToActView @JvmOverloads constructor(
             mActualAreaWidth + mTickMargin,
             mTickMargin,
             mAreaWidth - mTickMargin - mActualAreaWidth,
-            mAreaHeight - mTickMargin
+                mAreaHeight - mTickMargin
         )
 
-        tintIconCompat(mDrawableTick, innerColor)
+        if(enableCompleteIconTint)
+            tintIconCompat(mDrawableTick, innerColor)
+
         if (mFlagDrawTick) {
             mDrawableTick.draw(canvas)
         }
