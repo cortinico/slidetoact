@@ -24,6 +24,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.view.animation.AnticipateOvershootInterpolator
+import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -672,7 +673,7 @@ class SlideToActView @JvmOverloads constructor(
             mActualAreaMargin = it.animatedValue as Int
             invalidate()
         }
-        marginAnimator.interpolator = AnticipateOvershootInterpolator(2f)
+        marginAnimator.interpolator = LinearInterpolator()
 
         // Animator that reduces the outer area (to right)
         val areaAnimator = ValueAnimator.ofInt(0, (mAreaWidth - mAreaHeight) / 2)
