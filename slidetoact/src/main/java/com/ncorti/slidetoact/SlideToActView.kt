@@ -67,16 +67,22 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Height of the drawing area */
     private var mAreaHeight: Int = 0
+
     /** Width of the drawing area */
     private var mAreaWidth: Int = 0
+
     /** Actual Width of the drawing area, used for animations */
     private var mActualAreaWidth: Int = 0
+
     /** Border Radius, default to mAreaHeight/2, -1 when not initialized */
     private var mBorderRadius: Int = -1
+
     /** Margin of the cursor from the outer area */
     private var mActualAreaMargin: Int
     private val mOriginAreaMargin: Int
 
+    /** Enable default icon tint for slider **/
+    var enableSliderIconTint: Boolean = true
     /** Text message */
     var text: CharSequence = ""
         set(value) {
@@ -145,6 +151,7 @@ class SlideToActView @JvmOverloads constructor(
     var iconColor: Int = 0
         set(value) {
             field = value
+            if (value != 0)
             DrawableCompat.setTint(mDrawableArrow, value)
             invalidate()
         }
@@ -157,6 +164,7 @@ class SlideToActView @JvmOverloads constructor(
             if (field != 0) {
                 ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
                     mDrawableArrow = it
+                    if (iconColor != 0)
                     DrawableCompat.setTint(it, iconColor)
                 }
                 invalidate()
@@ -198,12 +206,14 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Slider cursor position in percentage (between 0f and 1f) */
     private var mPositionPerc: Float = 0f
+
     /** 1/mPositionPerc */
     private var mPositionPercInv: Float = 1f
 
     /* -------------------- ICONS -------------------- */
 
     private val mIconMargin: Int
+
     /** Margin for Arrow Icon */
     private var mArrowMargin: Int
     /** Current angle for Arrow Icon */
@@ -371,6 +381,11 @@ class SlideToActView @JvmOverloads constructor(
                 )
                 mActualAreaMargin = mOriginAreaMargin
 
+                enableSliderIconTint = getBoolean(
+                        R.styleable.SlideToActView_enable_tint_slider_icon,
+                        true
+                )
+
                 sliderIcon = getResourceId(
                     R.styleable.SlideToActView_slider_icon,
                     R.drawable.slidetoact_ic_arrow
@@ -380,6 +395,7 @@ class SlideToActView @JvmOverloads constructor(
                 // if not check if the `outer_color` is set.
                 // if not, default to defaultOuter.
                 actualIconColor = when {
+                    !enableSliderIconTint -> 0
                     hasValue(R.styleable.SlideToActView_slider_icon_color) ->
                         getColor(R.styleable.SlideToActView_slider_icon_color, defaultOuter)
                     hasValue(R.styleable.SlideToActView_outer_color) -> actualOuterColor

@@ -20,6 +20,7 @@
         <attr name="slider_locked" format="boolean" />
         <attr name="slider_reversed" format="boolean" />
         <attr name="slider_icon" format="reference" />
+        <attr name="enable_tint_slider_icon" format="boolean" />
         <attr name="slider_icon_color" format="color" />
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
