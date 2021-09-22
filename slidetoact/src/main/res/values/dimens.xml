@@ -1,5 +1,6 @@
 <resources>
     <dimen name="slidetoact_default_area_margin">8dp</dimen>
+    <dimen name="slidetoact_default_stroke_width">3dp</dimen>
     <dimen name="slidetoact_default_icon_margin">16dp</dimen>
     <dimen name="slidetoact_default_text_size">16sp</dimen>
 </resources>

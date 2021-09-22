@@ -11,15 +11,22 @@
         <attr name="area_margin" format="dimension" />
         <attr name="icon_margin" format="dimension" />
         <attr name="inner_color" format="color" />
+        <attr name="inner_stroke_color" format="color" />
+        <attr name="inner_stroke_width" format="dimension" />
         <attr name="outer_color" format="color" />
+        <attr name="outer_stroke_color" format="color" />
+        <attr name="outer_stroke_width" format="dimension" />
         <attr name="text_color" format="color" />
         <attr name="border_radius" format="dimension" />
         <attr name="slider_height" format="dimension" />
+        <attr name="grace_value_percent" format="float" />
         <attr name="animation_duration" format="integer" />
         <attr name="bump_vibration" format="integer" />
         <attr name="slider_locked" format="boolean" />
         <attr name="slider_reversed" format="boolean" />
         <attr name="slider_icon" format="reference" />
+        <attr name="enable_tint_slider_icon" format="boolean" />
+        <attr name="enable_tint_complete_icon" format="boolean" />
         <attr name="slider_icon_color" format="color" />
         <attr name="rotate_icon" format="boolean" />
         <attr name="animate_completion" format="boolean" />
