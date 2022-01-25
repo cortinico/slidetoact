@@ -25,6 +25,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``bump_vibration``](#bump_vibration)
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
+        * [``state_complete``](#state_complete)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
 * [Building/Testing](#buildingtesting-)
@@ -286,6 +287,35 @@ In order for this feature to work, you need have the permission ```android.permi
 Use the ``android:elevation`` attribute to set the **elevation** of the widget. The widgets will take care of providing the proper ``ViewOutlineProvider`` during the whole animation (a.k.a. The shadow will be drawn properly).
 
 <p align="center"><img src="assets/elevation_1.png" alt="elevation_1" width="40%"/> <img src="assets/elevation_2.png" alt="elevation_2" width="40%"/></p>
+
+#### ``state_complete``
+
+Use ``state_complete`` attribute to create ``SlideToActView`` in complete state.
+
+```xml
+app:state_complete="true"
+```
+
+Can be also set programmatically. 
+
+With full slide animation:
+
+```java
+SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
+sta.setCompleted(completed: true, withAnimation: true);
+```
+
+Without slide animation:
+
+```java
+SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
+sta.setCompleted(completed: true, withAnimation: false);
+```
+
+<p align="center">
+    <img src="assets/complete.png" alt="complete" width="40%"/>
+</p>
+
 
 ### Event callbacks
 

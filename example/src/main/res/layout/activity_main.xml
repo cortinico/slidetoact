@@ -112,5 +112,11 @@
             android:layout_height="wrap_content"
             android:text="@string/bump_vibration" />
 
+        <Button
+            android:id="@+id/button_completed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/completed" />
+
     </LinearLayout>
 </ScrollView>

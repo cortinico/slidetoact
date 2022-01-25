@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_reversed_slider).setOnClickListener(this);
         findViewById(R.id.button_animation_duration).setOnClickListener(this);
         findViewById(R.id.button_bump_vibration).setOnClickListener(this);
+        findViewById(R.id.button_completed).setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.reset) {
-            ((SlideToActView) findViewById(R.id.welcome_slider)).resetSlider();
+            ((SlideToActView) findViewById(R.id.welcome_slider)).setCompleted(false, true);
         }
         return super.onOptionsItemSelected(item);
     }
