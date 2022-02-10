@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="fullData"
+            type="com.ncorti.slidetoact.example.SampleActivity.SliderData" />
+
+        <variable
+            name="play"
+            type="boolean" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/slide_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+            <com.ncorti.slidetoact.SlideToActView
+                android:id="@+id/slide_bound"
+                style="@style/SlideToActView.Example"
+                app:complete_icon="@{fullData.completeIcon}"
+                app:slider_icon="@{fullData.sliderIcon}"
+                app:text="@{fullData.text}" />
+
+            <com.ncorti.slidetoact.SlideToActView
+                android:id="@+id/slide_bound1"
+                style="@style/SlideToActView.Example"
+                app:complete_icon="@{play == true ? @drawable/ic_pause : @drawable/ic_play}"
+                app:slider_icon="@{play == true ? @drawable/ic_play : @drawable/ic_pause}"
+                app:text="Slide to play" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

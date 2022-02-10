@@ -4,6 +4,7 @@ plugins {
     id("signing")
     id("org.jlleitschuh.gradle.ktlint")
     kotlin("android")
+    kotlin("kapt")
 }
 
 version = "0.10.0".plus(if (hasProperty("USE_SNAPSHOT")) "-SNAPSHOT" else "")
@@ -20,6 +21,9 @@ android {
     }
     lint {
         abortOnError = true
+    }
+    buildFeatures {
+        dataBinding = true
     }
 
     publishing {
