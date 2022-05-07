@@ -317,7 +317,6 @@ class SlideToActView @JvmOverloads constructor(
                 R.color.slidetoact_white
             )
 
-
             with(attrs) {
                 mDesiredSliderHeight = getDimensionPixelSize(
                     R.styleable.SlideToActView_slider_height,
