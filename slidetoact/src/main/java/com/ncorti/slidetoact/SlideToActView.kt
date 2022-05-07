@@ -317,6 +317,7 @@ class SlideToActView @JvmOverloads constructor(
                 R.color.slidetoact_white
             )
 
+
             with(attrs) {
                 mDesiredSliderHeight = getDimensionPixelSize(
                     R.styleable.SlideToActView_slider_height,
@@ -434,6 +435,10 @@ class SlideToActView @JvmOverloads constructor(
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val width: Int
 
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val height: Int
+
         width = when (widthMode) {
             MeasureSpec.EXACTLY -> widthSize
             MeasureSpec.AT_MOST -> Math.min(mDesiredSliderWidth, widthSize)
@@ -441,15 +446,23 @@ class SlideToActView @JvmOverloads constructor(
             else -> mDesiredSliderWidth
         }
         setMeasuredDimension(width, mDesiredSliderHeight)
+
+        height = when (heightMode) {
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> Math.min(mDesiredSliderHeight, heightSize)
+            MeasureSpec.UNSPECIFIED -> mDesiredSliderHeight
+            else -> mDesiredSliderHeight
+        }
+        setMeasuredDimension(width, height)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         mAreaWidth = w
         mAreaHeight = h
-        if (mBorderRadius == -1) {
+//        if (mBorderRadius == -1) {
             // Round if not set up
             mBorderRadius = h / 2
-        }
+//        }
 
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
