@@ -458,10 +458,7 @@ class SlideToActView @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         mAreaWidth = w
         mAreaHeight = h
-//        if (mBorderRadius == -1) {
-            // Round if not set up
-            mBorderRadius = h / 2
-//        }
+        mBorderRadius = h / 2
 
         // Text horizontal/vertical positioning (both centered)
         mTextXPosition = mAreaWidth.toFloat() / 2
