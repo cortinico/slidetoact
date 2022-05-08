@@ -444,7 +444,6 @@ class SlideToActView @JvmOverloads constructor(
             MeasureSpec.UNSPECIFIED -> mDesiredSliderWidth
             else -> mDesiredSliderWidth
         }
-        setMeasuredDimension(width, mDesiredSliderHeight)
 
         height = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
@@ -452,6 +451,7 @@ class SlideToActView @JvmOverloads constructor(
             MeasureSpec.UNSPECIFIED -> mDesiredSliderHeight
             else -> mDesiredSliderHeight
         }
+
         setMeasuredDimension(width, height)
     }
 
