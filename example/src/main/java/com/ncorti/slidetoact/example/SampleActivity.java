@@ -1,6 +1,7 @@
 package com.ncorti.slidetoact.example;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 public class SampleActivity extends AppCompatActivity {
@@ -97,6 +99,36 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_bump_vibration:
                 setContentView(R.layout.content_bumb_vibration);
                 break;
+            case R.id.button_loadable_slider:
+                setContentView(R.layout.content_loadable_slider);
+                final SlideToActView loadableSliderReset = findViewById(R.id.slide_loadable_reset);
+                final SlideToActView loadableSliderComplete = findViewById(R.id.slide_loadable_complete);
+                SlideToActView.OnSlideLoadingStartedListener loadingListener = new SlideToActView.OnSlideLoadingStartedListener() {
+                    @Override
+                    public void onSlideLoadingStarted(final SlideToActView view) {
+                        // Set the text of the slider when it's loading
+                        view.setText(getString(R.string.loading));
+
+                        Random ran = new Random();
+                        // Simulate an indeterminate amount of time
+                        int delay = ran.nextInt(3000);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (view.isLoadable()) {
+                                    if (view.isAnimateCompletion()) {
+                                        view.completeSlider();
+                                    } else {
+                                        view.resetSlider();
+                                    }
+                                }
+                            }
+                        }, delay);
+                    }
+                };
+                loadableSliderReset.setOnSlideLoadingStartedListener(loadingListener);
+                loadableSliderComplete.setOnSlideLoadingStartedListener(loadingListener);
+                break;
             default:
                 finish();
                 break;
@@ -140,6 +172,28 @@ public class SampleActivity extends AppCompatActivity {
     private void setupEventCallbacks() {
         final SlideToActView slide = findViewById(R.id.event_slider);
         final TextView log = findViewById(R.id.event_log);
+        slide.setOnSlideLoadingStartedListener(new SlideToActView.OnSlideLoadingStartedListener() {
+            @Override
+            public void onSlideLoadingStarted(@NonNull final SlideToActView view) {
+                log.append("\n" + getTime() + " onSlideLoadingStartedListener");
+                Random ran = new Random();
+                // Simulate an indeterminate amount of time
+                final int delay = ran.nextInt(3000);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        log.append("\n" + getTime() + " simulated loading for " + delay + "ms");
+                        if (view.isLoadable()) {
+                            if (view.isAnimateCompletion()) {
+                                view.completeSlider();
+                            } else {
+                                view.resetSlider();
+                            }
+                        }
+                    }
+                }, delay);
+            }
+        });
         slide.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
             public void onSlideComplete(@NonNull SlideToActView view) {

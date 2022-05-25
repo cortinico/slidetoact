@@ -75,6 +75,9 @@ class SlideToActView @JvmOverloads constructor(
     /** Margin of the cursor from the outer area */
     private var mActualAreaMargin: Int
     private val mOriginAreaMargin: Int
+    private var mForceShowText: Boolean = false
+
+    var originalText: CharSequence = ""
 
     /** Text message */
     var text: CharSequence = ""
@@ -82,6 +85,7 @@ class SlideToActView @JvmOverloads constructor(
             field = value
             mTextView.text = value
             mTextPaint.set(mTextView.paint)
+            mForceShowText = true
             invalidate()
         }
 
@@ -148,6 +152,9 @@ class SlideToActView @JvmOverloads constructor(
             invalidate()
         }
 
+    /** Private original Slider Icon */
+    private var originalSliderIcon: Int = R.drawable.slidetoact_ic_arrow
+
     /** Custom Slider Icon */
     @DrawableRes
     var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
@@ -161,6 +168,9 @@ class SlideToActView @JvmOverloads constructor(
                 invalidate()
             }
         }
+
+    /** Custom Loader Icon */
+    var loadingIcon: Int = R.drawable.slidetoact_ic_rotate_right
 
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
     private var mPosition: Int = 0
@@ -255,6 +265,9 @@ class SlideToActView @JvmOverloads constructor(
     /** Private flag to check if the slide gesture have been completed */
     private var mIsCompleted = false
 
+    /** Public flag to set whether the slider is loadable or not */
+    var isLoadable = false
+
     /** Public flag to lock the slider */
     var isLocked = false
 
@@ -276,6 +289,7 @@ class SlideToActView @JvmOverloads constructor(
     /** Public Slide event listeners */
     var onSlideToActAnimationEventListener: OnSlideToActAnimationEventListener? = null
     var onSlideCompleteListener: OnSlideCompleteListener? = null
+    var onSlideLoadingStartedListener: OnSlideLoadingStartedListener? = null
     var onSlideResetListener: OnSlideResetListener? = null
     var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
@@ -338,6 +352,7 @@ class SlideToActView @JvmOverloads constructor(
                 }
 
                 text = getString(R.styleable.SlideToActView_text) ?: ""
+                originalText = text
                 typeFace = getInt(R.styleable.SlideToActView_text_style, 0)
                 mTextSize = getDimensionPixelSize(
                     R.styleable.SlideToActView_text_size,
@@ -348,6 +363,7 @@ class SlideToActView @JvmOverloads constructor(
                 // TextAppearance is the last as will have precedence over everything text related.
                 textAppearance = getResourceId(R.styleable.SlideToActView_text_appearance, 0)
 
+                isLoadable = getBoolean(R.styleable.SlideToActView_slider_loadable, false)
                 isLocked = getBoolean(R.styleable.SlideToActView_slider_locked, false)
                 isReversed = getBoolean(R.styleable.SlideToActView_slider_reversed, false)
                 isRotateIcon = getBoolean(R.styleable.SlideToActView_rotate_icon, true)
@@ -375,6 +391,12 @@ class SlideToActView @JvmOverloads constructor(
                     R.drawable.slidetoact_ic_arrow
                 )
 
+                originalSliderIcon = sliderIcon
+
+                loadingIcon = getResourceId(
+                    R.styleable.SlideToActView_loading_icon, R.drawable.slidetoact_ic_rotate_right
+                )
+
                 // For icon color. check if the `slide_icon_color` is set.
                 // if not check if the `outer_color` is set.
                 // if not, default to defaultOuter.
@@ -396,6 +418,8 @@ class SlideToActView @JvmOverloads constructor(
 
                 mArrowMargin = mIconMargin
                 mTickMargin = mIconMargin
+
+                mForceShowText = false
             }
         } finally {
             attrs.recycle()
@@ -479,7 +503,7 @@ class SlideToActView @JvmOverloads constructor(
         )
 
         // Text alpha
-        mTextPaint.alpha = (255 * mPositionPercInv).toInt()
+        mTextPaint.alpha = if (mForceShowText) 255 else (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
         canvas.drawText(
@@ -582,7 +606,11 @@ class SlideToActView @JvmOverloads constructor(
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
                         isEnabled = false // Fully disable touch events
-                        startAnimationComplete()
+                        if (isLoadable) {
+                            startLoading()
+                        } else {
+                            startAnimationComplete()
+                        }
                     } else if (mFlagMoving && mPosition == 0) {
                         // mFlagMoving == true means user successfully grabbed the slider,
                         // but mPosition == 0 means that the slider is released at the beginning
@@ -654,6 +682,7 @@ class SlideToActView @JvmOverloads constructor(
      * Private method that is performed when user completes the slide
      */
     private fun startAnimationComplete() {
+        mForceShowText = false
         val animSet = AnimatorSet()
 
         // Animator that moves the cursor
@@ -736,6 +765,42 @@ class SlideToActView @JvmOverloads constructor(
     }
 
     /**
+     * Private method that is performed when the slider is loading
+     */
+    private fun startLoading() {
+        val animSet = AnimatorSet()
+
+        if (mPosition < mAreaWidth - mAreaHeight) {
+            // Animator that moves the cursor
+            val finalPositionAnimator = ValueAnimator.ofInt(mPosition, mAreaWidth - mAreaHeight)
+            finalPositionAnimator.addUpdateListener {
+                mPosition = it.animatedValue as Int
+                invalidate()
+            }
+            animSet.play(finalPositionAnimator)
+        }
+        animSet.duration = animDuration
+
+        animSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator?) {
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                sliderIcon = loadingIcon
+                mIsCompleted = !isAnimateCompletion
+                onSlideLoadingStartedListener?.onSlideLoadingStarted(this@SlideToActView)
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+        })
+        animSet.start()
+    }
+
+    /**
      * Method that completes the slider
      */
     fun completeSlider() {
@@ -790,6 +855,11 @@ class SlideToActView @JvmOverloads constructor(
         val positionAnimator = ValueAnimator.ofInt(mPosition, 0)
         positionAnimator.addUpdateListener {
             mPosition = it.animatedValue as Int
+            // When resetting the slider, we need to reset the icon before the handle resets
+            // Changing the icon here is a timing optimisation
+            sliderIcon = originalSliderIcon
+            text = originalText
+            mForceShowText = false
             invalidate()
         }
 
@@ -933,6 +1003,18 @@ class SlideToActView @JvmOverloads constructor(
          * @param view The SlideToActView who created the event
          */
         fun onSlideComplete(view: SlideToActView)
+    }
+
+    /**
+     * Event handler for the slide loading started event.
+     * Use this handler to react to slide event
+     */
+    interface OnSlideLoadingStartedListener {
+        /**
+         * Called when user performed the slide on a loadable slider
+         * @param view The SlideToActView who created the event
+         */
+        fun onSlideLoadingStarted(view: SlideToActView)
     }
 
     /**
