@@ -17,6 +17,10 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -38,6 +42,7 @@ import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
 import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
 import com.ncorti.slidetoact.SlideToActIconUtil.stopIconAnimation
 import com.ncorti.slidetoact.SlideToActIconUtil.tintIconCompat
+import kotlin.math.max
 
 /**
  *  Class representing the custom view, SlideToActView.
@@ -235,7 +240,7 @@ class SlideToActView @JvmOverloads constructor(
     private val mInnerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     /** Paint used for text elements */
-    private var mTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mTextPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 
     /** TextView used for text elements */
     private var mTextView: TextView
@@ -482,14 +487,47 @@ class SlideToActView @JvmOverloads constructor(
         mTextPaint.alpha = (255 * mPositionPercInv).toInt()
         // Checking if the TextView has a Transformation method applied (e.g. AllCaps).
         val textToDraw = mTextView.transformationMethod?.getTransformation(text, mTextView) ?: text
-        canvas.drawText(
-            textToDraw,
-            0,
-            textToDraw.length,
-            mTextXPosition,
-            mTextYPosition,
-            mTextPaint
-        )
+        val leftOffset =
+            (mAreaHeight - 2 * mActualAreaMargin).toFloat() / mAreaHeight.toFloat() *
+                mBorderRadius.toFloat() * 2
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val maxWidth = mAreaWidth - (2 * mActualAreaWidth) - leftOffset
+            val textLayout = StaticLayout.Builder
+                .obtain(textToDraw, 0, textToDraw.length, mTextPaint, maxWidth.toInt())
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setEllipsize(TextUtils.TruncateAt.END)
+                .setEllipsizedWidth(maxWidth.toInt() - mTextPaint.textSize.toInt())
+                .setMaxLines(
+                    max(
+                        1f,
+                        mAreaHeight / (mTextPaint.descent() - mTextPaint.ascent())
+                    ).toInt()
+                )
+                .build()
+            canvas.save()
+
+            val dY = (height / 2) - (textLayout.height / 2)
+            val dX = (width / 2) - (textLayout.width / 2)
+
+            val mTextLeft = mActualAreaWidth + leftOffset + dX
+            val mTextTop = 0 + dY
+            val mTextRight = mAreaWidth - mActualAreaWidth - dX
+
+            canvas.translate(mTextLeft.toFloat(), mTextTop.toFloat())
+            canvas.translate(((mTextRight - mTextLeft) / 2).toFloat(), 0f)
+            textLayout.draw(canvas)
+
+            canvas.restore()
+        } else {
+            canvas.drawText(
+                textToDraw,
+                0,
+                textToDraw.length,
+                mTextXPosition,
+                mTextYPosition,
+                mTextPaint
+            )
+        }
 
         // Inner Cursor
         // ratio is used to compute the proper border radius for the inner rect (see #8).
