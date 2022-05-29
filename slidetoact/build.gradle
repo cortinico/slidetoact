@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
 version = "0.9.0"
@@ -37,32 +37,36 @@ def siteUrl = 'https://github.com/cortinico/slidetoact'
 def gitUrl = 'https://github.com/cortinico/slidetoact.git'
 group = "com.ncorti"
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                group 'com.ncorti'
-                name 'slidetoact'
-                description = 'A simple \'Slide to Unlock\' Material widget for Android, written in Kotlin'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'MIT License'
-                        url 'https://opensource.org/licenses/MIT'
+
+
+afterEvaluate {
+    publishing {
+        publications {
+            create("release", MavenPublication) {
+                from(components["release"])
+                artifact(sourcesJar)
+
+                pom {
+                    description = 'A simple \'Slide to Unlock\' Material widget for Android, written in Kotlin'
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        id 'cortinico'
-                        name 'Nicola Corti'
-                        email 'corti.nico@gmail.com'
+                    developers {
+                        developer {
+                            id = 'cortinico'
+                            name = 'Nicola Corti'
+                            email = 'corti.nico@gmail.com'
+                        }
                     }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
                 }
             }
         }
@@ -72,9 +76,6 @@ install {
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
-}
-artifacts {
-    archives sourcesJar
 }
 
 Properties properties = new Properties()
