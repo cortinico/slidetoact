@@ -1,6 +1,7 @@
 package com.ncorti.slidetoact
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
@@ -13,6 +14,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 
 internal object SlideToActIconUtil {
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     internal fun loadIconCompat(context: Context, value: Int): Drawable {
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         return if (SDK_INT >= LOLLIPOP) {
@@ -26,15 +28,9 @@ internal object SlideToActIconUtil {
     internal fun tintIconCompat(icon: Drawable, color: Int) {
         // Tinting the tick with the proper implementation method
         when {
-            SDK_INT >= LOLLIPOP -> {
-                icon.setTint(color)
-            }
-            icon is AnimatedVectorDrawableCompat -> {
-                (icon as AnimatedVectorDrawableCompat).setTint(color)
-            }
-            else -> {
-                DrawableCompat.setTint(icon, color)
-            }
+            SDK_INT >= LOLLIPOP -> icon.setTint(color)
+            icon is AnimatedVectorDrawableCompat -> icon.setTint(color)
+            else -> DrawableCompat.setTint(icon, color)
         }
     }
 
@@ -43,12 +39,8 @@ internal object SlideToActIconUtil {
      */
     private fun startIconAnimation(icon: Drawable) {
         when {
-            SDK_INT >= LOLLIPOP && icon is AnimatedVectorDrawable -> {
-                icon.start()
-            }
-            icon is AnimatedVectorDrawableCompat -> {
-                (icon as AnimatedVectorDrawableCompat).start()
-            }
+            SDK_INT >= LOLLIPOP && icon is AnimatedVectorDrawable -> icon.start()
+            icon is AnimatedVectorDrawableCompat -> icon.start()
             else -> {
                 // Do nothing as the icon can't be animated
             }
@@ -60,12 +52,8 @@ internal object SlideToActIconUtil {
      */
     internal fun stopIconAnimation(icon: Drawable) {
         when {
-            SDK_INT >= LOLLIPOP && icon is AnimatedVectorDrawable -> {
-                icon.stop()
-            }
-            icon is AnimatedVectorDrawableCompat -> {
-                (icon as AnimatedVectorDrawableCompat).stop()
-            }
+            SDK_INT >= LOLLIPOP && icon is AnimatedVectorDrawable -> icon.stop()
+            icon is AnimatedVectorDrawableCompat -> icon.stop()
             else -> {
                 // Do nothing as the icon can't be animated
             }

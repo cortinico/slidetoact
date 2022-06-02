@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -31,6 +32,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
@@ -66,12 +68,16 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Height of the drawing area */
     private var mAreaHeight: Int = 0
+
     /** Width of the drawing area */
     private var mAreaWidth: Int = 0
+
     /** Actual Width of the drawing area, used for animations */
     private var mActualAreaWidth: Int = 0
+
     /** Border Radius, default to mAreaHeight/2, -1 when not initialized */
     private var mBorderRadius: Int = -1
+
     /** Margin of the cursor from the outer area */
     private var mActualAreaMargin: Int
     private val mOriginAreaMargin: Int
@@ -197,16 +203,20 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Slider cursor position in percentage (between 0f and 1f) */
     private var mPositionPerc: Float = 0f
+
     /** 1/mPositionPerc */
     private var mPositionPercInv: Float = 1f
 
     /* -------------------- ICONS -------------------- */
 
     private val mIconMargin: Int
+
     /** Margin for Arrow Icon */
     private var mArrowMargin: Int
+
     /** Current angle for Arrow Icon */
     private var mArrowAngle: Float = 0f
+
     /** Margin for Tick Icon */
     private var mTickMargin: Int
 
@@ -242,13 +252,16 @@ class SlideToActView @JvmOverloads constructor(
 
     /** Inner rectangle (used for arrow rotation) */
     private var mInnerRect: RectF
+
     /** Outer rectangle (used for area drawing) */
     private var mOuterRect: RectF
+
     /** Grace value, when mPositionPerc > mGraceValue slider will perform the 'complete' operations */
     private val mGraceValue: Float = 0.8F
 
     /** Last X coordinate for the touch event */
     private var mLastX: Float = 0F
+
     /** Flag to understand if user is moving the slider cursor */
     private var mFlagMoving: Boolean = false
 
@@ -871,13 +884,21 @@ class SlideToActView @JvmOverloads constructor(
             return
         }
 
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = context
+                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(
                 VibrationEffect.createOneShot(bumpVibration, VibrationEffect.DEFAULT_AMPLITUDE)
             )
         } else {
+            @Suppress("DEPRECATION")
             vibrator.vibrate(bumpVibration)
         }
     }

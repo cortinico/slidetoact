@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -10,18 +10,15 @@
         <item name="slideToActViewStyle">@style/SlideToActView.Example</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="SlideToActView.Example">
-        <item name="android:elevation">6dp</item>
+        <item name="android:elevation" tools:ignore="NewApi">6dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">8dp</item>
     </style>
 
     <style name="TextAppearanceCustomFont">
-        <item name="android:fontFamily">@font/montserrat_extrabold</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">@font/montserrat_extrabold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:capitalize">characters</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
