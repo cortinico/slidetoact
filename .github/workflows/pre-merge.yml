@@ -33,7 +33,7 @@ jobs:
           path: '~/.m2/repository/'
 
       - name: Upload the built Apk
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: debug-apk
           path: example/build/outputs/apk/debug/example-debug.apk
