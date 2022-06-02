@@ -1,0 +1,39 @@
+name: Pre Merge Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  gradle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Build and Test everything
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build publishToMavenLocal
+
+      - name: Upload Library Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'snapshot-artifacts'
+          path: '~/.m2/repository/'
+
+      - name: Upload the built Apk
+      - uses: actions/upload-artifact@v3
+        with:
+          name: debug-apk
+          path: example/build/outputs/apk/debug/example-debug.apk
