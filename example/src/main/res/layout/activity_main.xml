@@ -118,5 +118,11 @@
             android:layout_height="wrap_content"
             android:text="@string/completed" />
 
+        <Button
+            android:id="@+id/button_bound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bound" />
+
     </LinearLayout>
 </ScrollView>

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_animation_duration).setOnClickListener(this);
         findViewById(R.id.button_bump_vibration).setOnClickListener(this);
         findViewById(R.id.button_completed).setOnClickListener(this);
+        findViewById(R.id.button_bound).setOnClickListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

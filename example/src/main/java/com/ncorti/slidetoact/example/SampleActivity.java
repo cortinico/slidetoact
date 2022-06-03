@@ -1,5 +1,7 @@
 package com.ncorti.slidetoact.example;
 
+import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,8 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
 
 import com.ncorti.slidetoact.SlideToActView;
+import com.ncorti.slidetoact.example.databinding.ContentBoundBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,6 +106,14 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_completed:
                 setContentView(R.layout.content_completed);
                 break;
+            case R.id.button_bound:
+                ContentBoundBinding binding = DataBindingUtil.setContentView(this, R.layout.content_bound);
+                SliderData fullData = new SliderData("Bound SlideToAct View",
+                        ContextCompat.getDrawable(this, R.drawable.ic_android),
+                        ContextCompat.getDrawable(this, R.drawable.ic_cloud));
+                binding.setFullData(fullData);
+                binding.setPlay(true);
+                break;
             default:
                 finish();
                 break;
@@ -186,5 +200,17 @@ public class SampleActivity extends AppCompatActivity {
 
     private String getTime() {
         return dateFormat.format(new Date());
+    }
+
+    public class SliderData {
+        public String text;
+        public Drawable sliderIcon;
+        public Drawable completeIcon;
+
+        public SliderData(String text, Drawable sliderIcon, Drawable completeIcon) {
+            this.text = text;
+            this.sliderIcon = sliderIcon;
+            this.completeIcon = completeIcon;
+        }
     }
 }

@@ -28,7 +28,6 @@ import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
@@ -36,6 +35,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
+import androidx.databinding.BindingAdapter
 import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
 import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
 import com.ncorti.slidetoact.SlideToActIconUtil.startIconAnimation
@@ -156,17 +156,34 @@ class SlideToActView @JvmOverloads constructor(
         }
 
     /** Custom Slider Icon */
-    @DrawableRes
-    var sliderIcon: Int = R.drawable.slidetoact_ic_arrow
+    var sliderIcon: Any = R.drawable.slidetoact_ic_arrow
         set(value) {
             field = value
-            if (field != 0) {
-                ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
-                    mDrawableArrow = it
-                    DrawableCompat.setTint(it, iconColor)
+            when (value) {
+                is Int -> {
+                    if (field != 0) {
+                        ResourcesCompat.getDrawable(context.resources, value, context.theme)?.let {
+                            mDrawableArrow = it
+                            DrawableCompat.setTint(it, iconColor)
+                        }
+                    }
                 }
-                invalidate()
+                is Drawable -> {
+                    mDrawableArrow = value
+                    DrawableCompat.setTint(value, iconColor)
+                }
+                else -> {
+                    ResourcesCompat.getDrawable(
+                        context.resources,
+                        R.drawable.slidetoact_ic_arrow,
+                        context.theme
+                    )?.let {
+                        mDrawableArrow = it
+                        DrawableCompat.setTint(it, iconColor)
+                    }
+                }
             }
+            invalidate()
         }
 
     /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
@@ -228,14 +245,21 @@ class SlideToActView @JvmOverloads constructor(
     private var mDrawableTick: Drawable
     private var mFlagDrawTick: Boolean = false
 
-    @DrawableRes
-    var completeIcon: Int = 0
+    var completeIcon: Any = 0
         set(value) {
             field = value
-            if (field != 0) {
-                mDrawableTick = loadIconCompat(context, value)
-                invalidate()
+            when (value) {
+                is Int -> {
+                    if (field != 0) {
+                        mDrawableTick = loadIconCompat(context, value)
+                    }
+                }
+                is Drawable -> {
+                    mDrawableTick = value
+                }
+                else -> loadIconCompat(context, R.drawable.slidetoact_ic_check)
             }
+            invalidate()
         }
 
     /* -------------------- PAINT & DRAW -------------------- */
@@ -1098,4 +1122,14 @@ class SlideToActView @JvmOverloads constructor(
             )
         }
     }
+}
+
+@BindingAdapter("slider_icon")
+fun loadSliderIcon(view: SlideToActView, sliderIcon: Drawable) {
+    view.sliderIcon = sliderIcon
+}
+
+@BindingAdapter("complete_icon")
+fun loadCompleteIcon(view: SlideToActView, completeIcon: Drawable) {
+    view.completeIcon = completeIcon
 }
