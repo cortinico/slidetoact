@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.ncorti.slidetoact.SlideToActView;
@@ -106,10 +108,9 @@ public class SampleActivity extends AppCompatActivity {
                 break;
             case R.id.button_bound:
                 ContentBoundBinding binding = DataBindingUtil.setContentView(this, R.layout.content_bound);
-                @SuppressLint("UseCompatLoadingForDrawables")
                 SliderData fullData = new SliderData("Bound SlideToAct View",
-                        getResources().getDrawable(R.drawable.ic_android),
-                        getResources().getDrawable(R.drawable.ic_cloud));
+                        ContextCompat.getDrawable(this, R.drawable.ic_android),
+                        ContextCompat.getDrawable(this, R.drawable.ic_cloud));
                 binding.setFullData(fullData);
                 binding.setPlay(true);
                 break;
