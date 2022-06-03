@@ -485,7 +485,7 @@ class SlideToActView @JvmOverloads constructor(
         mPosition = 0
 
         // Set state to complete if needed
-        setCompleted(mIsCompleted)
+        setCompletedNotAnimated(mIsCompleted)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -750,7 +750,6 @@ class SlideToActView @JvmOverloads constructor(
 
                 override fun onAnimationEnd(p0: Animator?) {
                     mIsCompleted = true
-                    isEnabled = false
                     onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
                         this@SlideToActView
                     )
@@ -779,7 +778,7 @@ class SlideToActView @JvmOverloads constructor(
     /**
      * Method for complete slider immediately without animation
      */
-    private fun setCompleted(state: Boolean) {
+    private fun setCompletedNotAnimated(state: Boolean) {
         if (state) {
             setCompleteState()
         } else {
@@ -828,14 +827,17 @@ class SlideToActView @JvmOverloads constructor(
         if (withAnimation) {
             setCompletedAnimated(completed)
         } else {
-            setCompleted(completed)
+            setCompletedNotAnimated(completed)
         }
     }
 
     /**
      * @deprecated Method that completes the slider
      */
-    @Deprecated("Use setCompleted(completed: true, withAnimation: false) instead.")
+    @Deprecated(
+        message = "Use setCompleted(completed: true, withAnimation: true) instead.",
+        replaceWith = ReplaceWith("setCompleted(completed: true, withAnimation: true)")
+    )
     fun completeSlider() {
         if (!mIsCompleted) {
             startAnimationComplete()
@@ -843,9 +845,12 @@ class SlideToActView @JvmOverloads constructor(
     }
 
     /**
-     * @deprecated Method that reset the slider
+     * @deprecated Method that resets the slider
      */
-    @Deprecated("Use setCompleted(completed: false, withAnimation: true) instead")
+    @Deprecated(
+        message = "Use setCompleted(completed: true, withAnimation: true) instead.",
+        replaceWith = ReplaceWith("setCompleted(completed: false, withAnimation: true)")
+    )
     fun resetSlider() {
         if (mIsCompleted) {
             startAnimationReset()
