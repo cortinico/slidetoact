@@ -97,6 +97,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_bump_vibration:
                 setContentView(R.layout.content_bumb_vibration);
                 break;
+            case R.id.button_completed:
+                setContentView(R.layout.content_completed);
+                break;
             default:
                 finish();
                 break;
@@ -126,7 +129,7 @@ public class SampleActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.reset:
                 for (SlideToActView slide : mSlideList) {
-                    slide.resetSlider();
+                    slide.setCompleted(false, true);
                 }
                 return true;
             case android.R.id.home:

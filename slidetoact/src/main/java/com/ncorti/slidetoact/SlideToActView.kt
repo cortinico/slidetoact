@@ -38,6 +38,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
 import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
 import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
+import com.ncorti.slidetoact.SlideToActIconUtil.startIconAnimation
 import com.ncorti.slidetoact.SlideToActIconUtil.stopIconAnimation
 import com.ncorti.slidetoact.SlideToActIconUtil.tintIconCompat
 
@@ -409,6 +410,8 @@ class SlideToActView @JvmOverloads constructor(
 
                 mArrowMargin = mIconMargin
                 mTickMargin = mIconMargin
+
+                mIsCompleted = getBoolean(R.styleable.SlideToActView_state_complete, false)
             }
         } finally {
             attrs.recycle()
@@ -480,6 +483,9 @@ class SlideToActView @JvmOverloads constructor(
 
         // Make sure the position is recomputed.
         mPosition = 0
+
+        // Set state to complete if needed
+        setCompletedNotAnimated(mIsCompleted)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -757,9 +763,81 @@ class SlideToActView @JvmOverloads constructor(
         animSet.start()
     }
 
+    /** Private method to update view to base state */
+    private fun setBaseState() {
+        mPosition = 0
+        mActualAreaMargin = mOriginAreaMargin
+        mActualAreaWidth = 0
+        mArrowMargin = mIconMargin
+
+        mIsCompleted = false
+        isEnabled = true
+        mFlagDrawTick = false
+    }
+
     /**
-     * Method that completes the slider
+     * Method for complete slider immediately without animation
      */
+    private fun setCompletedNotAnimated(state: Boolean) {
+        if (state) {
+            setCompleteState()
+        } else {
+            setBaseState()
+        }
+    }
+
+    /** Private method to update view to complete state */
+    private fun setCompleteState() {
+        mPosition = mAreaWidth - mAreaHeight
+        mActualAreaMargin = mAreaHeight / 2
+        mActualAreaWidth = mPosition / 2
+        mIsCompleted = true
+        isEnabled = false
+
+        startIconAnimation(mDrawableTick)
+
+        mFlagDrawTick = true
+        mTickMargin = mIconMargin
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            invalidateOutline()
+        }
+    }
+
+    private fun setCompletedAnimated(state: Boolean) {
+        if (state) {
+            if (!mIsCompleted) {
+                isEnabled = false
+                startAnimationComplete()
+            }
+        } else {
+            if (mIsCompleted) {
+                startAnimationReset()
+            }
+        }
+    }
+
+    /**
+     * Method to change slider state
+     * @param completed - True for the completed state, False for the base state
+     * @param withAnimation - True for full slide animation
+     * Note: If you provide an animated source file for 'completeIcon' this animation will be run.
+     */
+    fun setCompleted(completed: Boolean, withAnimation: Boolean) {
+        if (withAnimation) {
+            setCompletedAnimated(completed)
+        } else {
+            setCompletedNotAnimated(completed)
+        }
+    }
+
+    /**
+     * @deprecated Method that completes the slider
+     */
+    @Deprecated(
+        message = "Use setCompleted(completed: true, withAnimation: true) instead.",
+        replaceWith = ReplaceWith("setCompleted(completed: true, withAnimation: true)")
+    )
     fun completeSlider() {
         if (!mIsCompleted) {
             startAnimationComplete()
@@ -767,8 +845,12 @@ class SlideToActView @JvmOverloads constructor(
     }
 
     /**
-     * Method that reset the slider
+     * @deprecated Method that resets the slider
      */
+    @Deprecated(
+        message = "Use setCompleted(completed: true, withAnimation: true) instead.",
+        replaceWith = ReplaceWith("setCompleted(completed: false, withAnimation: true)")
+    )
     fun resetSlider() {
         if (mIsCompleted) {
             startAnimationReset()

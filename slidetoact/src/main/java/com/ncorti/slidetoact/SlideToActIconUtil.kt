@@ -37,7 +37,7 @@ internal object SlideToActIconUtil {
     /**
      * Internal method to start the Icon AVD animation, with the proper library based on API level.
      */
-    private fun startIconAnimation(icon: Drawable) {
+    internal fun startIconAnimation(icon: Drawable) {
         when {
             SDK_INT >= LOLLIPOP && icon is AnimatedVectorDrawable -> icon.start()
             icon is AnimatedVectorDrawableCompat -> icon.start()
