@@ -1,6 +1,6 @@
 # Slide To Act
 
-[![CircleCI](https://circleci.com/gh/cortinico/slidetoact/tree/master.svg?style=shield)](https://circleci.com/gh/cortinico/slidetoact/tree/master)  [ ![Download](https://api.bintray.com/packages/cortinico/maven/slidetoact/images/download.svg) ](https://bintray.com/cortinico/maven/slidetoact/_latestVersion) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-%23336-blue.svg)](http://androidweekly.net/issues/issue-336) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/Twitter-@cortinico-blue.svg?style=flat)](http://twitter.com/cortinico) [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[![CircleCI](https://circleci.com/gh/cortinico/slidetoact/tree/master.svg?style=shield)](https://circleci.com/gh/cortinico/slidetoact/tree/master)  [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.ncorti/slidetoact/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.ncorti/slidetoact) [![Android Weekly](https://img.shields.io/badge/Android%20Weekly-%23336-blue.svg)](http://androidweekly.net/issues/issue-336) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Twitter](https://img.shields.io/badge/Twitter-@cortinico-blue.svg?style=flat)](http://twitter.com/cortinico) [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Kotlin**](https://github.com/JetBrains/kotlin) 🇰.
 
@@ -39,7 +39,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 
 ## Getting Started 👣
 
-**Slide To Act** is distributed through [JCenter](https://bintray.com/bintray/jcenter?filterByPkgName=slidetoact). To use it you need to add the following **Gradle dependency** to your **android app gradle file** (NOT the root file):
+**Slide To Act** is distributed through [Maven Central](https://search.maven.org/artifact/com.ncorti/slidetoact). To use it you need to add the following **Gradle dependency** to your **android app gradle file** (NOT the root file):
 
 ```groovy
 dependencies {
@@ -47,7 +47,7 @@ dependencies {
 }
 ```
 
-Or you can download the .AAR artifact [directly from Bintray](https://bintray.com/cortinico/maven/download_file?file_path=com%2Fncorti%2Fslidetoact%2F0.9.0%2Fslidetoact-0.9.0.aar).
+Or you can download the .AAR artifact [directly from Maven Central](https://search.maven.org/artifact/com.ncorti/slidetoact/0.9.0/aar).
 
 ## Example 🚸
 
