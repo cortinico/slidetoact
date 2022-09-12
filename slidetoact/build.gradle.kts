@@ -56,7 +56,8 @@ publishing {
     publications {
         register<MavenPublication>("release") {
             pom {
-                setDescription(
+                name.set("slidetoact")
+                description.set(
                     "A simple Slide to Unlock Material widget for Android, written in Kotlin"
                 )
                 url.set("https://github.com/cortinico/slidetoact")
