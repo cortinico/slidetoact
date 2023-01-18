@@ -848,7 +848,7 @@ class SlideToActView @JvmOverloads constructor(
      * @deprecated Method that resets the slider
      */
     @Deprecated(
-        message = "Use setCompleted(completed: true, withAnimation: true) instead.",
+        message = "Use setCompleted(completed: false, withAnimation: true) instead.",
         replaceWith = ReplaceWith("setCompleted(completed: false, withAnimation: true)")
     )
     fun resetSlider() {
