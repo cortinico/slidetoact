@@ -10,12 +10,12 @@ version = "0.10.0".plus(if (hasProperty("USE_SNAPSHOT")) "-SNAPSHOT" else "")
 group = "com.ncorti"
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     namespace = "com.ncorti.slidetoact"
 
     defaultConfig {
         minSdk = 14
-        targetSdk = 32
+        targetSdk = 33
         vectorDrawables.useSupportLibrary = true
     }
     lint {

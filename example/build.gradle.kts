@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         applicationId = "com.ncorti.slidetoact.example"
         minSdk = 14
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -15,6 +15,7 @@ android {
     lint {
         abortOnError = true
     }
+    namespace = "com.ncorti.slidetoact.example"
 }
 
 dependencies {
