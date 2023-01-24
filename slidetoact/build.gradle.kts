@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.appcompat:appcompat:1.6.0")
 }
 
 publishing {
