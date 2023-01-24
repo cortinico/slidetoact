@@ -738,17 +738,17 @@ class SlideToActView @JvmOverloads constructor(
 
         animSet.addListener(
             object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
+                override fun onAnimationStart(p0: Animator) {
                     onSlideToActAnimationEventListener?.onSlideCompleteAnimationStarted(
                         this@SlideToActView,
                         mPositionPerc
                     )
                 }
 
-                override fun onAnimationCancel(p0: Animator?) {
+                override fun onAnimationCancel(p0: Animator) {
                 }
 
-                override fun onAnimationEnd(p0: Animator?) {
+                override fun onAnimationEnd(p0: Animator) {
                     mIsCompleted = true
                     onSlideToActAnimationEventListener?.onSlideCompleteAnimationEnded(
                         this@SlideToActView
@@ -756,7 +756,7 @@ class SlideToActView @JvmOverloads constructor(
                     onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
                 }
 
-                override fun onAnimationRepeat(p0: Animator?) {
+                override fun onAnimationRepeat(p0: Animator) {
                 }
             }
         )
@@ -930,16 +930,16 @@ class SlideToActView @JvmOverloads constructor(
 
         animSet.addListener(
             object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
+                override fun onAnimationStart(p0: Animator) {
                     onSlideToActAnimationEventListener?.onSlideResetAnimationStarted(
                         this@SlideToActView
                     )
                 }
 
-                override fun onAnimationCancel(p0: Animator?) {
+                override fun onAnimationCancel(p0: Animator) {
                 }
 
-                override fun onAnimationEnd(p0: Animator?) {
+                override fun onAnimationEnd(p0: Animator) {
                     isEnabled = true
                     stopIconAnimation(mDrawableTick)
                     onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
@@ -948,7 +948,7 @@ class SlideToActView @JvmOverloads constructor(
                     onSlideResetListener?.onSlideReset(this@SlideToActView)
                 }
 
-                override fun onAnimationRepeat(p0: Animator?) {
+                override fun onAnimationRepeat(p0: Animator) {
                 }
             }
         )
