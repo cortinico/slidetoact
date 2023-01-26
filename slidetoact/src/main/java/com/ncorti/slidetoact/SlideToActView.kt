@@ -32,7 +32,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.widget.TextViewCompat
@@ -293,6 +292,15 @@ class SlideToActView @JvmOverloads constructor(
     var onSlideResetListener: OnSlideResetListener? = null
     var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
+    private var bounceAnimator: ValueAnimator? = null
+    /** Public flag to enable bounce animation */
+    private var mStartBounceAnimation: Boolean = false
+    /** Public flag to set bounce animation duration */
+    private var mBounceAnimationDuration: Long = 0
+    /** Public flag to set bounce animation repeat time, default value infinity */
+    private var mBounceAnimationRepeat: Int = 0
+
+
     init {
         val actualOuterColor: Int
         val actualInnerColor: Int
@@ -412,6 +420,10 @@ class SlideToActView @JvmOverloads constructor(
                 mTickMargin = mIconMargin
 
                 mIsCompleted = getBoolean(R.styleable.SlideToActView_state_complete, false)
+
+                mStartBounceAnimation = getBoolean(R.styleable.SlideToActView_bounce_on_start, false)
+                mBounceAnimationDuration = getInteger(R.styleable.SlideToActView_bounce_duration, 2000).toLong()
+                mBounceAnimationRepeat = getInteger(R.styleable.SlideToActView_bounce_repeat, ValueAnimator.INFINITE)
             }
         } finally {
             attrs.recycle()
@@ -442,6 +454,9 @@ class SlideToActView @JvmOverloads constructor(
         // This outline provider force removal of shadow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             outlineProvider = SlideToActOutlineProvider()
+        }
+        if (mStartBounceAnimation) {
+            startBounceAnimation(mBounceAnimationDuration, mBounceAnimationRepeat)
         }
     }
 
@@ -582,6 +597,9 @@ class SlideToActView @JvmOverloads constructor(
         if (event != null && event.action == MotionEvent.ACTION_DOWN) {
             // Calling performClick on every ACTION_DOWN so OnClickListener is triggered properly.
             performClick()
+        }
+        if (bounceAnimator?.isRunning == true) {
+            bounceAnimator!!.end()
         }
         if (event != null && isEnabled) {
             when (event.action) {
@@ -863,6 +881,25 @@ class SlideToActView @JvmOverloads constructor(
      */
     fun isCompleted(): Boolean {
         return this.mIsCompleted
+    }
+
+    /**
+     * Bounce animation on the slider on start
+     */
+    private fun startBounceAnimation(duration: Long, repeatCount: Int) {
+        bounceAnimator = ValueAnimator.ofInt(
+            0, 50, 0, 20, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ).also { it ->
+            it.addUpdateListener {
+                mPosition = it.animatedValue as Int
+                invalidate()
+            }
+            it.duration = duration
+            it.repeatCount = repeatCount
+            it.repeatMode = ValueAnimator.RESTART
+            it.startDelay = 1000
+            it.start()
+        }
     }
 
     /**
