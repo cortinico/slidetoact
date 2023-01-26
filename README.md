@@ -26,6 +26,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
         * [``state_complete``](#state_complete)
+        * [``bounce_on_start``](#bounce_on_start)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
 * [Building/Testing](#buildingtesting-)
