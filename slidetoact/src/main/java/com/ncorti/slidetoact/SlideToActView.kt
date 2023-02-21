@@ -293,13 +293,15 @@ class SlideToActView @JvmOverloads constructor(
     var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
     private var bounceAnimator: ValueAnimator? = null
+
     /** Public flag to enable bounce animation */
     private var mStartBounceAnimation: Boolean = false
+
     /** Public flag to set bounce animation duration */
     private var mBounceAnimationDuration: Long = 0
+
     /** Public flag to set bounce animation repeat time, default value infinity */
     private var mBounceAnimationRepeat: Int = 0
-
 
     init {
         val actualOuterColor: Int
@@ -421,9 +423,18 @@ class SlideToActView @JvmOverloads constructor(
 
                 mIsCompleted = getBoolean(R.styleable.SlideToActView_state_complete, false)
 
-                mStartBounceAnimation = getBoolean(R.styleable.SlideToActView_bounce_on_start, false)
-                mBounceAnimationDuration = getInteger(R.styleable.SlideToActView_bounce_duration, 2000).toLong()
-                mBounceAnimationRepeat = getInteger(R.styleable.SlideToActView_bounce_repeat, ValueAnimator.INFINITE)
+                mStartBounceAnimation = getBoolean(
+                    R.styleable.SlideToActView_bounce_on_start,
+                    false
+                )
+                mBounceAnimationDuration = getInteger(
+                    R.styleable.SlideToActView_bounce_duration,
+                    2000
+                ).toLong()
+                mBounceAnimationRepeat = getInteger(
+                    R.styleable.SlideToActView_bounce_repeat,
+                    ValueAnimator.INFINITE
+                )
             }
         } finally {
             attrs.recycle()
