@@ -100,6 +100,9 @@ public class SampleActivity extends AppCompatActivity {
             case R.id.button_completed:
                 setContentView(R.layout.content_completed);
                 break;
+            case R.id.button_bounce:
+                setContentView(R.layout.content_bounce_animation);
+                break;
             default:
                 finish();
                 break;

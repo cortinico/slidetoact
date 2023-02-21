@@ -26,6 +26,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``rotate_icon``](#rotate_icon)
         * [``android:elevation``](#androidelevation)
         * [``state_complete``](#state_complete)
+        * [``bounce_on_start``](#bounce_on_start)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
 * [Building/Testing](#buildingtesting-)
@@ -99,7 +100,8 @@ By the default, every ``SlideToActView`` widget fits to your app using the ``col
     app:text="Testing all the custom attributes"
     app:text_size="12sp"
     app:slider_height="80dp"
-    app:slider_locked="false" />
+    app:slider_locked="false"
+    app:bounce_on_start="true" />
 ```
 
 #### ``area_margin``
@@ -314,6 +316,16 @@ sta.setCompleted(completed: true, withAnimation: false);
 
 <p align="center">
     <img src="assets/complete.png" alt="complete" width="40%"/>
+</p>
+
+#### ``bounce_on_start``
+
+You can enable a bounce animation for the slider when the view is first rendered by setting the ``bounce_on_start`` attribute to true (default is false)
+Also you can set the duration of the bounce animation by setting the ``bounce_duration`` attribute (default is 2000)
+and repeat count by setting the ``bounce_repeat_count`` attribute (default is INFINITE)
+
+<p align="center">
+  <img src="assets/bounce_on_start.gif" alt="bounce on start gif"/>
 </p>
 
 

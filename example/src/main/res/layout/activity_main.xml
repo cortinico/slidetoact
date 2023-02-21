@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:elevation="6dp"
+            app:bounce_on_start="true"
             app:text="Sample SlideToActView" />
 
         <TextView
@@ -117,6 +118,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/completed" />
+
+        <Button
+            android:id="@+id/button_bounce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bounce_on_start" />
 
     </LinearLayout>
 </ScrollView>
