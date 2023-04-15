@@ -19,8 +19,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Publish to Maven Local
         run: ./gradlew publishToMavenLocal
