@@ -29,7 +29,6 @@ internal object SlideToActIconUtil {
         // Tinting the tick with the proper implementation method
         when {
             SDK_INT >= LOLLIPOP -> icon.setTint(color)
-            icon is AnimatedVectorDrawableCompat -> icon.setTint(color)
             else -> DrawableCompat.setTint(icon, color)
         }
     }
