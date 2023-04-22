@@ -268,6 +268,9 @@ class SlideToActView @JvmOverloads constructor(
     /** Private flag to check if the slide gesture have been completed */
     private var mIsCompleted = false
 
+    /** Private flag to check if the touch events should be handled or not */
+    private var mIsRespondingToTouchEvents = true
+
     /** Public flag to lock the slider */
     var isLocked = false
 
@@ -612,7 +615,7 @@ class SlideToActView @JvmOverloads constructor(
             performClick()
         }
         stopBounceAnimation()
-        if (event != null && isEnabled) {
+        if (event != null && isEnabled && mIsRespondingToTouchEvents) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (checkInsideButton(event.x, event.y)) {
@@ -638,7 +641,6 @@ class SlideToActView @JvmOverloads constructor(
                         }
                         positionAnimator.start()
                     } else if (mPosition > 0 && mPositionPerc >= mGraceValue) {
-                        isEnabled = false // Fully disable touch events
                         startAnimationComplete()
                     } else if (mFlagMoving && mPosition == 0) {
                         // mFlagMoving == true means user successfully grabbed the slider,
@@ -789,6 +791,7 @@ class SlideToActView @JvmOverloads constructor(
                 }
             }
         )
+        mIsRespondingToTouchEvents = false
         animSet.start()
     }
 
@@ -800,7 +803,7 @@ class SlideToActView @JvmOverloads constructor(
         mArrowMargin = mIconMargin
 
         mIsCompleted = false
-        isEnabled = true
+        mIsRespondingToTouchEvents = true
         mFlagDrawTick = false
     }
 
@@ -821,7 +824,6 @@ class SlideToActView @JvmOverloads constructor(
         mActualAreaMargin = mAreaHeight / 2
         mActualAreaWidth = mPosition / 2
         mIsCompleted = true
-        isEnabled = false
 
         startIconAnimation(mDrawableTick)
 
@@ -836,7 +838,6 @@ class SlideToActView @JvmOverloads constructor(
     private fun setCompletedAnimated(state: Boolean) {
         if (state) {
             if (!mIsCompleted) {
-                isEnabled = false
                 startAnimationComplete()
             }
         } else {
@@ -995,7 +996,7 @@ class SlideToActView @JvmOverloads constructor(
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
-                    isEnabled = true
+                    mIsRespondingToTouchEvents = true
                     stopIconAnimation(mDrawableTick)
                     onSlideToActAnimationEventListener?.onSlideResetAnimationEnded(
                         this@SlideToActView
