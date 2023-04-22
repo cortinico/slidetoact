@@ -292,7 +292,9 @@ class SlideToActView @JvmOverloads constructor(
     var onSlideResetListener: OnSlideResetListener? = null
     var onSlideUserFailedListener: OnSlideUserFailedListener? = null
 
-    private var bounceAnimator: ValueAnimator? = null
+    private var bounceAnimator: ValueAnimator = ValueAnimator.ofInt(
+        0, 50, 0, 20, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    )
 
     /** Public flag to enable bounce animation */
     private var mStartBounceAnimation: Boolean = false
@@ -609,9 +611,7 @@ class SlideToActView @JvmOverloads constructor(
             // Calling performClick on every ACTION_DOWN so OnClickListener is triggered properly.
             performClick()
         }
-        if (bounceAnimator?.isRunning == true) {
-            bounceAnimator!!.end()
-        }
+        stopBounceAnimation()
         if (event != null && isEnabled) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -853,6 +853,7 @@ class SlideToActView @JvmOverloads constructor(
      * Note: If you provide an animated source file for 'completeIcon' this animation will be run.
      */
     fun setCompleted(completed: Boolean, withAnimation: Boolean) {
+        stopBounceAnimation()
         if (withAnimation) {
             setCompletedAnimated(completed)
         } else {
@@ -868,6 +869,7 @@ class SlideToActView @JvmOverloads constructor(
         replaceWith = ReplaceWith("setCompleted(completed: true, withAnimation: true)")
     )
     fun completeSlider() {
+        stopBounceAnimation()
         if (!mIsCompleted) {
             startAnimationComplete()
         }
@@ -881,6 +883,7 @@ class SlideToActView @JvmOverloads constructor(
         replaceWith = ReplaceWith("setCompleted(completed: false, withAnimation: true)")
     )
     fun resetSlider() {
+        stopBounceAnimation()
         if (mIsCompleted) {
             startAnimationReset()
         }
@@ -898,18 +901,22 @@ class SlideToActView @JvmOverloads constructor(
      * Bounce animation on the slider on start
      */
     private fun startBounceAnimation(duration: Long, repeatCount: Int) {
-        bounceAnimator = ValueAnimator.ofInt(
-            0, 50, 0, 20, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        ).also { it ->
-            it.addUpdateListener {
+        bounceAnimator.apply {
+            addUpdateListener {
                 mPosition = it.animatedValue as Int
                 invalidate()
             }
-            it.duration = duration
-            it.repeatCount = repeatCount
-            it.repeatMode = ValueAnimator.RESTART
-            it.startDelay = 1000
-            it.start()
+            setDuration(duration)
+            setRepeatCount(repeatCount)
+            repeatMode = ValueAnimator.RESTART
+            startDelay = 1000
+            start()
+        }
+    }
+
+    private fun stopBounceAnimation() {
+        if (bounceAnimator.isRunning) {
+            bounceAnimator.end()
         }
     }
 
