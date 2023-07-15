@@ -1,5 +1,3 @@
-
-
 plugins {
     id("com.android.library")
     id("maven-publish")
@@ -8,7 +6,7 @@ plugins {
     kotlin("android")
 }
 
-version = "0.11.0".plus(if (hasProperty("USE_SNAPSHOT")) "-SNAPSHOT" else "")
+version = "0.12.0".plus(if (hasProperty("USE_SNAPSHOT")) "-SNAPSHOT" else "")
 group = "com.ncorti"
 
 android {
@@ -17,7 +15,6 @@ android {
 
     defaultConfig {
         minSdk = 14
-        targetSdk = 33
         vectorDrawables.useSupportLibrary = true
     }
     lint {
