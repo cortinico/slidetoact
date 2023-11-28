@@ -44,11 +44,11 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
 
 ```groovy
 dependencies {
-   implementation "com.ncorti:slidetoact:0.10.0"
+   implementation "com.ncorti:slidetoact:0.11.0"
 }
 ```
 
-Or you can download the .AAR artifact [directly from Maven Central](https://search.maven.org/artifact/com.ncorti/slidetoact/0.10.0/aar).
+Or you can download the .AAR artifact [directly from Maven Central](https://search.maven.org/artifact/com.ncorti/slidetoact/0.11.0/aar).
 
 ## Example 🚸
 
