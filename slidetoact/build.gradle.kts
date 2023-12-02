@@ -66,7 +66,7 @@ publishing {
             pom {
                 name.set("slidetoact")
                 description.set(
-                    "A simple Slide to Unlock Material widget for Android, written in Kotlin"
+                    "A simple Slide to Unlock Material widget for Android, written in Kotlin",
                 )
                 url.set("https://github.com/cortinico/slidetoact")
                 licenses {
