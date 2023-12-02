@@ -13,9 +13,11 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 
 internal object SlideToActIconUtil {
-
     @SuppressLint("UseCompatLoadingForDrawables")
-    internal fun loadIconCompat(context: Context, value: Int): Drawable {
+    internal fun loadIconCompat(
+        context: Context,
+        value: Int,
+    ): Drawable {
         // Due to bug in the AVD implementation in the support library, we use it only for API < 21
         return if (SDK_INT >= LOLLIPOP) {
             context.resources.getDrawable(value, context.theme)
@@ -25,7 +27,10 @@ internal object SlideToActIconUtil {
         }
     }
 
-    internal fun tintIconCompat(icon: Drawable, color: Int) {
+    internal fun tintIconCompat(
+        icon: Drawable,
+        color: Int,
+    ) {
         // Tinting the tick with the proper implementation method
         when {
             SDK_INT >= LOLLIPOP -> icon.setTint(color)
@@ -66,7 +71,7 @@ internal object SlideToActIconUtil {
     fun createIconAnimator(
         view: SlideToActView,
         icon: Drawable,
-        listener: ValueAnimator.AnimatorUpdateListener
+        listener: ValueAnimator.AnimatorUpdateListener,
     ): ValueAnimator {
         if (fallbackToFadeAnimation(icon)) {
             // Fallback not using AVD.
@@ -96,11 +101,12 @@ internal object SlideToActIconUtil {
     /**
      * Logic to decide if we should do a Fade or use the [AnimatedVectorDrawable] animation.
      */
-    private fun fallbackToFadeAnimation(icon: Drawable) = when {
-        // We don't use AVD at all for <= N.
-        SDK_INT <= N -> true
-        SDK_INT >= LOLLIPOP && icon !is AnimatedVectorDrawable -> true
-        SDK_INT < LOLLIPOP && icon !is AnimatedVectorDrawableCompat -> true
-        else -> false
-    }
+    private fun fallbackToFadeAnimation(icon: Drawable) =
+        when {
+            // We don't use AVD at all for <= N.
+            SDK_INT <= N -> true
+            SDK_INT >= LOLLIPOP && icon !is AnimatedVectorDrawable -> true
+            SDK_INT < LOLLIPOP && icon !is AnimatedVectorDrawableCompat -> true
+            else -> false
+        }
 }
