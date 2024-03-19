@@ -322,7 +322,7 @@ sta.setCompleted(completed: true, withAnimation: false);
 
 You can enable a bounce animation for the slider when the view is first rendered by setting the ``bounce_on_start`` attribute to true (default is false)
 Also you can set the duration of the bounce animation by setting the ``bounce_duration`` attribute (default is 2000)
-and repeat count by setting the ``bounce_repeat_count`` attribute (default is INFINITE)
+and repeat count by setting the ``bounce_repeat`` attribute (default is INFINITE)
 
 <p align="center">
   <img src="assets/bounce_on_start.gif" alt="bounce on start gif"/>
