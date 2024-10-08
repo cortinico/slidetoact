@@ -29,6 +29,7 @@
         <attr name="bounce_on_start" format="boolean" />
         <attr name="bounce_duration" format="integer" />
         <attr name="bounce_repeat" format="integer" />
+        <attr name="also_reverse" format="boolean" />
     </declare-styleable>
     <declare-styleable name="SlideToActViewTheme">
         <attr name="slideToActViewStyle" format="reference" />

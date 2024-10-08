@@ -83,6 +83,9 @@ class SlideToActView
         private var mActualAreaMargin: Int
         private val mOriginAreaMargin: Int
 
+
+
+
         /** Text message */
         var text: CharSequence = ""
             set(value) {
@@ -91,6 +94,7 @@ class SlideToActView
                 mTextPaint.set(mTextView.paint)
                 invalidate()
             }
+
 
         /** Typeface for the text field */
         var typeFace = Typeface.NORMAL
@@ -190,6 +194,8 @@ class SlideToActView
                 field = if (isReversed) (mAreaWidth - mAreaHeight) - value else value
             }
 
+
+
         /** Positioning of text */
         private var mTextYPosition = -1f
         private var mTextXPosition = -1f
@@ -282,6 +288,12 @@ class SlideToActView
                 field = value
                 // We reassign the position field to trigger the re-computation of the effective position.
                 mPosition = mPosition
+                invalidate()
+            }
+
+        var isReverseAlso: Boolean = false
+            set(value) {
+                field = value
                 invalidate()
             }
 
@@ -390,6 +402,7 @@ class SlideToActView
 
                     isLocked = getBoolean(R.styleable.SlideToActView_slider_locked, false)
                     isReversed = getBoolean(R.styleable.SlideToActView_slider_reversed, false)
+                    isReverseAlso = getBoolean(R.styleable.SlideToActView_also_reverse, false)
                     isRotateIcon = getBoolean(R.styleable.SlideToActView_rotate_icon, true)
                     isAnimateCompletion =
                         getBoolean(
@@ -649,6 +662,10 @@ class SlideToActView
             if (event != null && event.action == MotionEvent.ACTION_DOWN) {
                 // Calling performClick on every ACTION_DOWN so OnClickListener is triggered properly.
                 performClick()
+
+            }
+            if(isReverseAlso) {
+                animDuration = 0
             }
             stopBounceAnimation()
             if (event != null && isEnabled && mIsRespondingToTouchEvents) {
@@ -827,6 +844,11 @@ class SlideToActView
                             this@SlideToActView,
                         )
                         onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+                        if(isReverseAlso){
+
+                            isReversed = !isReversed
+                            setBaseState()
+                        }
                     }
 
                     override fun onAnimationRepeat(p0: Animator) {

@@ -3,11 +3,14 @@ package com.ncorti.slidetoact.example;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ncorti.slidetoact.SlideToActView;
 
@@ -36,6 +39,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_bump_vibration).setOnClickListener(this);
         findViewById(R.id.button_completed).setOnClickListener(this);
         findViewById(R.id.button_bounce).setOnClickListener(this);
+
+        SlideToActView slider = findViewById(R.id.welcome_slider);
+        //slider.setReverseAlso(true);
+        slider.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(@NonNull SlideToActView view) {
+                Toast.makeText(MainActivity.this, "slid",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
