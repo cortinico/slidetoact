@@ -27,6 +27,7 @@ A simple *Slide to Unlock* **Material** widget for **Android**, written in [**Ko
         * [``android:elevation``](#androidelevation)
         * [``state_complete``](#state_complete)
         * [``bounce_on_start``](#bounce_on_start)
+        * [``also_reverse``](#also_reverse)
     * [Event callbacks](#event-callbacks)
 * [Demo](#demo-)
 * [Building/Testing](#buildingtesting-)
@@ -328,6 +329,40 @@ and repeat count by setting the ``bounce_repeat`` attribute (default is INFINITE
   <img src="assets/bounce_on_start.gif" alt="bounce on start gif"/>
 </p>
 
+#### ``also_reverse``
+
+The also_reverse attribute allows the slider to be slidable in both directions. When this attribute is set to true, after the slider is fully slid in the forward direction, it can be slid back in the reverse direction. The arrow direction will reverse accordingly, and you can slide it back to the initial position. By default, this attribute is set to false.
+
+You can enable this feature by setting the also_reverse attribute to true in XML or programmatically.
+```xml
+ app:also_reverse="true"
+```
+```java
+SlideToActView sta = (SlideToActView) findViewById(R.id.slider);
+sta.setReverseAlso(true);
+```
+
+<p align="center">
+  <img src="assets/bounce_on_start.gif" alt="bounce on start gif"/>
+</p>
+onSlideCompleteListener (Kotlin)
+You can handle slide completion for both forward and backward slides using the onSlideCompleteListener. When the slider completes in either direction, you can define custom actions for both the forward and reverse slide.
+```kotlin
+slider.isReversed = false // Set to false initially
+
+slider.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener {
+    override fun onSlideComplete(view: SlideToActView) {
+        if (slider.isReversed) {
+            // Slided backward, actions when sliding back
+            // Example: slider.color = Color.RED
+        } else {
+            // Slided forward, actions when sliding forward
+            // Example: slider.color = Color.GREEN
+        }
+    }
+}
+
+```
 
 ### Event callbacks
 
