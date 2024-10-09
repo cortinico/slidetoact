@@ -41,11 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.button_bounce).setOnClickListener(this);
 
         SlideToActView slider = findViewById(R.id.welcome_slider);
+        slider.setReverseAlso(true);
         //slider.setReverseAlso(true);
         slider.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
             public void onSlideComplete(@NonNull SlideToActView view) {
-                Toast.makeText(MainActivity.this, "slid",Toast.LENGTH_SHORT).show();
+
             }
         });
     }
