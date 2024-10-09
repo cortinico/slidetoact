@@ -7,7 +7,6 @@ android {
     defaultConfig {
         applicationId = "com.ncorti.slidetoact.example"
         minSdk = 27
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
