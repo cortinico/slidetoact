@@ -345,7 +345,7 @@ sta.setReverseAlso(true);
 <p align="center">
   <img src="assets/slider_also_reverse.gif" alt="also reverse gif"/>
 </p>
-onSlideCompleteListener (Kotlin)
+
 You can handle slide completion for both forward and backward slides using the onSlideCompleteListener. When the slider completes in either direction, you can define custom actions for both the forward and reverse slide.
 
 ```kotlin
