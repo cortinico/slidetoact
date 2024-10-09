@@ -285,6 +285,12 @@ class SlideToActView
                 invalidate()
             }
 
+        var isReverseAlso: Boolean = false
+            set(value) {
+                field = value
+                invalidate()
+            }
+
         /** Public flag to lock the rotation icon */
         var isRotateIcon = true
 
@@ -390,6 +396,7 @@ class SlideToActView
 
                     isLocked = getBoolean(R.styleable.SlideToActView_slider_locked, false)
                     isReversed = getBoolean(R.styleable.SlideToActView_slider_reversed, false)
+                    isReverseAlso = getBoolean(R.styleable.SlideToActView_also_reverse, false)
                     isRotateIcon = getBoolean(R.styleable.SlideToActView_rotate_icon, true)
                     isAnimateCompletion =
                         getBoolean(
@@ -650,6 +657,9 @@ class SlideToActView
                 // Calling performClick on every ACTION_DOWN so OnClickListener is triggered properly.
                 performClick()
             }
+            if (isReverseAlso) {
+                animDuration = 0
+            }
             stopBounceAnimation()
             if (event != null && isEnabled && mIsRespondingToTouchEvents) {
                 when (event.action) {
@@ -827,6 +837,10 @@ class SlideToActView
                             this@SlideToActView,
                         )
                         onSlideCompleteListener?.onSlideComplete(this@SlideToActView)
+                        if (isReverseAlso) {
+                                isReversed = !isReversed
+                                setBaseState()
+                            }
                     }
 
                     override fun onAnimationRepeat(p0: Animator) {

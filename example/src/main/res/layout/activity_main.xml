@@ -25,6 +25,7 @@
             android:layout_margin="8dp"
             android:elevation="6dp"
             app:bounce_on_start="true"
+            app:also_reverse="true"
             app:text="Sample SlideToActView" />
 
         <TextView
