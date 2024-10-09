@@ -347,6 +347,7 @@ sta.setReverseAlso(true);
 </p>
 onSlideCompleteListener (Kotlin)
 You can handle slide completion for both forward and backward slides using the onSlideCompleteListener. When the slider completes in either direction, you can define custom actions for both the forward and reverse slide.
+
 ```kotlin
 slider.isReversed = false // Set to false initially
 
@@ -361,8 +362,6 @@ slider.onSlideCompleteListener = object : SlideToActView.OnSlideCompleteListener
         }
     }
 }
-```
-
 ```
 
 ### Event callbacks
