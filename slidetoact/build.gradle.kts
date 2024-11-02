@@ -10,7 +10,7 @@ version = "0.12.0".plus(if (hasProperty("USE_SNAPSHOT")) "-SNAPSHOT" else "")
 group = "com.ncorti"
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "com.ncorti.slidetoact"
 
     defaultConfig {
