@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.ncorti.slidetoact.example"
         minSdk = 14
