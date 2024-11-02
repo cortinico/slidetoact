@@ -24,6 +24,7 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
+import android.view.accessibility.AccessibilityNodeInfo
 import android.view.animation.AnticipateOvershootInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.TextView
@@ -34,6 +35,8 @@ import androidx.annotation.StyleRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.widget.TextViewCompat
 import com.ncorti.slidetoact.SlideToActIconUtil.createIconAnimator
 import com.ncorti.slidetoact.SlideToActIconUtil.loadIconCompat
@@ -497,6 +500,29 @@ class SlideToActView
             }
             if (mStartBounceAnimation) {
                 startBounceAnimation(mBounceAnimationDuration, mBounceAnimationRepeat)
+            }
+
+            // Accessibility related setup
+            isClickable = true
+            accessibilityDelegate =
+                object : AccessibilityDelegate() {
+                    override fun onInitializeAccessibilityNodeInfo(
+                        host: View,
+                        info: AccessibilityNodeInfo,
+                    ) {
+                        super.onInitializeAccessibilityNodeInfo(host, info)
+                        info.text = text
+                        info.className = this::class.java.name
+                        info.isClickable = true
+                    }
+                }
+            ViewCompat.replaceAccessibilityAction(
+                this,
+                AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+                context.getString(R.string.slidetoact_accessibility_action_description),
+            ) { _, _ ->
+                setCompleted(true, withAnimation = true)
+                true
             }
         }
 
