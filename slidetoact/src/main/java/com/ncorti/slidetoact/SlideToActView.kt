@@ -172,6 +172,16 @@ class SlideToActView
                 }
             }
 
+        /**
+         * Retrieves the current position of the slider cursor.
+         *
+         * @return The current position of the slider cursor as an integer.
+         * @see getSliderCursorPosition
+         */
+        fun getSliderCursorPosition(): Int {
+            return mPosition
+        }
+
         /** Slider cursor position (between 0 and (`mAreaWidth - mAreaHeight)) */
         private var mPosition: Int = 0
             set(value) {
