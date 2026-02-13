@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Intent intent = new Intent(MainActivity.this, SampleActivity.class);
         intent.putExtra(SampleActivity.EXTRA_PRESSED_BUTTON, view.getId());
-        startActivity(intent);
+
+        int position =
+                ((SlideToActView) findViewById(R.id.welcome_slider)).getSliderCursorPosition();
+        Log.e("SlideToActView", "Position: " + position);
+        boolean isCompleted = ((SlideToActView) findViewById(R.id.welcome_slider)).isCompleted();
+        if (position == 0 || isCompleted) {
+            startActivity(intent);
+        } else {
+            Log.e("SlideToActView", "Oops! Please wait for slider to reset to Zero | Position: " + position);
+        }
+
     }
 }
