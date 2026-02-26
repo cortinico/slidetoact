@@ -27,13 +27,13 @@ jobs:
           arguments: build publishToMavenLocal
 
       - name: Upload Library Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: 'snapshot-artifacts'
           path: '~/.m2/repository/'
 
       - name: Upload the built Apk
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: debug-apk
           path: example/build/outputs/apk/debug/example-debug.apk
